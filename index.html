@@ -11,6 +11,29 @@
 </head>
 <body>
 
+    <!-- Popup Form Overlay -->
+    <div id="popupOverlay" class="popup-overlay">
+        <div class="popup-form">
+            <h3>Enter Your Farm Details</h3>
+            <div class="form-group">
+                <label for="popupCropType">Crop Type</label>
+                <input type="text" id="popupCropType" class="form-control" placeholder="e.g. Wheat, Rice, Cotton" required>
+            </div>
+            <div class="form-group">
+                <label for="popupLandSize">Land Size (Acres)</label>
+                <input type="number" id="popupLandSize" class="form-control" placeholder="e.g. 5" required>
+            </div>
+            <div class="form-group">
+                <label for="popupLocation">Location</label>
+                <input type="text" id="popupLocation" class="form-control" placeholder="City, State" required>
+            </div>
+            <div class="popup-buttons">
+                <button onclick="generateScore()" class="btn btn-green">Submit</button>
+                <button onclick="closeForm()" class="btn btn-close">Close</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <a href="#home" class="logo">🌾 BhoomiFi</a>
@@ -30,7 +53,7 @@
                 <h1>AI-Powered Credit for Farmers</h1>
                 <p>Upload your crop data, generate a harvest score in seconds, and get fair loan offers from trusted lenders.</p>
                 <div class="hero-buttons">
-                    <a href="#form-section" class="btn btn-white-filled">Get Harvest Score</a>
+                    <button onclick="openForm()" class="btn btn-white-filled">Get Harvest Score</button>
                     <a href="#how-it-works" class="btn btn-white-outline">Learn More</a>
                 </div>
             </div>
@@ -89,7 +112,7 @@
                 <span class="badge">Process</span>
                 <h2>How It Works</h2>
             </div>
-            <p class="process-subtext">From crop data to loan disbursal — the entire journey in 8 simple steps.</p>
+            <p class="process-subtext">From crop data to loan disbursal — the entire journey in 8 simple steps.<br><em style="font-size: 0.9rem; color: #888;">Prototype uses basic data logic for score generation.</em></p>
             
             <div class="process-grid">
                 <!-- Step 1 -->
