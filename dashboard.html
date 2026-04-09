@@ -3,132 +3,953 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Farmer Dashboard — BhoomiFi</title>
+    <title>Harvest Score Report — BhoomiFi</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        .dashboard-container {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: #333;
+            animation: pageFadeIn 0.5s ease both;
+        }
+
+        @keyframes pageFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1, h2, h3 {
+            font-family: 'Fraunces', serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(13, 40, 24, 0.98);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 0 20px rgba(45, 158, 95, 0.55);
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1.25rem;
+            border: 1.5px solid rgba(255,255,255,0.3);
+            border-radius: 999px;
+            transition: all 0.25s ease;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #0d2818;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            background: linear-gradient(135deg, #0d2818 0%, #1a4a2e 40%, #0f3d20 70%, #1e5c35 100%);
+            padding: 8rem 5% 4rem;
+            position: relative;
+            color: white;
+        }
+
+        .grain-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            background: rgba(20, 83, 45, 0.5);
+            color: #86efac;
+            font-size: 0.8rem;
+            padding: 4px 14px;
+            border-radius: 999px;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-subtitle {
+            color: #a3c4a8;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .info-chip {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 999px;
+            padding: 6px 14px;
+            color: #d1fae5;
+            font-size: 0.85rem;
+        }
+
+        /* Score Circle */
+        .score-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .score-svg {
+            width: 200px;
+            height: 200px;
+            transform: rotate(-90deg);
+        }
+
+        .score-bg {
+            fill: none;
+            stroke: #1a4a2e;
+            stroke-width: 14;
+        }
+
+        .score-progress {
+            fill: none;
+            stroke-width: 14;
+            stroke-linecap: round;
+            stroke-dasharray: 565;
+            stroke-dashoffset: 565;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .score-text-container {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            height: 200px;
+        }
+
+        #scoreNumber {
+            font-family: 'Fraunces', serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .score-max {
+            font-size: 1rem;
+            color: #a3c4a8;
+        }
+
+        .grade-badge {
+            margin-top: 1rem;
+            padding: 6px 20px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: #f4f7f4;
+            padding: 3rem 5%;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            border-top: 4px solid #22c55e;
+        }
+
+        .stat-card:nth-child(2) {
+            border-top-color: #f59e0b;
+        }
+
+        .stat-card:nth-child(3) {
+            border-top-color: #22c55e;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a3a2a;
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Factors Section */
+        .factors-section {
+            background: white;
+            padding: 4rem 5%;
+        }
+
+        .section-title {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            color: #1a3a2a;
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .factors-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .factor-card {
+            background: #f8fdf8;
+            border-radius: 1rem;
+            padding: 1.75rem;
+            border-left: 5px solid #22c55e;
+        }
+
+        .factor-card.negative {
+            border-left-color: #ef4444;
+        }
+
+        .impact-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-badge.positive {
+            background: rgba(34,197,94,0.12);
+            color: #16a34a;
+        }
+
+        .impact-badge.negative {
+            background: rgba(239,68,68,0.12);
+            color: #dc2626;
+        }
+
+        .factor-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a3a2a;
+            margin: 0.5rem 0;
+        }
+
+        .factor-detail {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Government Scheme Section */
+        .scheme-section {
+            background: #f0f7f0;
+            padding: 4rem 5%;
+        }
+
+        .scheme-card {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            border: 2px solid rgba(34,197,94,0.2);
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .scheme-badge {
+            display: inline-block;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            background: rgba(20, 83, 45, 0.1);
+            color: #16a34a;
+            font-size: 0.8rem;
+            padding: 4px 14px;
+            border-radius: 999px;
+            margin-bottom: 0.75rem;
+        }
+
+        .scheme-name {
+            font-family: 'Fraunces', serif;
+            font-size: 1.75rem;
+            color: #1a3a2a;
+            margin-bottom: 0.75rem;
+        }
+
+        .scheme-benefit {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .scheme-eligibility {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .scheme-cta {
+            text-align: center;
+        }
+
+        .apply-btn {
+            background: #2d9e5f;
+            color: white;
+            border: none;
+            border-radius: 999px;
+            padding: 0.875rem 2rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .apply-btn:hover {
+            background: #22c55e;
+        }
+
+        .scheme-cta-note {
+            color: #999;
+            font-size: 0.8rem;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        /* AI Recommendation */
+        .recommendation-section {
+            background: white;
+            padding: 4rem 5%;
+        }
+
+        .recommendation-card {
+            background: linear-gradient(135deg, #0d2818, #1a4a2e);
+            border-radius: 1.25rem;
+            padding: 3rem;
+            color: white;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .recommendation-badge {
+            display: inline-block;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            background: rgba(20, 83, 45, 0.5);
+            color: #86efac;
+            font-size: 0.8rem;
+            padding: 4px 14px;
+            border-radius: 999px;
+            margin-bottom: 1rem;
+        }
+
+        .recommendation-text {
+            font-family: 'Fraunces', serif;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* Lender Section */
+        .lender-section {
+            background: #f4f7f4;
+            padding: 4rem 5%;
+        }
+
+        .lender-subtext {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .lender-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .lender-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.06);
+            position: relative;
+            transition: all 0.25s ease;
+        }
+
+        .lender-card.best-offer {
+            border: 2px solid #22c55e;
+            box-shadow: 0 8px 32px rgba(34,197,94,0.2);
+        }
+
+        .best-offer-badge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #22c55e;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 0 0 8px 0;
+        }
+
+        .lender-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1a3a2a;
+            margin-bottom: 1rem;
+        }
+
+        .lender-rate {
+            font-family: 'Fraunces', serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #22c55e;
+        }
+
+        .lender-rate-label {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 0.5rem;
+        }
+
+        .lender-amount {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a3a2a;
+            margin-bottom: 1.5rem;
+        }
+
+        .select-offer-btn {
+            width: 100%;
+            background: transparent;
+            border: 2px solid #2d9e5f;
+            color: #2d9e5f;
+            border-radius: 999px;
+            padding: 0.625rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .select-offer-btn:hover {
+            background: #2d9e5f;
+            color: white;
+        }
+
+        /* Bottom CTA */
+        .bottom-cta {
+            background: linear-gradient(135deg, #0d2818 0%, #1a4a2e 40%, #0f3d20 70%, #1e5c35 100%);
+            padding: 4rem 5%;
+            text-align: center;
+            position: relative;
+            color: white;
+        }
+
+        .cta-title {
+            font-family: 'Fraunces', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-subtitle {
+            color: #a3c4a8;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .download-btn {
+            background: #2d9e5f;
+            color: white;
+            border: none;
+            border-radius: 999px;
+            padding: 0.875rem 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .download-btn:hover {
+            background: #22c55e;
+        }
+
+        .apply-again-btn {
+            background: transparent;
+            color: white;
+            border: 1.5px solid white;
+            border-radius: 999px;
+            padding: 0.875rem 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+
+        .apply-again-btn:hover {
+            background: white;
+            color: #0d2818;
+        }
+
+        /* No Data Message */
+        .no-data-container {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 2rem;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        }
-        .dashboard-card {
-            background: var(--white);
-            padding: 3rem;
-            border-radius: 1.5rem;
-            box-shadow: var(--shadow-lg);
-            max-width: 500px;
-            width: 100%;
             text-align: center;
         }
-        .dashboard-card h1 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: var(--dark-green);
+
+        .no-data-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.5rem;
+            color: #1a3a2a;
+            margin-bottom: 1rem;
         }
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem 0;
-            border-bottom: 1px solid #eee;
-        }
-        .data-row:last-of-type {
-            border-bottom: none;
-        }
-        .data-label {
-            font-weight: 600;
-            color: var(--text-light);
-        }
-        .data-value {
-            font-weight: 700;
-            color: var(--text-main);
-        }
-        .score-display {
-            font-size: 4rem;
-            font-weight: 800;
-            color: var(--primary-green);
-            margin: 1.5rem 0;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            border-radius: 100px;
-            font-weight: 600;
-            margin-top: 1rem;
-        }
-        .status-eligible {
-            background-color: rgba(76, 175, 80, 0.15);
-            color: var(--dark-green);
-        }
-        .status-not-eligible {
-            background-color: rgba(220, 53, 69, 0.15);
-            color: #dc3545;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 2rem;
-            color: var(--primary-green);
+
+        .no-data-link {
+            color: #2d9e5f;
             text-decoration: none;
             font-weight: 600;
         }
-        .back-link:hover {
+
+        .no-data-link:hover {
             text-decoration: underline;
         }
-        .no-data {
-            color: var(--text-light);
-            font-size: 1.1rem;
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .info-chips {
+                justify-content: center;
+            }
+            .stats-grid, .factors-grid, .lender-grid {
+                grid-template-columns: 1fr;
+            }
+            .scheme-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .cta-title {
+                font-size: 1.75rem;
+            }
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <div class="dashboard-card">
-            <h1>🌾 Farmer Dashboard</h1>
-            <div id="dashboardContent">
-                <p class="no-data">Loading your data...</p>
-            </div>
-            <a href="index.html" class="back-link">← Back to Home</a>
-        </div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">⚡ BhoomiFi</a>
+        <a href="index.html" class="back-btn">← Back to Home</a>
+    </nav>
+
+    <!-- No Data Message (hidden by default) -->
+    <div id="noDataMessage" class="no-data-container" style="display: none;">
+        <h2 class="no-data-title">No assessment data found.</h2>
+        <p>Please complete the form on the home page.</p>
+        <a href="index.html" class="no-data-link">← Go to Home Page</a>
     </div>
+
+    <!-- Main Dashboard Content -->
+    <main id="dashboardMain">
+        <!-- Hero Banner -->
+        <section class="hero-banner">
+            <div class="grain-overlay"></div>
+            <div class="hero-grid">
+                <div class="hero-left">
+                    <span class="hero-badge">Your Credit Assessment is Ready</span>
+                    <h1 class="hero-title">Harvest Score Report</h1>
+                    <p class="hero-subtitle">Prepared for: <span id="farmerNameDisplay">Farmer</span></p>
+                    <div class="info-chips">
+                        <span class="info-chip" id="cropChip">🌾 Crop</span>
+                        <span class="info-chip" id="locationChip">📍 Location</span>
+                        <span class="info-chip" id="landChip">🏞️ 0 Acres</span>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="score-card">
+                        <div class="score-wrapper">
+                            <svg class="score-svg" viewBox="0 0 200 200">
+                                <circle class="score-bg" cx="100" cy="100" r="90"></circle>
+                                <circle id="scoreRing" class="score-progress" cx="100" cy="100" r="90"></circle>
+                            </svg>
+                            <div class="score-text-container">
+                                <span id="scoreNumber">0</span>
+                                <span class="score-max">/ 100</span>
+                            </div>
+                        </div>
+                        <div id="gradeBadge" class="grade-badge">Good</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card reveal" style="transition-delay: 0ms;">
+                    <div class="stat-icon">🌾</div>
+                    <div class="stat-title">Estimated Yield</div>
+                    <div class="stat-value" id="yieldValue">--</div>
+                </div>
+                <div class="stat-card reveal" style="transition-delay: 100ms;">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-title">Recommended Loan</div>
+                    <div class="stat-value" id="loanValue">--</div>
+                </div>
+                <div class="stat-card reveal" style="transition-delay: 200ms;">
+                    <div class="stat-icon" id="riskIcon">🟢</div>
+                    <div class="stat-title">Risk Level</div>
+                    <div class="stat-value" id="riskValue">--</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Factors Section -->
+        <section class="factors-section">
+            <h2 class="section-title">What Drove Your Score</h2>
+            <div class="factors-grid" id="factorsGrid">
+                <!-- Factors will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Government Scheme Section -->
+        <section class="scheme-section">
+            <div class="scheme-card reveal">
+                <div class="scheme-content">
+                    <span class="scheme-badge">🏛️ Government Scheme Match</span>
+                    <h3 class="scheme-name" id="schemeName">--</h3>
+                    <p class="scheme-benefit" id="schemeBenefit">--</p>
+                    <p class="scheme-eligibility" id="schemeEligibility">--</p>
+                </div>
+                <div class="scheme-cta">
+                    <button class="apply-btn" onclick="alert('Opening government portal...')">Apply Now →</button>
+                    <p class="scheme-cta-note">Opens government portal</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Recommendation Section -->
+        <section class="recommendation-section">
+            <div class="recommendation-card reveal">
+                <span class="recommendation-badge">🤖 AI Recommendation</span>
+                <p class="recommendation-text" id="recommendationText">--</p>
+            </div>
+        </section>
+
+        <!-- Lender Section -->
+        <section class="lender-section">
+            <h2 class="section-title">Loan Offers Available</h2>
+            <p class="lender-subtext">Based on your Harvest Score, these lenders are ready to offer you credit.</p>
+            <div class="lender-grid" id="lenderGrid">
+                <!-- Lender cards will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Bottom CTA -->
+        <section class="bottom-cta">
+            <div class="grain-overlay"></div>
+            <div style="position: relative; z-index: 1;">
+                <h2 class="cta-title">Share Your Credit Report</h2>
+                <p class="cta-subtitle">Your digital credit profile is ready to share with lenders.</p>
+                <div class="cta-buttons">
+                    <button class="download-btn" onclick="window.print()">Download Report</button>
+                    <a href="index.html" class="apply-again-btn">← Apply Again</a>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const content = document.getElementById('dashboardContent');
             const data = localStorage.getItem('farmerData');
+            const dashboardMain = document.getElementById('dashboardMain');
+            const noDataMessage = document.getElementById('noDataMessage');
 
             if (!data) {
-                content.innerHTML = '<p class="no-data">No data found. Please submit your farm details first.</p>';
+                dashboardMain.style.display = 'none';
+                noDataMessage.style.display = 'flex';
                 return;
             }
 
             const farmer = JSON.parse(data);
-            const isEligible = farmer.harvestScore >= 60;
 
-            content.innerHTML = `
-                <div class="data-row">
-                    <span class="data-label">Crop Type</span>
-                    <span class="data-value">${farmer.cropType}</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Land Size</span>
-                    <span class="data-value">${farmer.landSize} Acres</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Location</span>
-                    <span class="data-value">${farmer.location}</span>
-                </div>
-                <div class="score-display">${farmer.harvestScore}</div>
-                <p style="color: var(--text-light); margin-bottom: 1rem;">Harvest Score</p>
-                <div class="status-badge ${isEligible ? 'status-eligible' : 'status-not-eligible'}">
-                    ${isEligible ? '✅ Eligible for Loan' : '❌ Not Eligible'}
-                </div>
-            `;
+            // Populate hero section
+            document.getElementById('farmerNameDisplay').textContent = farmer.farmerName || 'Farmer';
+            document.getElementById('cropChip').textContent = '🌾 ' + farmer.cropType;
+            document.getElementById('locationChip').textContent = '📍 ' + farmer.location;
+            document.getElementById('landChip').textContent = '🏞️ ' + farmer.landSize + ' Acres';
+
+            // Score ring animation
+            const score = farmer.harvestScore;
+            const scoreRing = document.getElementById('scoreRing');
+            const scoreNumber = document.getElementById('scoreNumber');
+            const gradeBadge = document.getElementById('gradeBadge');
+
+            // Determine color based on score
+            let ringColor = '#22c55e'; // green
+            if (score < 50) {
+                ringColor = '#ef4444'; // red
+            } else if (score < 75) {
+                ringColor = '#f59e0b'; // amber
+            }
+
+            scoreRing.style.stroke = ringColor;
+
+            // Animate score ring after a short delay
+            setTimeout(() => {
+                const circumference = 565;
+                const offset = circumference - (score / 100 * circumference);
+                scoreRing.style.strokeDashoffset = offset;
+            }, 100);
+
+            // Animate score counter
+            const duration = 1500;
+            const startTime = performance.now();
+            const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+
+            function animateScore(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easedProgress = easeOutCubic(progress);
+                const currentScore = Math.round(easedProgress * score);
+                scoreNumber.textContent = currentScore;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateScore);
+                }
+            }
+            requestAnimationFrame(animateScore);
+
+            // Set grade badge
+            gradeBadge.textContent = farmer.grade;
+            gradeBadge.style.backgroundColor = ringColor;
+            gradeBadge.style.color = 'white';
+
+            // Populate stats
+            document.getElementById('yieldValue').textContent = farmer.estimatedYield;
+            document.getElementById('loanValue').textContent = farmer.recommendedLoanAmount;
+
+            const riskValue = document.getElementById('riskValue');
+            const riskIcon = document.getElementById('riskIcon');
+            riskValue.textContent = farmer.riskLevel;
+
+            if (farmer.riskLevel === 'Low') {
+                riskIcon.textContent = '🟢';
+                riskValue.style.color = '#22c55e';
+                document.querySelector('.stat-card:nth-child(3)').style.borderTopColor = '#22c55e';
+            } else if (farmer.riskLevel === 'Medium') {
+                riskIcon.textContent = '🟡';
+                riskValue.style.color = '#f59e0b';
+                document.querySelector('.stat-card:nth-child(3)').style.borderTopColor = '#f59e0b';
+            } else {
+                riskIcon.textContent = '🔴';
+                riskValue.style.color = '#ef4444';
+                document.querySelector('.stat-card:nth-child(3)').style.borderTopColor = '#ef4444';
+            }
+
+            // Populate factors
+            const factorsGrid = document.getElementById('factorsGrid');
+            factorsGrid.innerHTML = '';
+
+            farmer.factors.forEach((factor, index) => {
+                const isPositive = factor.impact === 'Positive';
+                const card = document.createElement('div');
+                card.className = 'factor-card reveal' + (isPositive ? '' : ' negative');
+                card.style.transitionDelay = (index * 100) + 'ms';
+                card.innerHTML = `
+                    <span class="impact-badge ${isPositive ? 'positive' : 'negative'}">
+                        ${isPositive ? '↑ Positive Impact' : '↓ Negative Impact'}
+                    </span>
+                    <div class="factor-name">${factor.name}</div>
+                    <div class="factor-detail">${factor.detail}</div>
+                `;
+                factorsGrid.appendChild(card);
+            });
+
+            // Populate government scheme
+            document.getElementById('schemeName').textContent = farmer.governmentScheme.name;
+            document.getElementById('schemeBenefit').textContent = farmer.governmentScheme.benefit;
+            document.getElementById('schemeEligibility').textContent = 'Eligibility: ' + farmer.governmentScheme.eligibility;
+
+            // Populate recommendation
+            document.getElementById('recommendationText').textContent = farmer.recommendation;
+
+            // Populate lender offers
+            const lenderGrid = document.getElementById('lenderGrid');
+            lenderGrid.innerHTML = '';
+
+            // Parse loan amount range
+            let baseAmount = 100000;
+            const loanMatch = farmer.recommendedLoanAmount.match(/[\d,]+/g);
+            if (loanMatch && loanMatch.length > 0) {
+                baseAmount = parseInt(loanMatch[0].replace(/,/g, ''));
+            }
+
+            // Determine rates based on score
+            let rates, rateColor;
+            if (score >= 75) {
+                rates = [7.5, 8.2, 9.1];
+                rateColor = '#22c55e';
+            } else if (score >= 60) {
+                rates = [9.5, 10.8, 11.5];
+                rateColor = '#f59e0b';
+            } else {
+                rates = [13, 15, 18];
+                rateColor = '#ef4444';
+            }
+
+            const lenders = [
+                { name: '🏦 State Bank of India', rate: rates[0], amount: baseAmount },
+                { name: '🏛️ Punjab National Bank', rate: rates[1], amount: Math.round(baseAmount * 0.9) },
+                { name: '🌾 NABARD Rural Credit', rate: rates[2], amount: Math.round(baseAmount * 1.1) }
+            ];
+
+            lenders.forEach((lender, index) => {
+                const card = document.createElement('div');
+                card.className = 'lender-card reveal' + (index === 0 ? ' best-offer' : '');
+                card.style.transitionDelay = (index * 100) + 'ms';
+                card.innerHTML = `
+                    ${index === 0 ? '<span class="best-offer-badge">⭐ Best Offer</span>' : ''}
+                    <div class="lender-name">${lender.name}</div>
+                    <div class="lender-rate" style="color: ${rateColor}">${lender.rate}%</div>
+                    <div class="lender-rate-label">per annum</div>
+                    <div class="lender-amount">₹${lender.amount.toLocaleString('en-IN')}</div>
+                    <button class="select-offer-btn" onclick="alert('Offer selected! A BhoomiFi representative will contact you within 24 hours.')">Select Offer</button>
+                `;
+                lenderGrid.appendChild(card);
+            });
+
+            // Intersection Observer for reveal animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         });
     </script>
 </body>

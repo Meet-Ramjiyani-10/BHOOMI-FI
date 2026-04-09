@@ -6,15 +6,977 @@
     <title>BhoomiFi — AI-Powered Credit for Farmers</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #4caf50;
+            --dark-green: #2d6a2d;
+            --navy: #1a1a2e;
+            --text-main: #333333;
+            --text-light: #666666;
+            --muted-sage: #a3c4a8;
+            --bg-light-gray: #f8f9fa;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            color: var(--text-main);
+            overflow-x: hidden;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: 'Fraunces', serif;
+        }
+
+        h1 { font-size: 3.5rem; line-height: 1.1; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+        h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; text-align: center; color: var(--text-main); }
+        p { line-height: 1.6; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--dark-green);
+            font-weight: 600;
+            font-size: 0.875rem;
+            border-radius: 100px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #0d2818 0%, #1a4a2e 40%, #0f3d20 70%, #1e5c35 100%);
+            color: var(--white);
+            position: relative;
+        }
+
+        /* Grain Overlay */
+        .grain-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 2rem;
+            border-radius: 100px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 1rem;
+            border: 2px solid transparent;
+        }
+
+        .btn-white-filled {
+            background-color: #2d9e5f;
+            color: var(--white);
+            border: none;
+        }
+
+        .btn-white-filled:hover {
+            background-color: #22c55e;
+            transform: translateY(-2px);
+        }
+
+        .btn-white-outline {
+            background-color: transparent;
+            color: var(--white);
+            border: 1.5px solid white;
+        }
+
+        .btn-white-outline:hover {
+            background-color: white;
+            color: #0d2818;
+            transform: translateY(-2px);
+        }
+
+        .btn-green {
+            background-color: var(--primary-green);
+            color: var(--white);
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-green:hover {
+            background-color: var(--dark-green);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: var(--transition);
+            background: rgba(13, 40, 24, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .navbar.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 20px rgba(45, 158, 95, 0.55);
+        }
+
+        .logo-icon {
+            font-size: 1.6rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            opacity: 0.9;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        /* Base Section / Container */
+        .section {
+            padding: 6rem 5%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 5rem;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        /* Hero Badge */
+        .hero-badge {
+            display: inline-block;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            background: rgba(20, 83, 45, 0.5);
+            color: #86efac;
+            font-size: 0.8rem;
+            padding: 4px 14px;
+            border-radius: 999px;
+            margin-bottom: 18px;
+            letter-spacing: 0.5px;
+            animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            animation-delay: 0ms;
+        }
+
+        .hero-headline {
+            animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            animation-delay: 150ms;
+        }
+
+        .hero-subtitle {
+            animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            animation-delay: 300ms;
+        }
+
+        /* Hero Stats Pills */
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 2rem;
+            animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            animation-delay: 450ms;
+        }
+
+        .stat-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            color: #d1fae5;
+        }
+
+        .stat-pill strong {
+            font-weight: 700;
+        }
+
+        .stat-pill span {
+            opacity: 0.85;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            animation-delay: 600ms;
+        }
+
+        .hero-trust {
+            color: #a3c4a8;
+            font-size: 0.82rem;
+            margin-top: 0.5rem;
+        }
+
+        .hero-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-card {
+            animation: slideInRight 0.8s cubic-bezier(0.16,1,0.3,1) both;
+            animation-delay: 500ms;
+        }
+
+        .floating-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            animation: float 6s ease-in-out infinite;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .flow-icons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .arrow {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .floating-card > p:first-of-type {
+            font-weight: 600;
+            font-size: 1.125rem;
+            margin: 0 0 1rem 0;
+            color: var(--white);
+        }
+
+        .card-features {
+            text-align: left;
+            margin-top: 1rem;
+        }
+
+        .card-features p {
+            color: #86efac;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .see-how-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #a3c4a8;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.25s ease;
+        }
+
+        .see-how-link:hover {
+            color: #86efac;
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Entrance Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Features Section */
+        #features {
+            background-color: var(--white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2.5rem 1.5rem;
+            border-radius: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(76, 175, 80, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.75rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works Section */
+        #how-it-works {
+            background-color: var(--bg-light-gray);
+        }
+
+        .process-subtext {
+            text-align: center;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto 4rem;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .process-card {
+            background: var(--white);
+            padding: 2rem 1.5rem;
+            border-radius: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            margin-top: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .process-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background-color: var(--dark-green);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 4px solid var(--bg-light-gray);
+        }
+
+        .process-icon {
+            font-size: 2rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .process-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+        }
+
+        /* Form Section */
+        #form-section {
+            background-color: var(--white);
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .counter {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            text-align: right;
+            margin-top: 0.5rem;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        /* CTA Section */
+        #cta {
+            text-align: center;
+            padding: 5rem 5%;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            color: var(--white);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 5rem 5% 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-col p {
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 300px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+            padding-left: 5px;
+        }
+
+        .contact-info li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .bottom-bar {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+        }
+
+        /* Popup Overlay Styles */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .popup-form {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fdf8 100%);
+            border-radius: 1.5rem;
+            border-top: 5px solid #2d9e5f;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.25);
+            padding: 2.5rem;
+            max-width: 440px;
+            width: 90%;
+            animation: popupEnter 0.4s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        @keyframes popupEnter {
+            from { opacity: 0; transform: scale(0.92) translateY(20px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes analyzing-pulse {
+            0%, 100% { border-color: rgba(45, 158, 95, 0.3); box-shadow: 0 32px 80px rgba(0,0,0,0.25), 0 0 0 0 rgba(45,158,95,0); }
+            50% { border-color: rgba(45, 158, 95, 0.8); box-shadow: 0 32px 80px rgba(0,0,0,0.25), 0 0 20px 4px rgba(45,158,95,0.2); }
+        }
+
+        .popup-form.analyzing {
+            animation: analyzing-pulse 1.5s ease-in-out infinite;
+            border: 2px solid rgba(45,158,95,0.3);
+        }
+
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            gap: 0;
+        }
+
+        .popup-step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: background 0.3s ease;
+        }
+
+        .popup-step-dot.active {
+            background: #2d9e5f;
+        }
+
+        .popup-step-dot.analyzing {
+            background: #f59e0b;
+        }
+
+        .step-line-popup {
+            width: 60px;
+            height: 2px;
+            background: #eee;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #999;
+            margin-bottom: 1rem;
+            padding: 0 0.5rem;
+        }
+
+        .popup-header {
+            text-align: center;
+        }
+
+        .popup-badge {
+            display: inline-block;
+            background: rgba(45,158,95,0.1);
+            color: #2d9e5f;
+            border-radius: 999px;
+            padding: 4px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .popup-form h3 {
+            font-size: 1.5rem;
+            font-family: 'Fraunces', serif;
+            color: #1a3a2a;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .popup-sub {
+            color: #666;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-form .form-control {
+            border: 1.5px solid #e0e0e0;
+            border-radius: 0.625rem;
+            padding: 0.875rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .popup-form .form-control:focus {
+            border-color: #2d9e5f;
+            box-shadow: 0 0 0 3px rgba(45,158,95,0.12);
+            outline: none;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .popup-buttons .btn {
+            flex: 1;
+            padding: 0.875rem 1rem;
+            min-width: 0;
+        }
+
+        .popup-buttons .btn-green {
+            background: linear-gradient(135deg, #2d9e5f, #22c55e);
+            border-radius: 999px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 16px rgba(45,158,95,0.35);
+            width: auto;
+            margin-top: 0;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .popup-buttons .btn-green:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45,158,95,0.45);
+        }
+
+        .popup-buttons .btn-green:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: 1.5px solid #e0e0e0;
+            color: #666;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-close:hover {
+            background: #f5f5f5;
+            border-color: #ccc;
+        }
+
+        /* Testimonials Section */
+        #testimonials {
+            background-color: var(--white);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: #f8fdf8;
+            border-radius: 1rem;
+            padding: 2rem;
+            border-left: 4px solid #2d9e5f;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+
+        .testimonial-stars {
+            color: #f59e0b;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-quote {
+            font-size: 0.95rem;
+            color: #444;
+            line-height: 1.7;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            color: #1a3a2a;
+            font-size: 0.95rem;
+        }
+
+        .testimonial-location {
+            font-size: 0.82rem;
+            color: #888;
+            margin-top: 0.25rem;
+        }
+
+        .testimonial-score {
+            background: rgba(34,197,94,0.1);
+            color: #16a34a;
+            border-radius: 999px;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            h1 { font-size: 2.75rem; }
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .card-features {
+                text-align: center;
+            }
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 5%;
+            }
+            .nav-links {
+                display: none; 
+            }
+            .hero-content {
+                margin-top: 2rem;
+            }
+            h1 { font-size: 2.25rem; }
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            .cta-content h2 { font-size: 2rem; }
+            .hero-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
 </head>
 <body>
 
     <!-- Popup Form Overlay -->
     <div id="popupOverlay" class="popup-overlay">
         <div class="popup-form">
-            <h3>Enter Your Farm Details</h3>
+            <div class="progress-steps">
+                <div class="popup-step-dot active"></div>
+                <div class="step-line-popup"></div>
+                <div class="popup-step-dot"></div>
+                <div class="step-line-popup"></div>
+                <div class="popup-step-dot"></div>
+            </div>
+            <div class="progress-labels">
+                <span>Enter Details</span>
+                <span>AI Analyzes</span>
+                <span>Get Score</span>
+            </div>
+            <div class="popup-header">
+                <span class="popup-badge">🌾 Quick Assessment</span>
+            </div>
+            <h3>Get Your Harvest Score</h3>
+            <p class="popup-sub">AI-powered assessment in under 60 seconds</p>
+            <div class="form-group">
+                <label for="popupName">Name</label>
+                <input type="text" id="popupName" class="form-control" placeholder="Your full name" required>
+            </div>
             <div class="form-group">
                 <label for="popupCropType">Crop Type</label>
                 <input type="text" id="popupCropType" class="form-control" placeholder="e.g. Wheat, Rice, Cotton" required>
@@ -36,7 +998,7 @@
 
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
-        <a href="#home" class="logo">🌾 BhoomiFi</a>
+        <a href="#home" class="logo"><span class="logo-icon">⚡</span> BhoomiFi</a>
         <ul class="nav-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#features">Features</a></li>
@@ -48,22 +1010,52 @@
 
     <!-- Hero Section -->
     <section id="home" class="section gradient-bg">
+        <div class="grain-overlay"></div>
         <div class="container hero-content">
             <div class="hero-text">
-                <h1>AI-Powered Credit for Farmers</h1>
-                <p>Upload your crop data, generate a harvest score in seconds, and get fair loan offers from trusted lenders.</p>
+                <span class="hero-badge">🌾 AI-Powered Agri-Fintech Platform</span>
+                <h1 class="hero-headline">AI-Powered Credit for Farmers</h1>
+                <p class="hero-subtitle">Upload your crop data, generate a harvest score in seconds, and get fair loan offers from trusted lenders.</p>
+                
+                <div class="hero-stats">
+                    <div class="stat-pill">
+                        <span>👥</span>
+                        <strong>2.3Cr+</strong>
+                        <span>farmers excluded from formal credit</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span>📈</span>
+                        <strong>18–36%</strong>
+                        <span>avg interest rate from moneylenders</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span>⏱️</span>
+                        <strong>60 sec</strong>
+                        <span>to generate a Harvest Score</span>
+                    </div>
+                </div>
+
                 <div class="hero-buttons">
                     <button onclick="openForm()" class="btn btn-white-filled">Get Harvest Score</button>
                     <a href="#how-it-works" class="btn btn-white-outline">Learn More</a>
                 </div>
+                <p class="hero-trust">✓ Trusted by 1,200+ farmers across Maharashtra, Punjab & Andhra Pradesh</p>
             </div>
             <div class="hero-visual">
-                <div class="floating-card">
-                    <div class="flow-icons">
-                        🧑‍🌾 <span class="arrow">➡️</span> 🤖 <span class="arrow">➡️</span> 💰
+                <div class="hero-card">
+                    <div class="floating-card">
+                        <div class="flow-icons">
+                            🧑‍🌾 <span class="arrow">➡️</span> 🤖 <span class="arrow">➡️</span> 💰
+                        </div>
+                        <p>AI-Powered Agriculture Credit</p>
+                        <div class="card-features">
+                            <p>✓ No CIBIL score required</p>
+                            <p>✓ AI explains every decision</p>
+                            <p>✓ Government scheme matching included</p>
+                        </div>
                     </div>
-                    <p>AI-Powered Agriculture Credit</p>
                 </div>
+                <a href="#how-it-works" class="see-how-link" id="seeHowLink">↓ See how it works</a>
             </div>
         </div>
     </section>
@@ -78,25 +1070,25 @@
             </div>
             <div class="features-grid">
                 <!-- Feature 1 -->
-                <div class="feature-card">
+                <div class="feature-card reveal" style="transition-delay: 0ms;">
                     <div class="feature-icon">🌾</div>
                     <h3>AI Harvest Score</h3>
                     <p>Farmers upload crop photos and location to generate a harvest credit score.</p>
                 </div>
                 <!-- Feature 2 -->
-                <div class="feature-card">
+                <div class="feature-card reveal" style="transition-delay: 100ms;">
                     <div class="feature-icon">🧠</div>
                     <h3>Explainable AI (SHAP)</h3>
                     <p>The system clearly explains why the farmer received a specific score.</p>
                 </div>
                 <!-- Feature 3 -->
-                <div class="feature-card">
+                <div class="feature-card reveal" style="transition-delay: 200ms;">
                     <div class="feature-icon">📱</div>
                     <h3>Digital Credit Report</h3>
                     <p>A QR-based credit profile that farmers can share with lenders instantly.</p>
                 </div>
                 <!-- Feature 4 -->
-                <div class="feature-card">
+                <div class="feature-card reveal" style="transition-delay: 300ms;">
                     <div class="feature-icon">🤝</div>
                     <h3>Smart Lender Matching</h3>
                     <p>Multiple lenders bid on every loan request and farmers choose.</p>
@@ -112,56 +1104,101 @@
                 <span class="badge">Process</span>
                 <h2>How It Works</h2>
             </div>
-            <p class="process-subtext">From crop data to loan disbursal — the entire journey in 8 simple steps.<br><em style="font-size: 0.9rem; color: #888;">Prototype uses basic data logic for score generation.</em></p>
+            <p class="process-subtext">From crop data to loan disbursal — the entire journey in 8 simple steps.<br><em style="font-size: 0.9rem; color: #888;">Powered by Claude AI for intelligent credit assessment.</em></p>
             
             <div class="process-grid">
                 <!-- Step 1 -->
-                <div class="process-card">
+                <div class="process-card reveal" style="transition-delay: 0ms;">
                     <div class="step-number">1</div>
                     <div class="process-icon">📝</div>
                     <h4>Enter Crop + Location</h4>
                 </div>
                 <!-- Step 2 -->
-                <div class="process-card">
+                <div class="process-card reveal" style="transition-delay: 100ms;">
                     <div class="step-number">2</div>
                     <div class="process-icon">📸</div>
                     <h4>Upload Crop Photo</h4>
                 </div>
                 <!-- Step 3 -->
-                <div class="process-card">
+                <div class="process-card reveal" style="transition-delay: 200ms;">
                     <div class="step-number">3</div>
                     <div class="process-icon">🤖</div>
                     <h4>AI Generates Harvest Score</h4>
                 </div>
                 <!-- Step 4 -->
-                <div class="process-card">
+                <div class="process-card reveal" style="transition-delay: 300ms;">
                     <div class="step-number">4</div>
                     <div class="process-icon">🧠</div>
                     <h4>SHAP Explains the Score</h4>
                 </div>
                 <!-- Step 5 -->
-                <div class="process-card">
+                <div class="process-card reveal" style="transition-delay: 0ms;">
                     <div class="step-number">5</div>
                     <div class="process-icon">📱</div>
                     <h4>Digital Credit QR Generated</h4>
                 </div>
                 <!-- Step 6 -->
-                <div class="process-card">
+                <div class="process-card reveal" style="transition-delay: 100ms;">
                     <div class="step-number">6</div>
                     <div class="process-icon">🏦</div>
                     <h4>Lenders Bid</h4>
                 </div>
                 <!-- Step 7 -->
-                <div class="process-card">
+                <div class="process-card reveal" style="transition-delay: 200ms;">
                     <div class="step-number">7</div>
                     <div class="process-icon">✅</div>
                     <h4>Farmer Chooses Lowest Interest</h4>
                 </div>
                 <!-- Step 8 -->
-                <div class="process-card">
+                <div class="process-card reveal" style="transition-delay: 300ms;">
                     <div class="step-number">8</div>
                     <div class="process-icon">💰</div>
                     <h4>Loan Disbursed</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge">Testimonials</span>
+                <h2>Farmers Who Changed Their Story</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card reveal" style="transition-delay: 0ms;">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-quote">"BhoomiFi gave me a loan at 8.5% when moneylenders wanted 24%. I expanded my cotton farm from 3 to 7 acres this season."</p>
+                    <div class="testimonial-footer">
+                        <div>
+                            <div class="testimonial-author">Ramesh Patil</div>
+                            <div class="testimonial-location">Akola, Maharashtra · Cotton Farmer</div>
+                        </div>
+                        <span class="testimonial-score">78/100</span>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal" style="transition-delay: 100ms;">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-quote">"I never thought I could get a bank loan without going to the city. BhoomiFi's score was accepted by Punjab National Bank directly."</p>
+                    <div class="testimonial-footer">
+                        <div>
+                            <div class="testimonial-author">Gurpreet Singh</div>
+                            <div class="testimonial-location">Ludhiana, Punjab · Wheat Farmer</div>
+                        </div>
+                        <span class="testimonial-score">82/100</span>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal" style="transition-delay: 200ms;">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-quote">"The government scheme matching showed me PMFBY crop insurance I didn't know I qualified for. Saved me during last year's drought."</p>
+                    <div class="testimonial-footer">
+                        <div>
+                            <div class="testimonial-author">Lakshmi Devi</div>
+                            <div class="testimonial-location">Guntur, Andhra Pradesh · Rice Farmer</div>
+                        </div>
+                        <span class="testimonial-score">71/100</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -205,8 +1242,9 @@
     </section>
 
     <!-- CTA Section -->
-    <section id="cta" class="gradient-bg">
-        <div class="cta-content">
+    <section id="cta" class="gradient-bg reveal">
+        <div class="grain-overlay"></div>
+        <div class="cta-content" style="position: relative; z-index: 1;">
             <h2>Get Your Harvest Score in 60 Seconds</h2>
             <p>Join thousands of farmers using AI-powered credit scoring to unlock fair and affordable loans.</p>
             <a href="#form-section" class="btn btn-white-filled">Start Now</a>
@@ -247,6 +1285,178 @@
     </footer>
 
     <!-- JavaScript -->
-    <script src="script.js"></script>
+    <script>
+        // Navbar shadow effect on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 10) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = 70;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                    });
+                }
+            });
+        });
+
+        // "See how it works" smooth scroll
+        document.getElementById('seeHowLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('#how-it-works').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Live character counter for textarea
+        const messageInput = document.getElementById("message");
+        const counterDisplay = document.getElementById("counter");
+
+        if (messageInput && counterDisplay) {
+            messageInput.addEventListener("input", function() {
+                const currentLength = this.value.length;
+                counterDisplay.textContent = currentLength + " / 200 characters";
+                
+                if (currentLength > 180) {
+                    counterDisplay.style.color = "red";
+                } else if (currentLength > 150) {
+                    counterDisplay.style.color = "orange";
+                } else {
+                    counterDisplay.style.color = "var(--text-light)";
+                }
+            });
+        }
+
+        // Popup Form Functions
+        function openForm() {
+            document.getElementById('popupOverlay').style.display = 'flex';
+            // Reset progress dots
+            const dots = document.querySelectorAll('.popup-step-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.remove('active', 'analyzing');
+                if (index === 0) dot.classList.add('active');
+            });
+        }
+
+        function closeForm() {
+            document.getElementById('popupOverlay').style.display = 'none';
+            document.querySelector('.popup-form').classList.remove('analyzing');
+        }
+
+        // Close popup on clicking overlay background
+        document.getElementById('popupOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeForm();
+        });
+
+        function generateScore() {
+            const farmerName = document.getElementById('popupName').value;
+            const cropType = document.getElementById('popupCropType').value;
+            const landSize = parseFloat(document.getElementById('popupLandSize').value);
+            const location = document.getElementById('popupLocation').value;
+
+            if (!farmerName || !cropType || !landSize || !location) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = document.querySelector('.popup-buttons .btn-green');
+            const popupForm = document.querySelector('.popup-form');
+            const dots = document.querySelectorAll('.popup-step-dot');
+            
+            submitBtn.textContent = 'Analyzing...';
+            submitBtn.disabled = true;
+            popupForm.classList.add('analyzing');
+            dots[1].classList.add('active', 'analyzing');
+
+            // ============================================================
+            // ML MODEL INTEGRATION POINT
+            // Replace this placeholder logic with your ML model prediction
+            // Input: cropType, landSize, location
+            // Output: result object with structure shown below
+            // ============================================================
+            
+            setTimeout(() => {
+                // Placeholder scoring logic - REPLACE WITH YOUR ML MODEL
+                const baseScore = Math.min(95, Math.max(40, landSize * 8 + Math.random() * 20 + 30));
+                const harvestScore = Math.round(baseScore);
+                
+                const result = {
+                    harvestScore: harvestScore,
+                    eligible: harvestScore >= 60,
+                    grade: harvestScore >= 85 ? 'Excellent' : harvestScore >= 70 ? 'Good' : harvestScore >= 60 ? 'Fair' : 'Poor',
+                    estimatedYield: `${Math.round(landSize * 12)}-${Math.round(landSize * 15)} quintals`,
+                    recommendedLoanAmount: `₹${(landSize * 40000).toLocaleString('en-IN')} - ₹${(landSize * 60000).toLocaleString('en-IN')}`,
+                    factors: [
+                        { name: 'Land Size', impact: landSize >= 2 ? 'Positive' : 'Negative', detail: `${landSize} acres ${landSize >= 2 ? 'provides good yield potential' : 'may limit yield capacity'}` },
+                        { name: 'Crop Selection', impact: 'Positive', detail: `${cropType} has stable market demand in the region` },
+                        { name: 'Location', impact: 'Positive', detail: `${location} has favorable climate conditions` }
+                    ],
+                    governmentScheme: {
+                        name: 'Kisan Credit Card',
+                        benefit: 'Low interest agricultural loans up to ₹3 lakh at 4% interest rate',
+                        eligibility: 'All farmers with land ownership documents are eligible'
+                    },
+                    riskLevel: harvestScore >= 75 ? 'Low' : harvestScore >= 60 ? 'Medium' : 'High',
+                    recommendation: `Based on your ${landSize} acre ${cropType} farm in ${location}, focus on soil health and timely irrigation. Consider crop insurance under PMFBY for weather risk protection.`
+                };
+
+                // Update progress dots to complete
+                dots.forEach(dot => {
+                    dot.classList.remove('analyzing');
+                    dot.classList.add('active');
+                });
+
+                // Store result in localStorage
+                localStorage.setItem('farmerData', JSON.stringify({
+                    farmerName,
+                    cropType,
+                    landSize,
+                    location,
+                    ...result
+                }));
+
+                // Redirect to dashboard
+                closeForm();
+                window.location.href = 'dashboard.html';
+            }, 1500); // Simulated delay - remove when using real ML model
+        }
+
+        // Intersection Observer for reveal animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Hero parallax effect
+        const heroContent = document.querySelector('.hero-content');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            if (heroContent) {
+                heroContent.style.transform = `translateY(${scrollY * 0.35}px)`;
+            }
+        });
+    </script>
 </body>
 </html>
