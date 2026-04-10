@@ -658,15 +658,15 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <a href="index.html" class="logo">⚡ BhoomiFi</a>
-        <a href="index.html" class="back-btn">← Back to Home</a>
+        <a href="index.html" class="logo">BhoomiFi</a>
+        <a href="index.html" class="back-btn">Back to Home</a>
     </nav>
 
     <!-- No Data Message (hidden by default) -->
     <div id="noDataMessage" class="no-data-container" style="display: none;">
         <h2 class="no-data-title">No assessment data found.</h2>
         <p>Please complete the form on the home page.</p>
-        <a href="index.html" class="no-data-link">← Go to Home Page</a>
+        <a href="index.html" class="no-data-link">Go to Home Page</a>
     </div>
 
     <!-- Main Dashboard Content -->
@@ -680,9 +680,9 @@
                     <h1 class="hero-title">Harvest Score Report</h1>
                     <p class="hero-subtitle">Prepared for: <span id="farmerNameDisplay">Farmer</span></p>
                     <div class="info-chips">
-                        <span class="info-chip" id="cropChip">🌾 Crop</span>
-                        <span class="info-chip" id="locationChip">📍 Location</span>
-                        <span class="info-chip" id="landChip">🏞️ 0 Acres</span>
+                        <span class="info-chip" id="cropChip">Crop</span>
+                        <span class="info-chip" id="locationChip">Location</span>
+                        <span class="info-chip" id="landChip">0 Acres</span>
                     </div>
                 </div>
                 <div class="hero-right">
@@ -707,17 +707,17 @@
         <section class="stats-section">
             <div class="stats-grid">
                 <div class="stat-card reveal" style="transition-delay: 0ms;">
-                    <div class="stat-icon">🌾</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-title">Estimated Yield</div>
                     <div class="stat-value" id="yieldValue">--</div>
                 </div>
                 <div class="stat-card reveal" style="transition-delay: 100ms;">
-                    <div class="stat-icon">💰</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-title">Recommended Loan</div>
                     <div class="stat-value" id="loanValue">--</div>
                 </div>
                 <div class="stat-card reveal" style="transition-delay: 200ms;">
-                    <div class="stat-icon" id="riskIcon">🟢</div>
+                    <div class="stat-icon" id="riskIcon"></div>
                     <div class="stat-title">Risk Level</div>
                     <div class="stat-value" id="riskValue">--</div>
                 </div>
@@ -736,13 +736,13 @@
         <section class="scheme-section">
             <div class="scheme-card reveal">
                 <div class="scheme-content">
-                    <span class="scheme-badge">🏛️ Government Scheme Match</span>
+                    <span class="scheme-badge">Government Scheme Match</span>
                     <h3 class="scheme-name" id="schemeName">--</h3>
                     <p class="scheme-benefit" id="schemeBenefit">--</p>
                     <p class="scheme-eligibility" id="schemeEligibility">--</p>
                 </div>
                 <div class="scheme-cta">
-                    <button class="apply-btn" onclick="alert('Opening government portal...')">Apply Now →</button>
+                    <button class="apply-btn" onclick="alert('Opening government portal...')">Apply Now</button>
                     <p class="scheme-cta-note">Opens government portal</p>
                 </div>
             </div>
@@ -751,7 +751,7 @@
         <!-- AI Recommendation Section -->
         <section class="recommendation-section">
             <div class="recommendation-card reveal">
-                <span class="recommendation-badge">🤖 AI Recommendation</span>
+                <span class="recommendation-badge">AI Recommendation</span>
                 <p class="recommendation-text" id="recommendationText">--</p>
             </div>
         </section>
@@ -773,7 +773,7 @@
                 <p class="cta-subtitle">Your digital credit profile is ready to share with lenders.</p>
                 <div class="cta-buttons">
                     <button class="download-btn" onclick="window.print()">Download Report</button>
-                    <a href="index.html" class="apply-again-btn">← Apply Again</a>
+                    <a href="index.html" class="apply-again-btn">Apply Again</a>
                 </div>
             </div>
         </section>
@@ -795,9 +795,9 @@
 
             // Populate hero section
             document.getElementById('farmerNameDisplay').textContent = farmer.farmerName || 'Farmer';
-            document.getElementById('cropChip').textContent = '🌾 ' + farmer.cropType;
-            document.getElementById('locationChip').textContent = '📍 ' + farmer.location;
-            document.getElementById('landChip').textContent = '🏞️ ' + farmer.landSize + ' Acres';
+            document.getElementById('cropChip').textContent = farmer.cropType || 'Unknown';
+            document.getElementById('locationChip').textContent = farmer.location || 'Unknown';
+            document.getElementById('landChip').textContent = (farmer.landSize ? farmer.landSize + ' acres' : 'N/A');
 
             // Score ring animation
             const score = farmer.harvestScore;
@@ -854,15 +854,31 @@
             riskValue.textContent = farmer.riskLevel;
 
             if (farmer.riskLevel === 'Low') {
-                riskIcon.textContent = '🟢';
+                // show a green indicator dot
+                riskIcon.textContent = '';
+                riskIcon.style.width = '14px';
+                riskIcon.style.height = '14px';
+                riskIcon.style.display = 'inline-block';
+                riskIcon.style.borderRadius = '50%';
+                riskIcon.style.backgroundColor = '#22c55e';
                 riskValue.style.color = '#22c55e';
                 document.querySelector('.stat-card:nth-child(3)').style.borderTopColor = '#22c55e';
             } else if (farmer.riskLevel === 'Medium') {
-                riskIcon.textContent = '🟡';
+                riskIcon.textContent = '';
+                riskIcon.style.width = '14px';
+                riskIcon.style.height = '14px';
+                riskIcon.style.display = 'inline-block';
+                riskIcon.style.borderRadius = '50%';
+                riskIcon.style.backgroundColor = '#f59e0b';
                 riskValue.style.color = '#f59e0b';
                 document.querySelector('.stat-card:nth-child(3)').style.borderTopColor = '#f59e0b';
             } else {
-                riskIcon.textContent = '🔴';
+                riskIcon.textContent = '';
+                riskIcon.style.width = '14px';
+                riskIcon.style.height = '14px';
+                riskIcon.style.display = 'inline-block';
+                riskIcon.style.borderRadius = '50%';
+                riskIcon.style.backgroundColor = '#ef4444';
                 riskValue.style.color = '#ef4444';
                 document.querySelector('.stat-card:nth-child(3)').style.borderTopColor = '#ef4444';
             }
@@ -919,9 +935,9 @@
             }
 
             const lenders = [
-                { name: '🏦 State Bank of India', rate: rates[0], amount: baseAmount },
-                { name: '🏛️ Punjab National Bank', rate: rates[1], amount: Math.round(baseAmount * 0.9) },
-                { name: '🌾 NABARD Rural Credit', rate: rates[2], amount: Math.round(baseAmount * 1.1) }
+                { name: 'State Bank of India', rate: rates[0], amount: baseAmount },
+                { name: 'Punjab National Bank', rate: rates[1], amount: Math.round(baseAmount * 0.9) },
+                { name: 'NABARD Rural Credit', rate: rates[2], amount: Math.round(baseAmount * 1.1) }
             ];
 
             lenders.forEach((lender, index) => {
@@ -929,7 +945,7 @@
                 card.className = 'lender-card reveal' + (index === 0 ? ' best-offer' : '');
                 card.style.transitionDelay = (index * 100) + 'ms';
                 card.innerHTML = `
-                    ${index === 0 ? '<span class="best-offer-badge">⭐ Best Offer</span>' : ''}
+                    ${index === 0 ? '<span class="best-offer-badge">Best Offer</span>' : ''}
                     <div class="lender-name">${lender.name}</div>
                     <div class="lender-rate" style="color: ${rateColor}">${lender.rate}%</div>
                     <div class="lender-rate-label">per annum</div>
