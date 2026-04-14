@@ -652,6 +652,22 @@
                 flex-direction: column;
                 align-items: center;
             }
+            #weatherContainer {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+
+        .scheme-card-item {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.75rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            transition: all 0.25s ease;
+        }
+
+        .scheme-card-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -724,6 +740,19 @@
             </div>
         </section>
 
+        <!-- Weather Data Section -->
+        <section class="stats-section" style="background:#eef6ff;">
+            <h2 class="section-title" style="margin-bottom:2rem;">🌤️ Real-Time Weather Data</h2>
+            <div class="stats-grid" id="weatherContainer" style="grid-template-columns: repeat(4, 1fr);">
+                <!-- Weather cards populated by JavaScript -->
+                <div class="stat-card reveal" style="border-top-color:#94a3b8;">
+                    <div class="stat-icon">🌡️</div>
+                    <div class="stat-title">Temperature</div>
+                    <div class="stat-value">Loading...</div>
+                </div>
+            </div>
+        </section>
+
         <!-- Factors Section -->
         <section class="factors-section">
             <h2 class="section-title">What Drove Your Score</h2>
@@ -732,9 +761,14 @@
             </div>
         </section>
 
-        <!-- Government Scheme Section -->
+        <!-- Government Schemes Section (Multi-scheme grid) -->
         <section class="scheme-section">
-            <div class="scheme-card reveal">
+            <h2 class="section-title" style="margin-bottom:2rem;">🏛️ Eligible Government Schemes</h2>
+            <div id="schemesGrid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:1.5rem;max-width:1200px;margin:0 auto;">
+                <!-- Scheme cards populated by JavaScript -->
+            </div>
+            <!-- Fallback single scheme card (hidden when schemesGrid is populated) -->
+            <div class="scheme-card reveal" id="singleSchemeCard">
                 <div class="scheme-content">
                     <span class="scheme-badge">Government Scheme Match</span>
                     <h3 class="scheme-name" id="schemeName">--</h3>
@@ -780,6 +814,20 @@
     </main>
 
     <script>
+        const API_BASE_URL = 'http://localhost:5000';
+
+        async function callAPI(endpoint, method, data) {
+            try {
+                const options = { method, headers: { 'Content-Type': 'application/json' } };
+                if (method === 'POST' && data) options.body = JSON.stringify(data);
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const data = localStorage.getItem('farmerData');
             const dashboardMain = document.getElementById('dashboardMain');
@@ -795,9 +843,25 @@
 
             // Populate hero section
             document.getElementById('farmerNameDisplay').textContent = farmer.farmerName || 'Farmer';
-            document.getElementById('cropChip').textContent = farmer.cropType || 'Unknown';
-            document.getElementById('locationChip').textContent = farmer.location || 'Unknown';
-            document.getElementById('landChip').textContent = (farmer.landSize ? farmer.landSize + ' acres' : 'N/A');
+            document.getElementById('cropChip').textContent = (farmer.cropType || 'Unknown').charAt(0).toUpperCase() + (farmer.cropType || '').slice(1);
+            document.getElementById('locationChip').textContent = (farmer.district || farmer.location || 'Unknown').charAt(0).toUpperCase() + (farmer.district || farmer.location || '').slice(1);
+            document.getElementById('landChip').textContent = farmer.landSize ? farmer.landSize + ' hectares' : 'N/A';
+
+            // Show confidence badge if available
+            if (farmer.confidence) {
+                const confBadge = document.createElement('span');
+                confBadge.className = 'info-chip';
+                confBadge.textContent = '🎯 ' + farmer.confidence + ' Confidence';
+                document.querySelector('.info-chips').appendChild(confBadge);
+            }
+            if (farmer.isFallback) {
+                const fallbackBadge = document.createElement('span');
+                fallbackBadge.className = 'info-chip';
+                fallbackBadge.style.borderColor = 'rgba(245,158,11,0.4)';
+                fallbackBadge.style.color = '#fbbf24';
+                fallbackBadge.textContent = '⚠️ Estimated (ML offline)';
+                document.querySelector('.info-chips').appendChild(fallbackBadge);
+            }
 
             // Score ring animation
             const score = farmer.harvestScore;
@@ -805,17 +869,12 @@
             const scoreNumber = document.getElementById('scoreNumber');
             const gradeBadge = document.getElementById('gradeBadge');
 
-            // Determine color based on score
-            let ringColor = '#22c55e'; // green
-            if (score < 50) {
-                ringColor = '#ef4444'; // red
-            } else if (score < 75) {
-                ringColor = '#f59e0b'; // amber
-            }
+            let ringColor = '#22c55e';
+            if (score < 50) ringColor = '#ef4444';
+            else if (score < 75) ringColor = '#f59e0b';
 
             scoreRing.style.stroke = ringColor;
 
-            // Animate score ring after a short delay
             setTimeout(() => {
                 const circumference = 565;
                 const offset = circumference - (score / 100 * circumference);
@@ -831,12 +890,8 @@
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 const easedProgress = easeOutCubic(progress);
-                const currentScore = Math.round(easedProgress * score);
-                scoreNumber.textContent = currentScore;
-
-                if (progress < 1) {
-                    requestAnimationFrame(animateScore);
-                }
+                scoreNumber.textContent = Math.round(easedProgress * score);
+                if (progress < 1) requestAnimationFrame(animateScore);
             }
             requestAnimationFrame(animateScore);
 
@@ -853,107 +908,186 @@
             const riskIcon = document.getElementById('riskIcon');
             riskValue.textContent = farmer.riskLevel;
 
-            if (farmer.riskLevel === 'Low') {
-                // show a green indicator dot
-                riskIcon.textContent = '';
-                riskIcon.style.width = '14px';
-                riskIcon.style.height = '14px';
-                riskIcon.style.display = 'inline-block';
-                riskIcon.style.borderRadius = '50%';
-                riskIcon.style.backgroundColor = '#22c55e';
-                riskValue.style.color = '#22c55e';
-                document.querySelector('.stat-card:nth-child(3)').style.borderTopColor = '#22c55e';
-            } else if (farmer.riskLevel === 'Medium') {
-                riskIcon.textContent = '';
-                riskIcon.style.width = '14px';
-                riskIcon.style.height = '14px';
-                riskIcon.style.display = 'inline-block';
-                riskIcon.style.borderRadius = '50%';
-                riskIcon.style.backgroundColor = '#f59e0b';
-                riskValue.style.color = '#f59e0b';
-                document.querySelector('.stat-card:nth-child(3)').style.borderTopColor = '#f59e0b';
-            } else {
-                riskIcon.textContent = '';
-                riskIcon.style.width = '14px';
-                riskIcon.style.height = '14px';
-                riskIcon.style.display = 'inline-block';
-                riskIcon.style.borderRadius = '50%';
-                riskIcon.style.backgroundColor = '#ef4444';
-                riskValue.style.color = '#ef4444';
-                document.querySelector('.stat-card:nth-child(3)').style.borderTopColor = '#ef4444';
+            const riskColors = { 'Low': '#22c55e', 'Medium': '#f59e0b', 'High': '#ef4444' };
+            const riskColor = riskColors[farmer.riskLevel] || '#f59e0b';
+            riskIcon.textContent = '';
+            riskIcon.style.cssText = `width:14px;height:14px;display:inline-block;border-radius:50%;background-color:${riskColor}`;
+            riskValue.style.color = riskColor;
+            document.querySelector('.stat-card:nth-child(3)').style.borderTopColor = riskColor;
+
+            // ==================== WEATHER DATA SECTION ====================
+            const weatherContainer = document.getElementById('weatherContainer');
+            if (farmer.weather_used && weatherContainer) {
+                const w = farmer.weather_used;
+                weatherContainer.innerHTML = `
+                    <div class="stat-card reveal" style="transition-delay:0ms;border-top-color:#3b82f6;">
+                        <div class="stat-icon">🌡️</div>
+                        <div class="stat-title">Temperature</div>
+                        <div class="stat-value">${w.avgTemp || w.temperature || '--'}°C</div>
+                    </div>
+                    <div class="stat-card reveal" style="transition-delay:100ms;border-top-color:#06b6d4;">
+                        <div class="stat-icon">🌧️</div>
+                        <div class="stat-title">Rainfall</div>
+                        <div class="stat-value">${w.rainfall || 0} mm</div>
+                    </div>
+                    <div class="stat-card reveal" style="transition-delay:200ms;border-top-color:#8b5cf6;">
+                        <div class="stat-icon">💧</div>
+                        <div class="stat-title">Humidity</div>
+                        <div class="stat-value">${w.humidity || '--'}%</div>
+                    </div>
+                    <div class="stat-card reveal" style="transition-delay:300ms;border-top-color:#f97316;">
+                        <div class="stat-icon">🌱</div>
+                        <div class="stat-title">Soil Moisture</div>
+                        <div class="stat-value">${w.soil_moisture || '--'}%</div>
+                    </div>
+                `;
+                // Add weather recommendations
+                if (farmer.weather_recommendations && farmer.weather_recommendations.length > 0) {
+                    const recsHtml = farmer.weather_recommendations.map(r => `<div style="padding:0.5rem 0;border-bottom:1px solid #eee;font-size:0.95rem;">${r}</div>`).join('');
+                    weatherContainer.innerHTML += `
+                        <div class="stat-card reveal" style="transition-delay:400ms;grid-column:1/-1;border-top-color:#22c55e;">
+                            <div class="stat-icon">💡</div>
+                            <div class="stat-title">Weather Recommendations</div>
+                            <div style="margin-top:0.5rem;">${recsHtml}</div>
+                        </div>
+                    `;
+                }
             }
 
-            // Populate factors
+            // ==================== SHAP FACTORS ====================
             const factorsGrid = document.getElementById('factorsGrid');
             factorsGrid.innerHTML = '';
 
-            farmer.factors.forEach((factor, index) => {
-                const isPositive = factor.impact === 'Positive';
-                const card = document.createElement('div');
-                card.className = 'factor-card reveal' + (isPositive ? '' : ' negative');
-                card.style.transitionDelay = (index * 100) + 'ms';
-                card.innerHTML = `
-                    <span class="impact-badge ${isPositive ? 'positive' : 'negative'}">
-                        ${isPositive ? '↑ Positive Impact' : '↓ Negative Impact'}
-                    </span>
-                    <div class="factor-name">${factor.name}</div>
-                    <div class="factor-detail">${factor.detail}</div>
-                `;
-                factorsGrid.appendChild(card);
-            });
+            if (farmer.factors && farmer.factors.length > 0) {
+                farmer.factors.forEach((factor, index) => {
+                    const isPositive = factor.impact === 'Positive';
+                    const card = document.createElement('div');
+                    card.className = 'factor-card reveal' + (isPositive ? '' : ' negative');
+                    card.style.transitionDelay = (index * 100) + 'ms';
+                    card.innerHTML = `
+                        <span class="impact-badge ${isPositive ? 'positive' : 'negative'}">
+                            ${isPositive ? '✅ Positive Impact' : '⚠️ Negative Impact'}
+                        </span>
+                        <div class="factor-name">${factor.name}</div>
+                        <div class="factor-detail">${factor.detail}</div>
+                    `;
+                    factorsGrid.appendChild(card);
+                });
+            } else if (farmer.explanation && farmer.explanation.length > 0) {
+                // Use raw SHAP explanation strings
+                farmer.explanation.forEach((exp, index) => {
+                    const isPositive = exp.includes('+');
+                    const card = document.createElement('div');
+                    card.className = 'factor-card reveal' + (isPositive ? '' : ' negative');
+                    card.style.transitionDelay = (index * 100) + 'ms';
+                    card.innerHTML = `
+                        <span class="impact-badge ${isPositive ? 'positive' : 'negative'}">
+                            ${isPositive ? '✅ Positive' : '⚠️ Negative'}
+                        </span>
+                        <div class="factor-detail" style="font-size:1rem;font-weight:600;color:#1a3a2a;">${exp}</div>
+                    `;
+                    factorsGrid.appendChild(card);
+                });
+            }
 
-            // Populate government scheme
-            document.getElementById('schemeName').textContent = farmer.governmentScheme.name;
-            document.getElementById('schemeBenefit').textContent = farmer.governmentScheme.benefit;
-            document.getElementById('schemeEligibility').textContent = 'Eligibility: ' + farmer.governmentScheme.eligibility;
+            // ==================== GOVERNMENT SCHEMES (FROM API) ====================
+            const schemesGrid = document.getElementById('schemesGrid');
+            if (schemesGrid && farmer.eligibleSchemes && farmer.eligibleSchemes.length > 0) {
+                schemesGrid.innerHTML = '';
+                farmer.eligibleSchemes.forEach((scheme, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'scheme-card-item reveal';
+                    card.style.transitionDelay = (index * 100) + 'ms';
+                    card.innerHTML = `
+                        <div style="border-left:4px solid ${scheme.color || '#22c55e'};padding-left:1rem;">
+                            <span class="scheme-badge">${scheme.eligible ? '✅ Eligible' : '❌ Not Eligible'}</span>
+                            <h4 style="font-family:'Fraunces',serif;font-size:1.25rem;color:#1a3a2a;margin:0.5rem 0;">${scheme.name}</h4>
+                            <p style="font-size:0.9rem;color:#555;margin-bottom:0.5rem;">${scheme.description}</p>
+                            <p style="font-size:0.95rem;font-weight:600;color:#16a34a;margin-bottom:1rem;">💰 ${scheme.benefit}</p>
+                            <a href="${scheme.applyLink}" target="_blank" rel="noopener" class="apply-btn" style="display:inline-block;font-size:0.9rem;padding:0.625rem 1.5rem;text-decoration:none;">Apply Now →</a>
+                        </div>
+                    `;
+                    schemesGrid.appendChild(card);
+                });
+            } else {
+                // Fallback: show single scheme from old format
+                document.getElementById('schemeName').textContent = farmer.governmentScheme?.name || '--';
+                document.getElementById('schemeBenefit').textContent = farmer.governmentScheme?.benefit || '--';
+                document.getElementById('schemeEligibility').textContent = 'Eligibility: ' + (farmer.governmentScheme?.eligibility || '--');
+            }
 
             // Populate recommendation
             document.getElementById('recommendationText').textContent = farmer.recommendation;
 
-            // Populate lender offers
+            // ==================== LENDER OFFERS (FROM API) ====================
             const lenderGrid = document.getElementById('lenderGrid');
             lenderGrid.innerHTML = '';
 
-            // Parse loan amount range
-            let baseAmount = 100000;
-            const loanMatch = farmer.recommendedLoanAmount.match(/[\d,]+/g);
-            if (loanMatch && loanMatch.length > 0) {
-                baseAmount = parseInt(loanMatch[0].replace(/,/g, ''));
-            }
+            if (farmer.loanBids && farmer.loanBids.length > 0) {
+                // Use actual bids from backend API
+                const sortedBids = [...farmer.loanBids].sort((a, b) => a.interestRate - b.interestRate);
 
-            // Determine rates based on score
-            let rates, rateColor;
-            if (score >= 75) {
-                rates = [7.5, 8.2, 9.1];
-                rateColor = '#22c55e';
-            } else if (score >= 60) {
-                rates = [9.5, 10.8, 11.5];
-                rateColor = '#f59e0b';
+                sortedBids.forEach((bid, index) => {
+                    const card = document.createElement('div');
+                    const isBest = index === 0;
+                    const isAccepted = bid.status === 'accepted';
+                    const isRejected = bid.status === 'rejected';
+
+                    let rateColor = '#22c55e';
+                    if (bid.interestRate > 12) rateColor = '#ef4444';
+                    else if (bid.interestRate > 9) rateColor = '#f59e0b';
+
+                    card.className = 'lender-card reveal' + (isBest ? ' best-offer' : '');
+                    card.style.transitionDelay = (index * 100) + 'ms';
+                    card.innerHTML = `
+                        ${isBest ? '<span class="best-offer-badge">⭐ Best Offer</span>' : ''}
+                        <div class="lender-name">${bid.lenderName}</div>
+                        <div class="lender-rate" style="color: ${rateColor}">${bid.interestRate}%</div>
+                        <div class="lender-rate-label">per annum</div>
+                        <div class="lender-amount">₹${bid.amount.toLocaleString('en-IN')}</div>
+                        ${isAccepted
+                            ? '<div style="background:#22c55e;color:white;text-align:center;padding:0.625rem;border-radius:999px;font-weight:600;">✅ Accepted</div>'
+                            : isRejected
+                            ? '<div style="background:#ef4444;color:white;text-align:center;padding:0.625rem;border-radius:999px;font-weight:600;">Rejected</div>'
+                            : `<button class="select-offer-btn" onclick="acceptBid(${bid.id}, ${farmer.farmerId})" data-bid-id="${bid.id}">Select Offer</button>`
+                        }
+                    `;
+                    lenderGrid.appendChild(card);
+                });
             } else {
-                rates = [13, 15, 18];
-                rateColor = '#ef4444';
+                // Fallback: generate display-only lender cards
+                let baseAmount = 100000;
+                const loanMatch = (farmer.recommendedLoanAmount || '').match(/[\d,]+/g);
+                if (loanMatch && loanMatch.length > 0) baseAmount = parseInt(loanMatch[0].replace(/,/g, ''));
+
+                let rates;
+                if (score >= 75) rates = [7.5, 8.2, 9.1];
+                else if (score >= 60) rates = [9.5, 10.8, 11.5];
+                else rates = [13, 15, 18];
+
+                const lenders = [
+                    { name: 'State Bank of India', rate: rates[0], amount: baseAmount },
+                    { name: 'Punjab National Bank', rate: rates[1], amount: Math.round(baseAmount * 0.9) },
+                    { name: 'NABARD Rural Credit', rate: rates[2], amount: Math.round(baseAmount * 1.1) }
+                ];
+
+                let rateColor = score >= 75 ? '#22c55e' : score >= 60 ? '#f59e0b' : '#ef4444';
+
+                lenders.forEach((lender, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'lender-card reveal' + (index === 0 ? ' best-offer' : '');
+                    card.style.transitionDelay = (index * 100) + 'ms';
+                    card.innerHTML = `
+                        ${index === 0 ? '<span class="best-offer-badge">Best Offer</span>' : ''}
+                        <div class="lender-name">${lender.name}</div>
+                        <div class="lender-rate" style="color: ${rateColor}">${lender.rate}%</div>
+                        <div class="lender-rate-label">per annum</div>
+                        <div class="lender-amount">₹${lender.amount.toLocaleString('en-IN')}</div>
+                        <button class="select-offer-btn" onclick="alert('Offer selected! A BhoomiFi representative will contact you within 24 hours.')">Select Offer</button>
+                    `;
+                    lenderGrid.appendChild(card);
+                });
             }
-
-            const lenders = [
-                { name: 'State Bank of India', rate: rates[0], amount: baseAmount },
-                { name: 'Punjab National Bank', rate: rates[1], amount: Math.round(baseAmount * 0.9) },
-                { name: 'NABARD Rural Credit', rate: rates[2], amount: Math.round(baseAmount * 1.1) }
-            ];
-
-            lenders.forEach((lender, index) => {
-                const card = document.createElement('div');
-                card.className = 'lender-card reveal' + (index === 0 ? ' best-offer' : '');
-                card.style.transitionDelay = (index * 100) + 'ms';
-                card.innerHTML = `
-                    ${index === 0 ? '<span class="best-offer-badge">Best Offer</span>' : ''}
-                    <div class="lender-name">${lender.name}</div>
-                    <div class="lender-rate" style="color: ${rateColor}">${lender.rate}%</div>
-                    <div class="lender-rate-label">per annum</div>
-                    <div class="lender-amount">₹${lender.amount.toLocaleString('en-IN')}</div>
-                    <button class="select-offer-btn" onclick="alert('Offer selected! A BhoomiFi representative will contact you within 24 hours.')">Select Offer</button>
-                `;
-                lenderGrid.appendChild(card);
-            });
 
             // Intersection Observer for reveal animations
             const observer = new IntersectionObserver((entries) => {
@@ -967,6 +1101,43 @@
 
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         });
+
+        // Accept bid via API
+        async function acceptBid(bidId, farmerId) {
+            const btn = document.querySelector(`[data-bid-id="${bidId}"]`);
+            if (btn) {
+                btn.textContent = 'Processing...';
+                btn.disabled = true;
+            }
+
+            try {
+                const result = await callAPI('/api/farmer/accept-bid', 'POST', { bidId, farmerId });
+
+                if (result.success) {
+                    // Update localStorage
+                    const data = JSON.parse(localStorage.getItem('farmerData'));
+                    if (data && data.loanBids) {
+                        data.loanBids = data.loanBids.map(b => ({
+                            ...b,
+                            status: b.id === bidId ? 'accepted' : 'rejected'
+                        }));
+                        localStorage.setItem('farmerData', JSON.stringify(data));
+                    }
+
+                    // Refresh the page to show updated status
+                    alert('🎉 Offer accepted! A BhoomiFi representative will contact you within 24 hours.');
+                    location.reload();
+                } else {
+                    throw new Error(result.error || 'Failed to accept bid');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+                if (btn) {
+                    btn.textContent = 'Select Offer';
+                    btn.disabled = false;
+                }
+            }
+        }
     </script>
 </body>
 </html>

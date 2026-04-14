@@ -693,9 +693,11 @@
             border-radius: 1.5rem;
             border-top: 5px solid #2d9e5f;
             box-shadow: 0 32px 80px rgba(0,0,0,0.25);
-            padding: 2.5rem;
+            padding: 2rem;
             max-width: 440px;
             width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
             animation: popupEnter 0.4s cubic-bezier(0.16,1,0.3,1) both;
         }
 
@@ -765,7 +767,7 @@
             padding: 4px 14px;
             font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .popup-form h3 {
@@ -773,20 +775,24 @@
             font-family: 'Fraunces', serif;
             color: #1a3a2a;
             text-align: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
 
         .popup-sub {
             color: #666;
             font-size: 0.85rem;
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .popup-form .form-group {
+            margin-bottom: 1rem;
         }
 
         .popup-form .form-control {
             border: 1.5px solid #e0e0e0;
             border-radius: 0.625rem;
-            padding: 0.875rem 1rem;
+            padding: 0.75rem 1rem;
             font-size: 0.95rem;
             transition: all 0.2s ease;
         }
@@ -985,30 +991,80 @@
                 <span>Get Score</span>
             </div>
             <div class="popup-header">
-                <span class="popup-badge">🌾 Quick Assessment</span>
+                <span class="popup-badge">🌾 AI Credit Assessment</span>
             </div>
-            <h3>Get Your Harvest Score</h3>
-            <p class="popup-sub">AI-powered assessment in under 60 seconds</p>
+            <h3>Get Your Credit Score</h3>
+            <p class="popup-sub">AI-powered assessment with real weather data</p>
             <div class="form-group">
-                <label for="popupName">Name</label>
-                <input type="text" id="popupName" class="form-control" placeholder="Your full name" required>
+                <label for="popupName">Full Name</label>
+                <input type="text" id="popupName" class="form-control" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="popupPhone">Phone Number</label>
+                <input type="tel" id="popupPhone" class="form-control" placeholder="e.g. 9876543210" required>
             </div>
             <div class="form-group">
                 <label for="popupCropType">Crop Type</label>
-                <input type="text" id="popupCropType" class="form-control" placeholder="e.g. Wheat, Rice, Cotton" required>
+                <select id="popupCropType" class="form-control" required>
+                    <option value="">Select crop type</option>
+                    <option value="rice">🌾 Rice</option>
+                    <option value="wheat">🌿 Wheat</option>
+                    <option value="cotton">🤍 Cotton</option>
+                    <option value="maize">🌽 Maize</option>
+                    <option value="sugarcane">🍬 Sugarcane</option>
+                </select>
             </div>
             <div class="form-group">
-                <label for="popupLandSize">Land Size (Acres)</label>
-                <input type="number" id="popupLandSize" class="form-control" placeholder="e.g. 5" required>
+                <label for="popupDistrict">District / State</label>
+                <select id="popupDistrict" class="form-control" required>
+                    <option value="">Select district</option>
+                    <option value="punjab">Punjab</option>
+                    <option value="haryana">Haryana</option>
+                    <option value="maharashtra">Maharashtra</option>
+                    <option value="telangana">Telangana</option>
+                    <option value="karnataka">Karnataka</option>
+                    <option value="gujarat">Gujarat</option>
+                    <option value="up">Uttar Pradesh</option>
+                    <option value="tamilnadu">Tamil Nadu</option>
+                    <option value="bihar">Bihar</option>
+                    <option value="westbengal">West Bengal</option>
+                    <option value="rajasthan">Rajasthan</option>
+                    <option value="madhya">Madhya Pradesh</option>
+                    <option value="odisha">Odisha</option>
+                    <option value="assam">Assam</option>
+                    <option value="jharkhand">Jharkhand</option>
+                </select>
             </div>
             <div class="form-group">
-                <label for="popupLocation">Location</label>
-                <input type="text" id="popupLocation" class="form-control" placeholder="City, State" maxlength="200" required>
-                <div id="popupLocationCounter" class="counter">0 / 200 characters</div>
+                <label for="popupIrrigation">Irrigation Type</label>
+                <select id="popupIrrigation" class="form-control" required>
+                    <option value="">Select irrigation type</option>
+                    <option value="drip">💧 Drip Irrigation</option>
+                    <option value="sprinkler">🌧️ Sprinkler</option>
+                    <option value="canal">🏞️ Canal</option>
+                    <option value="rainfed">🌦️ Rainfed</option>
+                </select>
             </div>
+            <div class="form-group">
+                <label for="popupLandSize">Land Area (Hectares)</label>
+                <input type="number" id="popupLandSize" class="form-control" placeholder="e.g. 2.5" step="0.1" min="0.1" required>
+            </div>
+            <div class="form-group">
+                <label for="popupSoilQuality">Soil Quality (0-100) <span style="font-weight:400;color:#888;">— optional</span></label>
+                <input type="range" id="popupSoilQuality" class="form-control" min="0" max="100" value="65" style="padding: 0.5rem 0;">
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#888;"><span>Poor (0)</span><span id="soilQualityValue" style="font-weight:600;color:#2d9e5f;">65</span><span>Excellent (100)</span></div>
+            </div>
+            <!-- Loading indicator (hidden by default) -->
+            <div id="popupLoading" style="display:none;text-align:center;padding:1rem 0;">
+                <div style="display:inline-block;width:40px;height:40px;border:3px solid #e0e0e0;border-top:3px solid #2d9e5f;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+                <p style="margin-top:0.75rem;color:#666;font-size:0.9rem;" id="loadingText">Fetching weather data & analyzing...</p>
+            </div>
+            <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+            <!-- Error display -->
+            <div id="popupError" style="display:none;background:rgba(239,68,68,0.1);color:#dc2626;padding:0.75rem 1rem;border-radius:0.5rem;font-size:0.9rem;margin-bottom:0.5rem;"></div>
             <div class="popup-buttons">
-                <button onclick="generateScore()" class="btn btn-green">Submit</button>
-                <button onclick="closeForm()" class="btn btn-close">Close</button>
+                <button onclick="generateScore()" id="popupSubmitBtn" class="btn btn-green">🔍 Calculate Score</button>
+                <button onclick="closeForm()" class="btn btn-close">Cancel</button>
             </div>
         </div>
     </div>
@@ -1303,7 +1359,29 @@
 
     <!-- JavaScript -->
     <script>
-        // Navbar shadow effect on scroll
+        // ==================== CONFIGURATION ====================
+        const API_BASE_URL = 'http://localhost:5000';
+
+        // ==================== API HELPER ====================
+        async function callAPI(endpoint, method, data) {
+            try {
+                const options = {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' }
+                };
+                if (method === 'POST' && data) {
+                    options.body = JSON.stringify(data);
+                }
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('API Error:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+        // ==================== NAVBAR ====================
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 10) {
@@ -1313,80 +1391,62 @@
             }
         });
 
-        // Smooth scrolling for anchor links
+        // ==================== SMOOTH SCROLLING ====================
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     const headerOffset = 70;
                     const elementPosition = targetElement.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                    window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth"
-                    });
+                    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
                 }
             });
         });
 
-        // "See how it works" smooth scroll
         document.getElementById('seeHowLink').addEventListener('click', function(e) {
             e.preventDefault();
             document.querySelector('#how-it-works').scrollIntoView({ behavior: 'smooth' });
         });
 
-        // Live character counter for textarea
+        // ==================== CHARACTER COUNTERS ====================
         const messageInput = document.getElementById("message");
         const counterDisplay = document.getElementById("counter");
-
         if (messageInput && counterDisplay) {
             messageInput.addEventListener("input", function() {
                 const currentLength = this.value.length;
                 counterDisplay.textContent = currentLength + " / 200 characters";
-                
-                if (currentLength > 180) {
-                    counterDisplay.style.color = "red";
-                } else if (currentLength > 150) {
-                    counterDisplay.style.color = "orange";
-                } else {
-                    counterDisplay.style.color = "var(--text-light)";
-                }
+                counterDisplay.style.color = currentLength > 180 ? "red" : currentLength > 150 ? "orange" : "var(--text-light)";
             });
         }
 
-        // Live character counter for popup Location
-        const popupLocationInput = document.getElementById("popupLocation");
-        const popupLocationCounter = document.getElementById("popupLocationCounter");
-
-        if (popupLocationInput && popupLocationCounter) {
-            popupLocationInput.addEventListener("input", function() {
-                const currentLength = this.value.length;
-                popupLocationCounter.textContent = currentLength + " / 200 characters";
-                
-                if (currentLength > 180) {
-                    popupLocationCounter.style.color = "red";
-                } else if (currentLength > 150) {
-                    popupLocationCounter.style.color = "orange";
-                } else {
-                    popupLocationCounter.style.color = "var(--text-light)";
-                }
+        // ==================== SOIL QUALITY SLIDER ====================
+        const soilSlider = document.getElementById('popupSoilQuality');
+        const soilValueDisplay = document.getElementById('soilQualityValue');
+        if (soilSlider && soilValueDisplay) {
+            soilSlider.addEventListener('input', function() {
+                soilValueDisplay.textContent = this.value;
             });
         }
 
-        // Popup Form Functions
+        // ==================== POPUP FORM ====================
         function openForm() {
             document.getElementById('popupOverlay').style.display = 'flex';
-            // Reset progress dots
+            // Reset state
             const dots = document.querySelectorAll('.popup-step-dot');
-            dots.forEach((dot, index) => {
+            dots.forEach((dot, i) => {
                 dot.classList.remove('active', 'analyzing');
-                if (index === 0) dot.classList.add('active');
+                if (i === 0) dot.classList.add('active');
             });
+            document.getElementById('popupError').style.display = 'none';
+            document.getElementById('popupLoading').style.display = 'none';
+            const submitBtn = document.getElementById('popupSubmitBtn');
+            submitBtn.textContent = '🔍 Calculate Score';
+            submitBtn.disabled = false;
+            submitBtn.style.display = '';
         }
 
         function closeForm() {
@@ -1394,63 +1454,83 @@
             document.querySelector('.popup-form').classList.remove('analyzing');
         }
 
-        // Close popup on clicking overlay background
         document.getElementById('popupOverlay').addEventListener('click', function(e) {
             if (e.target === this) closeForm();
         });
 
-        function generateScore() {
-            const farmerName = document.getElementById('popupName').value;
+        // ==================== GENERATE SCORE (BACKEND CONNECTED) ====================
+        async function generateScore() {
+            // Gather form values
+            const farmerName = document.getElementById('popupName').value.trim();
+            const phone = document.getElementById('popupPhone').value.trim();
             const cropType = document.getElementById('popupCropType').value;
-            const landSize = parseFloat(document.getElementById('popupLandSize').value);
-            const location = document.getElementById('popupLocation').value;
+            const district = document.getElementById('popupDistrict').value;
+            const irrigation = document.getElementById('popupIrrigation').value;
+            const landArea = parseFloat(document.getElementById('popupLandSize').value);
+            const soilQuality = parseInt(document.getElementById('popupSoilQuality').value);
 
-            if (!farmerName || !cropType || !landSize || !location) {
-                alert('Please fill in all fields');
+            // Validation
+            if (!farmerName || !cropType || !district || !irrigation || !landArea) {
+                showPopupError('Please fill in all required fields.');
+                return;
+            }
+            if (landArea <= 0) {
+                showPopupError('Land area must be greater than 0.');
                 return;
             }
 
-            // Show loading state
-            const submitBtn = document.querySelector('.popup-buttons .btn-green');
+            // UI: Show loading state
+            const submitBtn = document.getElementById('popupSubmitBtn');
             const popupForm = document.querySelector('.popup-form');
             const dots = document.querySelectorAll('.popup-step-dot');
-            
-            submitBtn.textContent = 'Analyzing...';
-            submitBtn.disabled = true;
+            const loadingEl = document.getElementById('popupLoading');
+            const errorEl = document.getElementById('popupError');
+
+            submitBtn.style.display = 'none';
+            errorEl.style.display = 'none';
+            loadingEl.style.display = 'block';
             popupForm.classList.add('analyzing');
             dots[1].classList.add('active', 'analyzing');
+            document.getElementById('loadingText').textContent = '📡 Fetching weather data & analyzing...';
 
-            // ============================================================
-            // ML MODEL INTEGRATION POINT
-            // Replace this placeholder logic with your ML model prediction
-            // Input: cropType, landSize, location
-            // Output: result object with structure shown below
-            // ============================================================
-            
-            setTimeout(() => {
-                // Placeholder scoring logic - REPLACE WITH YOUR ML MODEL
-                const baseScore = Math.min(95, Math.max(40, landSize * 8 + Math.random() * 20 + 30));
-                const harvestScore = Math.round(baseScore);
-                
-                const result = {
-                    harvestScore: harvestScore,
-                    eligible: harvestScore >= 60,
-                    grade: harvestScore >= 85 ? 'Excellent' : harvestScore >= 70 ? 'Good' : harvestScore >= 60 ? 'Fair' : 'Poor',
-                    estimatedYield: `${Math.round(landSize * 12)}-${Math.round(landSize * 15)} quintals`,
-                    recommendedLoanAmount: `₹${(landSize * 40000).toLocaleString('en-IN')} - ₹${(landSize * 60000).toLocaleString('en-IN')}`,
-                    factors: [
-                        { name: 'Land Size', impact: landSize >= 2 ? 'Positive' : 'Negative', detail: `${landSize} acres ${landSize >= 2 ? 'provides good yield potential' : 'may limit yield capacity'}` },
-                        { name: 'Crop Selection', impact: 'Positive', detail: `${cropType} has stable market demand in the region` },
-                        { name: 'Location', impact: 'Positive', detail: `${location} has favorable climate conditions` }
-                    ],
-                    governmentScheme: {
-                        name: 'Kisan Credit Card',
-                        benefit: 'Low interest agricultural loans up to ₹3 lakh at 4% interest rate',
-                        eligibility: 'All farmers with land ownership documents are eligible'
-                    },
-                    riskLevel: harvestScore >= 75 ? 'Low' : harvestScore >= 60 ? 'Medium' : 'High',
-                    recommendation: `Based on your ${landSize} acre ${cropType} farm in ${location}, focus on soil health and timely irrigation. Consider crop insurance under PMFBY for weather risk protection.`
-                };
+            try {
+                // STEP 1: Get credit score from backend
+                const scoreResult = await callAPI('/api/score/predict', 'POST', {
+                    cropType, district, irrigation, landArea, soilQuality
+                });
+
+                if (!scoreResult.success) {
+                    throw new Error(scoreResult.error || 'Failed to calculate score');
+                }
+
+                document.getElementById('loadingText').textContent = '💾 Saving profile...';
+                dots[1].classList.remove('analyzing');
+                dots[1].classList.add('active');
+
+                // STEP 2: Save farmer profile
+                const profileResult = await callAPI('/api/farmer/profile', 'POST', {
+                    name: farmerName,
+                    phone: phone,
+                    cropType, district, irrigation, landArea,
+                    creditScore: scoreResult.score,
+                    shapExplanation: scoreResult.explanation
+                });
+
+                const farmerId = profileResult.farmerId || null;
+
+                document.getElementById('loadingText').textContent = '🏛️ Matching government schemes...';
+
+                // STEP 3: Match government schemes
+                const schemesResult = await callAPI('/api/schemes/match', 'POST', {
+                    cropType, landArea, irrigation,
+                    creditScore: scoreResult.score
+                });
+
+                // STEP 4: Get loan bids (if we have a farmerId)
+                let bidsResult = { bids: [] };
+                if (farmerId) {
+                    bidsResult = await callAPI(`/api/farmer/${farmerId}/bids`, 'GET');
+                }
 
                 // Update progress dots to complete
                 dots.forEach(dot => {
@@ -1458,22 +1538,88 @@
                     dot.classList.add('active');
                 });
 
-                // Store result in localStorage
-                localStorage.setItem('farmerData', JSON.stringify({
+                // Build comprehensive result for dashboard
+                const score = scoreResult.score;
+                const dashboardData = {
                     farmerName,
+                    phone,
                     cropType,
-                    landSize,
-                    location,
-                    ...result
-                }));
+                    district,
+                    irrigation,
+                    landSize: landArea,
+                    location: district,
+                    farmerId: farmerId,
+                    harvestScore: score,
+                    eligible: score >= 60,
+                    grade: score >= 85 ? 'Excellent' : score >= 70 ? 'Good' : score >= 60 ? 'Fair' : 'Poor',
+                    confidence: scoreResult.confidence || 'Medium',
+                    estimatedYield: `${Math.round(landArea * 12)}-${Math.round(landArea * 15)} quintals`,
+                    recommendedLoanAmount: `₹${(landArea * 40000).toLocaleString('en-IN')} - ₹${(landArea * 60000).toLocaleString('en-IN')}`,
+                    riskLevel: score >= 75 ? 'Low' : score >= 60 ? 'Medium' : 'High',
+                    // SHAP explanations from backend
+                    explanation: scoreResult.explanation || [],
+                    factors: (scoreResult.explanation || []).map(exp => {
+                        const isPositive = exp.includes('+');
+                        return {
+                            name: exp.split(' ')[0] || 'Factor',
+                            impact: isPositive ? 'Positive' : 'Negative',
+                            detail: exp
+                        };
+                    }),
+                    // Weather data
+                    weather_used: scoreResult.weather_used || null,
+                    weather_recommendations: scoreResult.weather_recommendations || [],
+                    // Government schemes
+                    eligibleSchemes: schemesResult.eligibleSchemes || [],
+                    otherSchemes: schemesResult.otherSchemes || [],
+                    governmentScheme: (schemesResult.eligibleSchemes && schemesResult.eligibleSchemes.length > 0)
+                        ? {
+                            name: schemesResult.eligibleSchemes[0].name,
+                            benefit: schemesResult.eligibleSchemes[0].benefit,
+                            eligibility: schemesResult.eligibleSchemes[0].description
+                          }
+                        : { name: 'Kisan Credit Card', benefit: 'Loans up to ₹3 lakh at 4%', eligibility: 'All farmers eligible' },
+                    // Loan bids
+                    loanBids: bidsResult.bids || [],
+                    // AI recommendation
+                    recommendation: scoreResult.weather_recommendations && scoreResult.weather_recommendations.length > 0
+                        ? scoreResult.weather_recommendations.join(' | ')
+                        : `Based on your ${landArea} ha ${cropType} farm in ${district}, focus on soil health and timely irrigation. Consider crop insurance under PMFBY.`,
+                    isFallback: scoreResult.isFallback || false
+                };
 
-                // Redirect to dashboard
-                closeForm();
-                window.location.href = 'dashboard.html';
-            }, 1500); // Simulated delay - remove when using real ML model
+                // Store in localStorage for dashboard
+                localStorage.setItem('farmerData', JSON.stringify(dashboardData));
+
+                // Short delay before redirect so user sees completion
+                setTimeout(() => {
+                    closeForm();
+                    window.location.href = 'dashboard.html';
+                }, 500);
+
+            } catch (error) {
+                console.error('Score generation error:', error);
+                // Reset UI
+                loadingEl.style.display = 'none';
+                submitBtn.style.display = '';
+                submitBtn.disabled = false;
+                popupForm.classList.remove('analyzing');
+                dots.forEach((dot, i) => {
+                    dot.classList.remove('analyzing');
+                    if (i === 0) dot.classList.add('active');
+                    else dot.classList.remove('active');
+                });
+                showPopupError('⚠️ ' + (error.message || 'Could not connect to server. Please ensure the backend is running on port 5000.'));
+            }
         }
 
-        // Intersection Observer for reveal animations
+        function showPopupError(message) {
+            const errorEl = document.getElementById('popupError');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+        }
+
+        // ==================== INTERSECTION OBSERVER ====================
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1485,7 +1631,7 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Hero parallax effect
+        // ==================== HERO PARALLAX ====================
         const heroContent = document.querySelector('.hero-content');
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
