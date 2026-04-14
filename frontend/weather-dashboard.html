@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BHOOMI-Fi Weather Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+        }
+        
+        .search-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        select, input, button {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        select {
+            flex: 1;
+            min-width: 150px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5a67d8;
+        }
+        
+        .current-weather {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .weather-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .temp {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .detail-card {
+            background: #f7f7f7;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        .detail-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .forecast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .forecast-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .forecast-date {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        .forecast-temp {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+        }
+        
+        .error {
+            background: #ff4757;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .weather-main {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌤️ BHOOMI-Fi Weather Dashboard</h1>
+        <p class="subtitle">Real-time weather data for agricultural credit scoring</p>
+        
+        <div class="search-section">
+            <div class="search-box">
+                <select id="districtSelect">
+                    <option value="punjab">Punjab</option>
+                    <option value="haryana">Haryana</option>
+                    <option value="maharashtra">Maharashtra</option>
+                    <option value="telangana">Telangana</option>
+                    <option value="karnataka">Karnataka</option>
+                    <option value="gujarat">Gujarat</option>
+                    <option value="up">Uttar Pradesh</option>
+                    <option value="tamilnadu">Tamil Nadu</option>
+                    <option value="bihar">Bihar</option>
+                    <option value="westbengal">West Bengal</option>
+                    <option value="rajasthan">Rajasthan</option>
+                    <option value="madhya">Madhya Pradesh</option>
+                </select>
+                <button onclick="getWeather()">Get Weather</button>
+                <button onclick="getForecast()">Get 5-Day Forecast</button>
+            </div>
+        </div>
+        
+        <div id="weatherContent">
+            <div class="loading">Select a district to view weather data...</div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = 'http://localhost:5000/api/weather';
+        
+        async function getWeather() {
+            const district = document.getElementById('districtSelect').value;
+            const contentDiv = document.getElementById('weatherContent');
+            contentDiv.innerHTML = '<div class="loading">Loading weather data...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/current/${district}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayCurrentWeather(data);
+                } else {
+                    contentDiv.innerHTML = `<div class="error">⚠️ ${data.error || 'Could not fetch weather data'}</div>`;
+                }
+            } catch (error) {
+                contentDiv.innerHTML = `<div class="error">⚠️ Error: ${error.message}</div>`;
+            }
+        }
+        
+        function displayCurrentWeather(data) {
+            const contentDiv = document.getElementById('weatherContent');
+            
+            contentDiv.innerHTML = `
+                <div class="current-weather">
+                    <h2>📍 Current Weather: ${data.district.toUpperCase()}</h2>
+                    <div class="weather-main">
+                        <div>
+                            <div class="temp">${data.temperature}°C</div>
+                            <div>${data.weather_condition || 'Clear sky'}</div>
+                        </div>
+                        <div>
+                            <div>Feels like: ${data.feels_like}°C</div>
+                            <div>Last updated: ${new Date(data.timestamp).toLocaleTimeString()}</div>
+                        </div>
+                    </div>
+                    <div class="weather-details">
+                        <div class="detail-card">
+                            <div class="detail-label">💧 Humidity</div>
+                            <div class="detail-value">${data.humidity}%</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">🌧️ Rainfall</div>
+                            <div class="detail-value">${data.rainfall} mm</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">💨 Wind Speed</div>
+                            <div class="detail-value">${data.wind_speed} m/s</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">📊 Pressure</div>
+                            <div class="detail-value">${data.pressure} hPa</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function getForecast() {
+            const district = document.getElementById('districtSelect').value;
+            const contentDiv = document.getElementById('weatherContent');
+            contentDiv.innerHTML = '<div class="loading">Loading forecast data...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/forecast/${district}`);
+                const data = await response.json();
+                
+                if (data.success && data.forecasts) {
+                    displayForecast(data.forecasts, district);
+                } else {
+                    contentDiv.innerHTML = `<div class="error">⚠️ Could not fetch forecast data</div>`;
+                }
+            } catch (error) {
+                contentDiv.innerHTML = `<div class="error">⚠️ Error: ${error.message}</div>`;
+            }
+        }
+        
+        function displayForecast(forecasts, district) {
+            const contentDiv = document.getElementById('weatherContent');
+            
+            let forecastHTML = `
+                <div class="current-weather">
+                    <h2>📅 5-Day Forecast: ${district.toUpperCase()}</h2>
+                    <div class="forecast-grid">
+            `;
+            
+            forecasts.forEach(day => {
+                const date = new Date(day.date);
+                const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+                
+                forecastHTML += `
+                    <div class="forecast-card">
+                        <div class="forecast-date">${dayName}</div>
+                        <div class="forecast-temp">${Math.round(day.temp_max)}° / ${Math.round(day.temp_min)}°</div>
+                        <div>💧 ${day.humidity}% humidity</div>
+                        <div>🌧️ ${day.rainfall} mm rain</div>
+                        <div>${day.condition || 'Clear'}</div>
+                    </div>
+                `;
+            });
+            
+            forecastHTML += `
+                    </div>
+                </div>
+                <button onclick="getWeather()" style="margin-top: 20px; width: 100%;">← Back to Current Weather</button>
+            `;
+            
+            contentDiv.innerHTML = forecastHTML;
+        }
+        
+        // Load default weather on page load
+        window.onload = () => {
+            getWeather();
+            // Refresh every 5 minutes
+            setInterval(getWeather, 300000);
+        };
+    </script>
+</body>
+</html>
