@@ -526,21 +526,7 @@
             color: var(--text-main);
         }
 
-        /* Form Section */
-        #form-section {
-            background-color: var(--white);
-        }
-
-        .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: var(--white);
-            padding: 3rem;
-            border-radius: 1rem;
-            box-shadow: var(--shadow-md);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
+        /* Form Styles (used by popup) */
         .form-group {
             margin-bottom: 1.5rem;
             text-align: left;
@@ -573,13 +559,131 @@
             min-height: 120px;
         }
 
-        .counter {
-            font-size: 0.875rem;
-            color: var(--text-light);
-            text-align: right;
-            margin-top: 0.5rem;
-            transition: var(--transition);
-            font-weight: 500;
+        /* Why Choose Us Section */
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .why-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem 1.75rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            border-top: 4px solid #2d9e5f;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .why-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+        }
+
+        .why-icon {
+            width: 52px;
+            height: 52px;
+            background: rgba(45,158,95,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .why-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1a3a2a;
+            font-family: 'Fraunces', serif;
+            margin-bottom: 0.75rem;
+        }
+
+        .why-card p {
+            font-size: 0.92rem;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        /* FAQ Accordion */
+        .faq-accordion {
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 0.875rem;
+            margin-bottom: 0.875rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.2s ease;
+        }
+
+        .faq-question:hover {
+            background: #f8fdf8;
+        }
+
+        .faq-q-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a3a2a;
+            font-family: 'DM Sans', sans-serif;
+            line-height: 1.5;
+            padding-right: 1rem;
+        }
+
+        .faq-icon {
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: #2d9e5f;
+            flex-shrink: 0;
+            transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+            line-height: 1;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-item.open .faq-question {
+            background: #f0faf4;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1),
+                        padding 0.3s ease;
+            padding: 0 1.5rem;
+        }
+
+        .faq-answer.open {
+            max-height: 300px;
+            padding: 0 1.5rem 1.25rem;
+        }
+
+        .faq-answer p {
+            font-size: 0.93rem;
+            color: #555;
+            line-height: 1.75;
+            border-top: 1px solid #e8f5e9;
+            padding-top: 1rem;
         }
 
         /* CTA Section */
@@ -942,6 +1046,9 @@
             .footer-content {
                 grid-template-columns: 1fr 1fr;
             }
+            .why-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
@@ -969,6 +1076,15 @@
             .hero-stats {
                 flex-direction: column;
                 align-items: center;
+            }
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+            .faq-accordion {
+                padding: 0 0.5rem;
+            }
+            .faq-q-text {
+                font-size: 0.92rem;
             }
         }
     </style>
@@ -1077,6 +1193,7 @@
             <li><a href="#features">Features</a></li>
             <li><a href="#how-it-works">How It Works</a></li>
             <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#faq">FAQ</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -1277,39 +1394,105 @@
         </div>
     </section>
 
-    <!-- Farmer Form Section -->
-    <section id="form-section" class="section">
-        <div class="container" style="text-align: center;">
-            <div class="section-header">
-                <h2>Get Your Harvest Score</h2>
-                <p class="process-subtext">Fill in your details to start the evaluation.</p>
+    <!-- FAQ & Why Choose Us Section -->
+    <section id="faq" class="section" style="background-color: #f4f7f4;">
+        <div class="container">
+            <!-- Why Choose Us -->
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <span class="badge">Why BhoomiFi</span>
+                <h2 style="font-family: 'Fraunces', serif; color: #1a3a2a; font-size: 2.5rem;">Built Different. Built for Bharat.</h2>
+                <p style="color: #666; max-width: 650px; margin: 0 auto; line-height: 1.7;">Most fintech platforms are built for someone who already has a credit card. We built BhoomiFi for someone who has never needed one — because they grow their own living from the ground up.</p>
             </div>
-            
-            <div class="form-container">
-                <form id="harvestForm" onsubmit="event.preventDefault();">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" class="form-control" placeholder="Your full name" required>
+
+            <div class="why-grid">
+                <div class="why-card reveal" style="transition-delay: 0ms;">
+                    <div class="why-icon">🤖</div>
+                    <h3>AI That Actually Explains Itself</h3>
+                    <p>Most credit systems are black boxes. BhoomiFi's Harvest Score tells you exactly which factors pushed your score up or down — crop health, land size, regional yield data — in plain language, not jargon.</p>
+                </div>
+                <div class="why-card reveal" style="transition-delay: 150ms;">
+                    <div class="why-icon">🏛️</div>
+                    <h3>Government Schemes You Didn't Know About</h3>
+                    <p>Billions in agricultural subsidies go unclaimed every year because farmers don't know they qualify. Our system automatically matches your profile to PM-Kisan, PMFBY, Kisan Credit Card, and more.</p>
+                </div>
+                <div class="why-card reveal" style="transition-delay: 300ms;">
+                    <div class="why-icon">⚖️</div>
+                    <h3>Fair Credit. No Middlemen.</h3>
+                    <p>Instead of going to one lender who sets the terms, BhoomiFi brings multiple lenders to you. They compete for your business. You pick the lowest rate. That's how credit should work.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Accordion -->
+            <div style="text-align: center;">
+                <span class="badge">FAQ</span>
+                <h2 style="font-family: 'Fraunces', serif; color: #1a3a2a; font-size: 2rem;">Questions Farmers Actually Ask</h2>
+                <p style="color: #666; font-size: 0.95rem; margin-bottom: 2.5rem;">No bank jargon. No fine print. Just honest answers.</p>
+            </div>
+
+            <div class="faq-accordion reveal">
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span class="faq-q-text">Do I need a CIBIL score or any existing credit history to use BhoomiFi?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No — that's exactly the problem we're solving. BhoomiFi was designed for farmers who have never had a credit card or formal loan. Your Harvest Score is built entirely from your agricultural data: crop type, land size, location, and farming conditions. No CIBIL score required, ever.</p>
                     </div>
-                    <div class="form-group">
-                        <label for="cropType">Crop Type</label>
-                        <input type="text" id="cropType" class="form-control" placeholder="e.g. Wheat, Rice, Cotton" required>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span class="faq-q-text">How is my Harvest Score calculated? Is it fair?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Your score is generated by a machine learning model trained on real agricultural yield data from across India. It considers crop viability in your region, land size, estimated yield potential, and risk factors like seasonal patterns. The AI then explains every single factor — so you always know why you got the score you did. No hidden logic.</p>
                     </div>
-                    <div class="form-group">
-                        <label for="landSize">Land Size (Acres/Hectares)</label>
-                        <input type="text" id="landSize" class="form-control" placeholder="e.g. 5 Acres" required>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span class="faq-q-text">What documents do I need to submit to get my score?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>For the initial Harvest Score, you only need to provide your crop type, land size in acres, and your village or district location. No documents are required at this stage. If a lender decides to proceed with a loan offer, they may request land records (7/12 extract) separately.</p>
                     </div>
-                    <div class="form-group">
-                        <label for="location">Location</label>
-                        <input type="text" id="location" class="form-control" placeholder="City or Village, State" required>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span class="faq-q-text">Is my farm data safe? Who can see it?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Your data is used only to generate your Harvest Score and match you to relevant loan offers and schemes. We do not sell your data to third parties. Lenders only see your score and profile after you choose to share it — they cannot access your raw farm data without your consent.</p>
                     </div>
-                    <div class="form-group">
-                        <label for="message">Description</label>
-                        <textarea id="message" class="form-control" placeholder="Describe your farm or crop condition..." maxlength="200" required></textarea>
-                        <div id="counter" class="counter">0 / 200 characters</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span class="faq-q-text">How do lenders see my profile and make offers?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Once your Harvest Score is generated, BhoomiFi shares your credit profile (score, crop, location, land size) with registered lenders in our network. Lenders then submit loan offers — interest rate, maximum loan amount, tenure. You see all offers side by side and choose the one that works for you. You are never locked into a single lender.</p>
                     </div>
-                    <button type="submit" class="btn btn-green">Submit Details</button>
-                </form>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span class="faq-q-text">Which government schemes can BhoomiFi match me to?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>BhoomiFi currently matches farmers to PM-Kisan Samman Nidhi (direct income support), Pradhan Mantri Fasal Bima Yojana or PMFBY (crop insurance), Kisan Credit Card or KCC (revolving credit for farm inputs), and the Soil Health Card scheme. More schemes are added regularly. Eligibility is determined automatically based on your farm profile.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span class="faq-q-text">Is BhoomiFi free to use for farmers?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes — completely free. Farmers never pay to get a Harvest Score, view loan offers, or discover government schemes. BhoomiFi earns from lenders who pay a small fee when a farmer successfully accepts a loan offer. Your access is always free, always will be.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1320,7 +1503,7 @@
         <div class="cta-content" style="position: relative; z-index: 1;">
             <h2>Get Your Harvest Score in 60 Seconds</h2>
             <p>Join thousands of farmers using AI-powered credit scoring to unlock fair and affordable loans.</p>
-            <a href="#form-section" class="btn btn-white-filled">Start Now</a>
+            <a href="#" onclick="openForm(); return false;" class="btn btn-white-filled">Start Now</a>
         </div>
     </section>
 
@@ -1412,16 +1595,31 @@
             document.querySelector('#how-it-works').scrollIntoView({ behavior: 'smooth' });
         });
 
-        // ==================== CHARACTER COUNTERS ====================
-        const messageInput = document.getElementById("message");
-        const counterDisplay = document.getElementById("counter");
-        if (messageInput && counterDisplay) {
-            messageInput.addEventListener("input", function() {
-                const currentLength = this.value.length;
-                counterDisplay.textContent = currentLength + " / 200 characters";
-                counterDisplay.style.color = currentLength > 180 ? "red" : currentLength > 150 ? "orange" : "var(--text-light)";
+        // ==================== FAQ ACCORDION ====================
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+
+            question.addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+
+                // Close all items first
+                faqItems.forEach(i => {
+                    i.classList.remove('open');
+                    i.querySelector('.faq-answer').classList.remove('open');
+                    i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                });
+
+                // If it was closed, open it
+                if (!isOpen) {
+                    item.classList.add('open');
+                    answer.classList.add('open');
+                    question.setAttribute('aria-expanded', 'true');
+                }
             });
-        }
+        });
 
         // ==================== SOIL QUALITY SLIDER ====================
         const soilSlider = document.getElementById('popupSoilQuality');
@@ -1590,6 +1788,43 @@
 
                 // Store in localStorage for dashboard
                 localStorage.setItem('farmerData', JSON.stringify(dashboardData));
+
+                // Log to SQLite DB (silent — failures don't break flow)
+                try {
+                    const logRes = await fetch('http://localhost:5001/log/farmer', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: farmerName,
+                            crop_type: cropType,
+                            land_size: landArea,
+                            location: district,
+                            description: ''
+                        })
+                    });
+                    const logData = await logRes.json();
+                    if (logData.success) {
+                        try {
+                            await fetch('http://localhost:5001/log/score', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    farmer_id: logData.farmer_id,
+                                    harvest_score: dashboardData.harvestScore,
+                                    grade: dashboardData.grade,
+                                    risk_level: dashboardData.riskLevel,
+                                    eligible: dashboardData.eligible,
+                                    recommended_loan: dashboardData.recommendedLoanAmount,
+                                    government_scheme: dashboardData.governmentScheme.name
+                                })
+                            });
+                        } catch(e) {
+                            console.warn('Score logging failed silently:', e);
+                        }
+                    }
+                } catch(e) {
+                    console.warn('DB logging failed silently:', e);
+                }
 
                 // Short delay before redirect so user sees completion
                 setTimeout(() => {
