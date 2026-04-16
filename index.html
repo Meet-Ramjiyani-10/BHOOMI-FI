@@ -1308,6 +1308,426 @@
             }
         }
 
+        /* ═══════════════════════════════════════════════ */
+        /*            DARK MODE THEME TOGGLE              */
+        /* ═══════════════════════════════════════════════ */
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            transition: background 0.4s ease, border-color 0.4s ease;
+            margin-left: 1rem;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.35);
+        }
+
+        .theme-toggle-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+                        background 0.3s ease;
+            transform: translateX(0);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            line-height: 1;
+        }
+
+        [data-theme="dark"] .theme-toggle-thumb {
+            transform: translateX(22px);
+            background: #1a2e22;
+        }
+
+        .theme-toggle .icon-sun,
+        .theme-toggle .icon-moon {
+            position: absolute;
+            font-size: 11px;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .theme-toggle .icon-sun {
+            left: 7px;
+            opacity: 1;
+        }
+
+        .theme-toggle .icon-moon {
+            right: 7px;
+            opacity: 0.5;
+        }
+
+        [data-theme="dark"] .theme-toggle .icon-sun {
+            opacity: 0.5;
+        }
+
+        [data-theme="dark"] .theme-toggle .icon-moon {
+            opacity: 1;
+        }
+
+        /* ── DARK MODE VARIABLE OVERRIDES ── */
+        [data-theme="dark"] {
+            --text-main: #e0e8e4;
+            --text-light: #9aada2;
+            --bg-light-gray: #121f18;
+            --white: #ffffff;
+            --navy: #070f0b;
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.25);
+            --shadow-md: 0 10px 20px rgba(0, 0, 0, 0.35);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        [data-theme="dark"] body {
+            background-color: #0b1a12;
+            color: #e0e8e4;
+        }
+
+        /* Navbar dark mode */
+        [data-theme="dark"] .navbar {
+            background: rgba(7, 15, 11, 0.95);
+            border-bottom-color: rgba(45, 158, 95, 0.1);
+        }
+
+        /* Hero gradient - slightly deeper & richer */
+        [data-theme="dark"] .gradient-bg {
+            background: linear-gradient(135deg, #060f09 0%, #0d261a 40%, #091e12 70%, #12402a 100%);
+        }
+
+        /* Features section */
+        [data-theme="dark"] #features {
+            background-color: #0b1a12;
+        }
+
+        [data-theme="dark"] .feature-card {
+            background: #142420;
+            border-color: rgba(45, 158, 95, 0.12);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .feature-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        [data-theme="dark"] .feature-card h3 {
+            color: #d4e8dc;
+        }
+
+        [data-theme="dark"] .feature-card p {
+            color: #8aa898;
+        }
+
+        [data-theme="dark"] .feature-icon {
+            background-color: rgba(45, 158, 95, 0.15);
+        }
+
+        [data-theme="dark"] .badge {
+            background-color: rgba(45, 158, 95, 0.15);
+            color: #4ade80;
+        }
+
+        [data-theme="dark"] h2 {
+            color: #e0e8e4;
+        }
+
+        /* How It Works */
+        [data-theme="dark"] #how-it-works {
+            background-color: #0e1f16;
+        }
+
+        [data-theme="dark"] .process-card {
+            background: #142420;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .process-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        [data-theme="dark"] .process-card h4 {
+            color: #d4e8dc;
+        }
+
+        [data-theme="dark"] .step-number {
+            border-color: #0e1f16;
+            background-color: #22c55e;
+        }
+
+        [data-theme="dark"] .process-subtext {
+            color: #8aa898;
+        }
+
+        /* Testimonials */
+        [data-theme="dark"] #testimonials {
+            background-color: #0b1a12;
+        }
+
+        [data-theme="dark"] .testimonial-card {
+            background: #142420;
+            border-left-color: #22c55e;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .testimonial-quote {
+            color: #9aada2;
+        }
+
+        [data-theme="dark"] .testimonial-author {
+            color: #d4e8dc;
+        }
+
+        [data-theme="dark"] .testimonial-location {
+            color: #6b8a7a;
+        }
+
+        [data-theme="dark"] .testimonial-score {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+        }
+
+        /* Why Choose Us */
+        [data-theme="dark"] .why-card {
+            background: #142420;
+            border-top-color: #22c55e;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .why-card:hover {
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+        }
+
+        [data-theme="dark"] .why-card h3 {
+            color: #d4e8dc;
+        }
+
+        [data-theme="dark"] .why-card p {
+            color: #8aa898;
+        }
+
+        [data-theme="dark"] .why-icon {
+            background: rgba(45, 158, 95, 0.15);
+        }
+
+        /* FAQ */
+        [data-theme="dark"] #faq {
+            background-color: #0b1a12;
+        }
+
+        [data-theme="dark"] .faq-item {
+            background: #142420;
+            border-color: rgba(45, 158, 95, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .faq-question:hover {
+            background: rgba(45, 158, 95, 0.08);
+        }
+
+        [data-theme="dark"] .faq-q-text {
+            color: #d4e8dc;
+        }
+
+        [data-theme="dark"] .faq-item.open .faq-question {
+            background: rgba(45, 158, 95, 0.1);
+        }
+
+        [data-theme="dark"] .faq-answer p {
+            color: #8aa898;
+            border-top-color: rgba(45, 158, 95, 0.15);
+        }
+
+        /* Gallery */
+        [data-theme="dark"] #gallery {
+            background-color: #0e1f16;
+        }
+
+        [data-theme="dark"] .gallery-card {
+            background: #142420;
+            border-color: rgba(45, 158, 95, 0.1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .gallery-card:hover {
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        [data-theme="dark"] .gallery-card-body h4 {
+            color: #d4e8dc;
+        }
+
+        [data-theme="dark"] .gallery-card-body p {
+            color: #8aa898;
+        }
+
+        [data-theme="dark"] .gallery-img-wrap {
+            background: #1a3326;
+        }
+
+        [data-theme="dark"] .gallery-img-wrap.img-error {
+            background: rgba(45, 158, 95, 0.08);
+        }
+
+        [data-theme="dark"] .gallery-count {
+            color: #6b8a7a;
+        }
+
+        [data-theme="dark"] .gallery-empty {
+            color: #6b8a7a;
+        }
+
+        [data-theme="dark"] .filter-btn {
+            background: #142420;
+            color: #9aada2;
+            border-color: rgba(45, 158, 95, 0.2);
+        }
+
+        [data-theme="dark"] .filter-btn:hover {
+            background: rgba(45, 158, 95, 0.12);
+            border-color: #2d9e5f;
+            color: #4ade80;
+        }
+
+        [data-theme="dark"] .filter-btn.active {
+            background: #2d9e5f;
+            color: white;
+            border-color: #2d9e5f;
+        }
+
+        /* CTA section — keep gradient but deepen */
+        [data-theme="dark"] #cta.gradient-bg {
+            background: linear-gradient(135deg, #060f09 0%, #0d261a 40%, #091e12 70%, #12402a 100%);
+        }
+
+        /* Footer */
+        [data-theme="dark"] footer {
+            background-color: #070f0b;
+        }
+
+        [data-theme="dark"] .bottom-bar {
+            border-top-color: rgba(45, 158, 95, 0.1);
+        }
+
+        /* Popup Form */
+        [data-theme="dark"] .popup-overlay {
+            background: rgba(0, 0, 0, 0.75);
+        }
+
+        [data-theme="dark"] .popup-form {
+            background: linear-gradient(145deg, #142420 0%, #0e1f16 100%);
+            border-top-color: #22c55e;
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        [data-theme="dark"] .popup-form h3 {
+            color: #d4e8dc;
+        }
+
+        [data-theme="dark"] .popup-sub {
+            color: #8aa898;
+        }
+
+        [data-theme="dark"] .popup-badge {
+            background: rgba(45, 158, 95, 0.15);
+            color: #4ade80;
+        }
+
+        [data-theme="dark"] .form-group label {
+            color: #c4d8cc;
+        }
+
+        [data-theme="dark"] .form-control {
+            background: #0b1a12;
+            border-color: rgba(45, 158, 95, 0.2);
+            color: #e0e8e4;
+        }
+
+        [data-theme="dark"] .form-control:focus {
+            border-color: #2d9e5f;
+            box-shadow: 0 0 0 3px rgba(45, 158, 95, 0.2);
+        }
+
+        [data-theme="dark"] .popup-step-dot {
+            background: #2a3d32;
+        }
+
+        [data-theme="dark"] .step-line-popup {
+            background: #2a3d32;
+        }
+
+        [data-theme="dark"] .progress-labels {
+            color: #6b8a7a;
+        }
+
+        [data-theme="dark"] .btn-close {
+            border-color: rgba(45, 158, 95, 0.2);
+            color: #8aa898;
+        }
+
+        [data-theme="dark"] .btn-close:hover {
+            background: rgba(45, 158, 95, 0.1);
+            border-color: rgba(45, 158, 95, 0.3);
+        }
+
+        /* Scrollbar dark mode */
+        [data-theme="dark"] ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        [data-theme="dark"] ::-webkit-scrollbar-track {
+            background: #0b1a12;
+        }
+
+        [data-theme="dark"] ::-webkit-scrollbar-thumb {
+            background: #2a3d32;
+            border-radius: 4px;
+        }
+
+        [data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+            background: #3a5442;
+        }
+
+        /* Smooth theme transition */
+        html[data-theme="dark"],
+        html[data-theme="dark"] body,
+        html[data-theme="dark"] .navbar,
+        html[data-theme="dark"] .feature-card,
+        html[data-theme="dark"] .process-card,
+        html[data-theme="dark"] .testimonial-card,
+        html[data-theme="dark"] .why-card,
+        html[data-theme="dark"] .faq-item,
+        html[data-theme="dark"] .gallery-card,
+        html[data-theme="dark"] .filter-btn,
+        html[data-theme="dark"] .popup-form,
+        html[data-theme="dark"] .form-control,
+        html[data-theme="dark"] footer {
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        /* Mobile toggle positioning */
+        @media (max-width: 768px) {
+            .theme-toggle {
+                margin-left: auto;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -1387,14 +1807,14 @@
                 <input type="number" id="popupLandSize" class="form-control" placeholder="e.g. 2.5" step="0.1" min="0.1" required>
             </div>
             <div class="form-group">
-                <label for="popupSoilQuality">Soil Quality (0-100) <span style="font-weight:400;color:#888;">— optional</span></label>
+                <label for="popupSoilQuality">Soil Quality (0-100) <span style="font-weight:400;color:var(--text-light);">— optional</span></label>
                 <input type="range" id="popupSoilQuality" class="form-control" min="0" max="100" value="65" style="padding: 0.5rem 0;">
-                <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#888;"><span>Poor (0)</span><span id="soilQualityValue" style="font-weight:600;color:#2d9e5f;">65</span><span>Excellent (100)</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-light);"><span>Poor (0)</span><span id="soilQualityValue" style="font-weight:600;color:#2d9e5f;">65</span><span>Excellent (100)</span></div>
             </div>
             <!-- Loading indicator (hidden by default) -->
             <div id="popupLoading" style="display:none;text-align:center;padding:1rem 0;">
                 <div style="display:inline-block;width:40px;height:40px;border:3px solid #e0e0e0;border-top:3px solid #2d9e5f;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
-                <p style="margin-top:0.75rem;color:#666;font-size:0.9rem;" id="loadingText">Fetching weather data & analyzing...</p>
+                <p style="margin-top:0.75rem;color:var(--text-light);font-size:0.9rem;" id="loadingText">Fetching weather data & analyzing...</p>
             </div>
             <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
             <!-- Error display -->
@@ -1418,6 +1838,11 @@
             <li><a href="#gallery">Gallery</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark/light mode">
+            <span class="icon-sun">☀️</span>
+            <span class="icon-moon">🌙</span>
+            <span class="theme-toggle-thumb"></span>
+        </button>
     </nav>
 
     <!-- Hero Section -->
@@ -1516,7 +1941,7 @@
                 <span class="badge">Process</span>
                 <h2>How It Works</h2>
             </div>
-            <p class="process-subtext">From crop data to loan disbursal — the entire journey in 8 simple steps.<br><em style="font-size: 0.9rem; color: #888;">Powered by Claude AI for intelligent credit assessment.</em></p>
+            <p class="process-subtext">From crop data to loan disbursal — the entire journey in 8 simple steps.<br><em style="font-size: 0.9rem; color: var(--text-light);">Powered by Claude AI for intelligent credit assessment.</em></p>
             
             <div class="process-grid">
                 <!-- Step 1 -->
@@ -1617,13 +2042,13 @@
     </section>
 
     <!-- FAQ & Why Choose Us Section -->
-    <section id="faq" class="section" style="background-color: #f4f7f4;">
+    <section id="faq" class="section" style="background-color: var(--bg-light-gray);">
         <div class="container">
             <!-- Why Choose Us -->
             <div style="text-align: center; margin-bottom: 3rem;">
                 <span class="badge">Why BhoomiFi</span>
-                <h2 style="font-family: 'Fraunces', serif; color: #1a3a2a; font-size: 2.5rem;">Built Different. Built for Bharat.</h2>
-                <p style="color: #666; max-width: 650px; margin: 0 auto; line-height: 1.7;">Most fintech platforms are built for someone who already has a credit card. We built BhoomiFi for someone who has never needed one — because they grow their own living from the ground up.</p>
+                <h2 style="font-family: 'Fraunces', serif; color: var(--text-main); font-size: 2.5rem;">Built Different. Built for Bharat.</h2>
+                <p style="color: var(--text-light); max-width: 650px; margin: 0 auto; line-height: 1.7;">Most fintech platforms are built for someone who already has a credit card. We built BhoomiFi for someone who has never needed one — because they grow their own living from the ground up.</p>
             </div>
 
             <div class="why-grid">
@@ -1647,8 +2072,8 @@
             <!-- FAQ Accordion -->
             <div style="text-align: center;">
                 <span class="badge">FAQ</span>
-                <h2 style="font-family: 'Fraunces', serif; color: #1a3a2a; font-size: 2rem;">Questions Farmers Actually Ask</h2>
-                <p style="color: #666; font-size: 0.95rem; margin-bottom: 2.5rem;">No bank jargon. No fine print. Just honest answers.</p>
+                <h2 style="font-family: 'Fraunces', serif; color: var(--text-main); font-size: 2rem;">Questions Farmers Actually Ask</h2>
+                <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 2.5rem;">No bank jargon. No fine print. Just honest answers.</p>
             </div>
 
             <div class="faq-accordion reveal">
@@ -1720,7 +2145,7 @@
     </section>
 
     <!-- Gallery Section -->
-    <section id="gallery" class="section" style="background: #ffffff;">
+    <section id="gallery" class="section">
         <div class="container">
 
             <!-- Section Header -->
@@ -2524,6 +2949,35 @@
                 heroContent.style.transform = `translateY(${scrollY * 0.35}px)`;
             }
         });
+
+        // ==================== DARK MODE TOGGLE ====================
+        (function initThemeToggle() {
+            const toggle = document.getElementById('themeToggle');
+            const html = document.documentElement;
+
+            // Check localStorage or system preference
+            const savedTheme = localStorage.getItem('bhoomifi-theme');
+            if (savedTheme) {
+                html.setAttribute('data-theme', savedTheme);
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                html.setAttribute('data-theme', 'dark');
+            }
+
+            toggle.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('bhoomifi-theme', newTheme);
+            });
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.getItem('bhoomifi-theme')) {
+                    html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                }
+            });
+        })();
     </script>
 </body>
 </html>
