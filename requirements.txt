@@ -2,3 +2,9 @@ flask
 numpy
 scikit-learn
 pandas
+
+# ── CV / PyTorch dependencies (added for crop health image model) ──
+torch
+torchvision
+Pillow
+opencv-python-headless

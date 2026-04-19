@@ -1837,6 +1837,411 @@
                 margin-left: auto;
             }
         }
+
+        /* ==================== POPUP TABS & UPLOAD UI ==================== */
+        .popup-tabs {
+            display: flex;
+            background: rgba(45, 106, 79, 0.05);
+            border-radius: 999px;
+            padding: 4px;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .popup-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.6rem 1rem;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .popup-tab.active {
+            background: #2d9e5f;
+            color: white;
+            box-shadow: 0 4px 10px rgba(45, 158, 95, 0.3);
+        }
+
+        .tab-content-panel {
+            display: none;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .tab-content-panel.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Upload Photo Tab Styles */
+        .upload-banner {
+            background: rgba(45, 158, 95, 0.1);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-banner-icon {
+            font-size: 1.5rem;
+        }
+
+        .upload-banner-text h4 {
+            color: #1a3a2a;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .upload-banner-text p {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .upload-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            background: white;
+            padding: 2px 8px;
+            border-radius: 999px;
+            color: #2d9e5f;
+            font-weight: 600;
+            border: 1px solid rgba(45, 158, 95, 0.2);
+        }
+
+        .upload-area {
+            border: 2px dashed #2d9e5f;
+            background: rgba(45, 158, 95, 0.05);
+            border-radius: 16px;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.15s ease;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .upload-area.drag-over {
+            border-color: #40916c;
+            background: rgba(45, 106, 79, 0.15);
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-title {
+            font-weight: 700;
+            color: #1a3a2a;
+            margin-bottom: 0.25rem;
+        }
+
+        .upload-subtext {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .upload-btn {
+            background: white;
+            border: 1.5px solid #d0e8d0;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1a3a2a;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .upload-btn:hover {
+            border-color: #2d9e5f;
+            color: #2d9e5f;
+            background: #f0faf4;
+        }
+
+        .upload-hint {
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        .preview-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeInScale 0.25s ease both;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .image-preview {
+            max-height: 200px;
+            width: auto;
+            max-width: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-meta {
+            width: 100%;
+            text-align: center;
+        }
+
+        .preview-filename {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .preview-filesize {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-status {
+            display: inline-block;
+            font-size: 0.75rem;
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .preview-action-btn {
+            background: transparent;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .preview-action-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+        }
+
+        .preview-action-btn.remove:hover {
+            background: rgba(220, 38, 38, 0.1);
+            color: #dc2626;
+        }
+
+        .crop-type-hint {
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.8rem;
+            color: #92400e;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            margin-top: 1rem;
+            text-align: left;
+        }
+
+        .skip-option {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .skip-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .skip-btn {
+            background: transparent;
+            border: none;
+            color: #2d9e5f;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .skip-btn:hover {
+            color: #1a4a2e;
+            text-decoration: underline;
+        }
+
+        .upload-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            right: 1rem;
+            animation: slideDownFade 0.3s ease both;
+            z-index: 10;
+        }
+
+        .tab-text-short {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .tab-text-full {
+                display: none;
+            }
+
+            .tab-text-short {
+                display: inline;
+            }
+
+            .popup-tab {
+                font-size: 0.8rem;
+                padding: 0.6rem 0.5rem;
+            }
+
+            .upload-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .upload-btn {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .image-preview {
+                max-height: 150px;
+            }
+
+            .upload-area {
+                min-height: 140px;
+            }
+        }
+
+        [data-theme="dark"] .popup-tabs {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="dark"] .popup-tab {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        [data-theme="dark"] .popup-tab.active {
+            color: white;
+        }
+
+        [data-theme="dark"] .upload-banner {
+            background: rgba(45, 158, 95, 0.15);
+        }
+
+        [data-theme="dark"] .upload-banner-text h4 {
+            color: #d4e8dc;
+        }
+
+        [data-theme="dark"] .upload-banner-text p {
+            color: #8aa898;
+        }
+
+        [data-theme="dark"] .upload-badge {
+            background: rgba(20, 36, 32, 0.8);
+            color: #4ade80;
+            border-color: rgba(45, 158, 95, 0.3);
+        }
+
+        [data-theme="dark"] .upload-title,
+        [data-theme="dark"] .preview-filename {
+            color: #e0e8e4;
+        }
+
+        [data-theme="dark"] .upload-subtext {
+            color: #8aa898;
+        }
+
+        [data-theme="dark"] .upload-btn {
+            background: #142420;
+            border-color: rgba(45, 158, 95, 0.2);
+            color: #9aada2;
+        }
+
+        [data-theme="dark"] .upload-btn:hover {
+            border-color: #2d9e5f;
+            color: #4ade80;
+            background: rgba(45, 158, 95, 0.1);
+        }
+
+        [data-theme="dark"] .preview-action-btn {
+            color: #8aa898;
+        }
+
+        [data-theme="dark"] .preview-action-btn:hover {
+            color: #e0e8e4;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .crop-type-hint {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+        }
     </style>
 </head>
 
@@ -1862,70 +2267,140 @@
             </div>
             <h3>Get Your Credit Score</h3>
             <p class="popup-sub">AI-powered assessment with real weather data</p>
-            <div class="form-group">
-                <label for="popupName">Full Name</label>
-                <input type="text" id="popupName" class="form-control" placeholder="Enter your full name" required>
+
+            <div class="popup-tabs">
+                <button class="popup-tab active" id="tabBtnDetails" onclick="switchPopupTab('details')">📋 <span
+                        class="tab-text-full">Farm Details</span><span class="tab-text-short">Details</span></button>
+                <button class="popup-tab" id="tabBtnUpload" onclick="switchPopupTab('upload')">📸 <span
+                        class="tab-text-full">Upload Photo</span><span class="tab-text-short">Photo</span></button>
             </div>
-            <div class="form-group">
-                <label for="popupPhone">Phone Number</label>
-                <input type="tel" id="popupPhone" class="form-control" placeholder="e.g. 9876543210" required>
+
+            <div id="tabFarmDetails" class="tab-content-panel active">
+                <div class="form-group">
+                    <label for="popupName">Full Name</label>
+                    <input type="text" id="popupName" class="form-control" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="popupPhone">Phone Number</label>
+                    <input type="tel" id="popupPhone" class="form-control" placeholder="e.g. 9876543210" required>
+                </div>
+                <div class="form-group">
+                    <label for="popupCropType">Crop Type</label>
+                    <select id="popupCropType" class="form-control" required>
+                        <option value="">Select crop type</option>
+                        <option value="rice">🌾 Rice</option>
+                        <option value="wheat">🌿 Wheat</option>
+                        <option value="cotton">🤍 Cotton</option>
+                        <option value="maize">🌽 Maize</option>
+                        <option value="sugarcane">🍬 Sugarcane</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="popupDistrict">District / State</label>
+                    <select id="popupDistrict" class="form-control" required>
+                        <option value="">Select district</option>
+                        <option value="punjab">Punjab</option>
+                        <option value="haryana">Haryana</option>
+                        <option value="maharashtra">Maharashtra</option>
+                        <option value="telangana">Telangana</option>
+                        <option value="karnataka">Karnataka</option>
+                        <option value="gujarat">Gujarat</option>
+                        <option value="up">Uttar Pradesh</option>
+                        <option value="tamilnadu">Tamil Nadu</option>
+                        <option value="bihar">Bihar</option>
+                        <option value="westbengal">West Bengal</option>
+                        <option value="rajasthan">Rajasthan</option>
+                        <option value="madhya">Madhya Pradesh</option>
+                        <option value="odisha">Odisha</option>
+                        <option value="assam">Assam</option>
+                        <option value="jharkhand">Jharkhand</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="popupIrrigation">Irrigation Type</label>
+                    <select id="popupIrrigation" class="form-control" required>
+                        <option value="">Select irrigation type</option>
+                        <option value="drip">💧 Drip Irrigation</option>
+                        <option value="sprinkler">🌧️ Sprinkler</option>
+                        <option value="canal">🏞️ Canal</option>
+                        <option value="rainfed">🌦️ Rainfed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="popupLandSize">Land Area (Hectares)</label>
+                    <input type="number" id="popupLandSize" class="form-control" placeholder="e.g. 2.5" step="0.1"
+                        min="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label for="popupSoilQuality">Soil Quality (0-100) <span
+                            style="font-weight:400;color:var(--text-light);">— optional</span></label>
+                    <input type="range" id="popupSoilQuality" class="form-control" min="0" max="100" value="65"
+                        style="padding: 0.5rem 0;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-light);">
+                        <span>Poor (0)</span><span id="soilQualityValue"
+                            style="font-weight:600;color:#2d9e5f;">65</span><span>Excellent (100)</span>
+                    </div>
+                </div>
+            </div> <!-- end tabFarmDetails -->
+
+            <!-- START TAB UPLOAD PHOTO -->
+            <div id="tabUploadPhoto" class="tab-content-panel">
+                <div class="upload-banner">
+                    <div class="upload-banner-icon">🌾</div>
+                    <div class="upload-banner-text">
+                        <h4>Photo improves your Harvest Score accuracy</h4>
+                        <p>Our AI analyzes crop health, field condition, and visible stress indicators from your photo.
+                        </p>
+                        <span class="upload-badge">Optional — you can skip this tab</span>
+                    </div>
+                </div>
+
+                <div class="upload-area" id="uploadArea">
+                    <!-- Default upload state -->
+                    <div id="uploadDefaultState">
+                        <div class="upload-icon">📸</div>
+                        <div class="upload-title">Upload Crop Photo</div>
+                        <div class="upload-subtext">Drag & drop your photo here</div>
+                        <div class="upload-subtext" style="margin-bottom:0.5rem;">or</div>
+                        <div class="upload-buttons">
+                            <button class="upload-btn" onclick="document.getElementById('galleryInput').click()">🖼️
+                                Choose from Gallery</button>
+                            <button class="upload-btn" onclick="document.getElementById('cameraInput').click()">📷 Use
+                                Camera</button>
+                        </div>
+                        <div class="upload-hint">Supports JPG, PNG, WEBP · Max 5MB</div>
+                    </div>
+
+                    <!-- Preview state -->
+                    <div id="uploadPreviewState" class="preview-container" style="display: none;">
+                        <img id="imagePreview" class="image-preview" src="" alt="Crop preview">
+                        <div class="preview-meta">
+                            <div class="preview-filename" id="previewFilename">photo.jpg</div>
+                            <div class="preview-filesize" id="previewFilesize">1.2 MB</div>
+                            <div class="preview-status">✓ Ready for Analysis</div>
+                        </div>
+                        <div class="preview-actions">
+                            <button class="preview-action-btn" onclick="resetUploadArea()">🔄 Change Photo</button>
+                            <button class="preview-action-btn remove" onclick="resetUploadArea(true)">🗑️
+                                Remove</button>
+                        </div>
+                    </div>
+                    <input type="file" id="galleryInput" hidden accept="image/jpeg,image/png,image/webp">
+                    <input type="file" id="cameraInput" hidden capture="environment"
+                        accept="image/jpeg,image/png,image/webp">
+                </div>
+
+                <div id="cropTypeHint" class="crop-type-hint" style="display: none;">
+                    💡 Tip: Make sure your Farm Details tab has the correct crop type selected for best accuracy
+                </div>
+
+                <div class="skip-option">
+                    <div class="skip-text">Prefer to skip photo upload?</div>
+                    <button class="skip-btn" onclick="switchPopupTab('details')">Continue without photo →</button>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="popupCropType">Crop Type</label>
-                <select id="popupCropType" class="form-control" required>
-                    <option value="">Select crop type</option>
-                    <option value="rice">🌾 Rice</option>
-                    <option value="wheat">🌿 Wheat</option>
-                    <option value="cotton">🤍 Cotton</option>
-                    <option value="maize">🌽 Maize</option>
-                    <option value="sugarcane">🍬 Sugarcane</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="popupDistrict">District / State</label>
-                <select id="popupDistrict" class="form-control" required>
-                    <option value="">Select district</option>
-                    <option value="punjab">Punjab</option>
-                    <option value="haryana">Haryana</option>
-                    <option value="maharashtra">Maharashtra</option>
-                    <option value="telangana">Telangana</option>
-                    <option value="karnataka">Karnataka</option>
-                    <option value="gujarat">Gujarat</option>
-                    <option value="up">Uttar Pradesh</option>
-                    <option value="tamilnadu">Tamil Nadu</option>
-                    <option value="bihar">Bihar</option>
-                    <option value="westbengal">West Bengal</option>
-                    <option value="rajasthan">Rajasthan</option>
-                    <option value="madhya">Madhya Pradesh</option>
-                    <option value="odisha">Odisha</option>
-                    <option value="assam">Assam</option>
-                    <option value="jharkhand">Jharkhand</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="popupIrrigation">Irrigation Type</label>
-                <select id="popupIrrigation" class="form-control" required>
-                    <option value="">Select irrigation type</option>
-                    <option value="drip">💧 Drip Irrigation</option>
-                    <option value="sprinkler">🌧️ Sprinkler</option>
-                    <option value="canal">🏞️ Canal</option>
-                    <option value="rainfed">🌦️ Rainfed</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="popupLandSize">Land Area (Hectares)</label>
-                <input type="number" id="popupLandSize" class="form-control" placeholder="e.g. 2.5" step="0.1" min="0.1"
-                    required>
-            </div>
-            <div class="form-group">
-                <label for="popupSoilQuality">Soil Quality (0-100) <span
-                        style="font-weight:400;color:var(--text-light);">— optional</span></label>
-                <input type="range" id="popupSoilQuality" class="form-control" min="0" max="100" value="65"
-                    style="padding: 0.5rem 0;">
-                <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-light);">
-                    <span>Poor (0)</span><span id="soilQualityValue"
-                        style="font-weight:600;color:#2d9e5f;">65</span><span>Excellent (100)</span></div>
-            </div>
+            <!-- END TAB UPLOAD PHOTO -->
+
             <!-- Loading indicator (hidden by default) -->
             <div id="popupLoading" style="display:none;text-align:center;padding:1rem 0;">
                 <div
@@ -2671,7 +3146,7 @@
     <!-- JavaScript -->
     <script>
         // ==================== CONFIGURATION ====================
-        const API_BASE_URL = 'http://localhost:5000';
+        const API_BASE_URL = '';
 
         // ==================== API HELPER ====================
         async function callAPI(endpoint, method, data) {
@@ -2773,6 +3248,8 @@
             submitBtn.textContent = '🔍 Calculate Score';
             submitBtn.disabled = false;
             submitBtn.style.display = '';
+
+            switchPopupTab('details');
         }
 
         function closeForm() {
@@ -2783,6 +3260,148 @@
         document.getElementById('popupOverlay').addEventListener('click', function (e) {
             if (e.target === this) closeForm();
         });
+
+        // ==================== TAB AND UPLOAD LOGIC ====================
+        let activeTab = 'details';
+        let selectedCropImage = null;
+        let cropImageBase64 = null;
+
+        function switchPopupTab(tabId) {
+            activeTab = tabId;
+            const tabDetailsBtn = document.getElementById('tabBtnDetails');
+            const tabUploadBtn = document.getElementById('tabBtnUpload');
+            const panelDetails = document.getElementById('tabFarmDetails');
+            const panelUpload = document.getElementById('tabUploadPhoto');
+
+            if (tabId === 'details') {
+                tabDetailsBtn.classList.add('active');
+                tabUploadBtn.classList.remove('active');
+
+                panelUpload.classList.remove('active');
+                setTimeout(() => {
+                    if (activeTab === 'details') {
+                        panelUpload.style.display = 'none';
+                        panelDetails.style.display = 'block';
+                        setTimeout(() => panelDetails.classList.add('active'), 10);
+                    }
+                }, 200);
+
+            } else {
+                tabUploadBtn.classList.add('active');
+                tabDetailsBtn.classList.remove('active');
+
+                panelDetails.classList.remove('active');
+                setTimeout(() => {
+                    if (activeTab === 'upload') {
+                        panelDetails.style.display = 'none';
+                        panelUpload.style.display = 'block';
+                        setTimeout(() => panelUpload.classList.add('active'), 10);
+                    }
+                }, 200);
+            }
+        }
+
+        function handleFiles(files) {
+            if (!files || files.length === 0) return;
+            const file = files[0];
+
+            const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            if (!validTypes.includes(file.type)) {
+                showUploadError("❌ Please upload a JPG, PNG, or WEBP image");
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                showUploadError("❌ Image too large. Please use a photo under 5MB");
+                return;
+            }
+
+            selectedCropImage = file;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const fullBase64 = e.target.result;
+                cropImageBase64 = fullBase64.split(',')[1];
+
+                document.getElementById('imagePreview').src = fullBase64;
+
+                let name = file.name;
+                if (name.length > 25) name = name.substring(0, 12) + "..." + name.substring(name.length - 10);
+                document.getElementById('previewFilename').textContent = name;
+
+                let sizeStr = (file.size / 1024).toFixed(1) + " KB";
+                if (file.size > 1024 * 1024) {
+                    sizeStr = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+                }
+                document.getElementById('previewFilesize').textContent = sizeStr;
+
+                document.getElementById('uploadDefaultState').style.display = 'none';
+                document.getElementById('uploadPreviewState').style.display = 'flex';
+                document.getElementById('cropTypeHint').style.display = 'flex';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetUploadArea(clearData = false) {
+            if (clearData) {
+                selectedCropImage = null;
+                cropImageBase64 = null;
+                document.getElementById('galleryInput').value = "";
+                document.getElementById('cameraInput').value = "";
+            }
+            document.getElementById('uploadPreviewState').style.display = 'none';
+            document.getElementById('cropTypeHint').style.display = 'none';
+            document.getElementById('uploadDefaultState').style.display = 'block';
+        }
+
+        function showUploadError(msg) {
+            const uploadArea = document.getElementById('uploadArea');
+            let existing = uploadArea.querySelector('.upload-error');
+            if (existing) existing.remove();
+
+            const errDiv = document.createElement('div');
+            errDiv.className = 'upload-error';
+            errDiv.textContent = msg;
+            uploadArea.appendChild(errDiv);
+
+            setTimeout(() => {
+                if (errDiv.parentElement) errDiv.remove();
+            }, 4000);
+        }
+
+        (function initUploadListeners() {
+            const uploadArea = document.getElementById('uploadArea');
+            const galleryInput = document.getElementById('galleryInput');
+            const cameraInput = document.getElementById('cameraInput');
+
+            if (galleryInput && cameraInput && uploadArea) {
+                galleryInput.addEventListener('change', (e) => handleFiles(e.target.files));
+                cameraInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, preventDefaults, false);
+                });
+
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, () => uploadArea.classList.add('drag-over'), false);
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('drag-over'), false);
+                });
+
+                uploadArea.addEventListener('drop', (e) => {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    handleFiles(files);
+                });
+            }
+        })();
 
         // ==================== GENERATE SCORE (BACKEND CONNECTED) ====================
         async function generateScore() {
@@ -2821,9 +3440,18 @@
 
             try {
                 // STEP 1: Get credit score from backend
-                const scoreResult = await callAPI('/api/score/predict', 'POST', {
+                let payload = {
                     cropType, district, irrigation, landArea, soilQuality
-                });
+                };
+
+                if (cropImageBase64) {
+                    payload.has_image = true;
+                    payload.crop_image_base64 = cropImageBase64;
+                } else {
+                    payload.has_image = false;
+                }
+
+                const scoreResult = await callAPI('/api/score/predict', 'POST', payload);
 
                 if (!scoreResult.success) {
                     throw new Error(scoreResult.error || 'Failed to calculate score');
@@ -2865,8 +3493,48 @@
                 });
 
                 // Build comprehensive result for dashboard
-                const score = scoreResult.score;
+                const rfScore = scoreResult.score;
+
+                // ── CV Image Analysis (if photo was uploaded) ────────────
+                let imageAnalysisResult = null;
+                let finalHarvestScore = rfScore; // rfScore = score from RF model
+
+                if (cropImageBase64 !== null) {
+                    try {
+                        document.getElementById('loadingText').textContent = '🔍 Analyzing crop photo...';
+
+                        const imageResponse = await fetch('/api/image/analyze', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                image: cropImageBase64,
+                                crop_type: document.getElementById('popupCropType').value,
+                                existing_rf_score: rfScore,
+                                has_rf_score: true
+                            })
+                        });
+
+                        if (imageResponse.ok) {
+                            imageAnalysisResult = await imageResponse.json();
+
+                            if (imageAnalysisResult.success &&
+                                imageAnalysisResult.final_harvest_score) {
+                                finalHarvestScore = imageAnalysisResult.final_harvest_score;
+                            }
+                        }
+                    } catch (imageErr) {
+                        // Silent fail — image analysis is optional
+                        console.warn('Image analysis failed, using RF score only:', imageErr.message);
+                        imageAnalysisResult = null;
+                    }
+                }
+
+                const score = finalHarvestScore;
                 const dashboardData = {
+                    hasImage: cropImageBase64 !== null,
+                    imageAnalysis: imageAnalysisResult,
+                    rfOnlyScore: rfScore,
+                    finalHarvestScore: finalHarvestScore,
                     farmerName,
                     phone,
                     cropType,
@@ -2875,7 +3543,7 @@
                     landSize: landArea,
                     location: district,
                     farmerId: farmerId,
-                    harvestScore: score,
+                    harvestScore: finalHarvestScore,
                     eligible: score >= 60,
                     grade: score >= 85 ? 'Excellent' : score >= 70 ? 'Good' : score >= 60 ? 'Fair' : 'Poor',
                     confidence: scoreResult.confidence || 'Medium',
@@ -2911,7 +3579,9 @@
                     recommendation: scoreResult.weather_recommendations && scoreResult.weather_recommendations.length > 0
                         ? scoreResult.weather_recommendations.join(' | ')
                         : `Based on your ${landArea} ha ${cropType} farm in ${district}, focus on soil health and timely irrigation. Consider crop insurance under PMFBY.`,
-                    isFallback: scoreResult.isFallback || false
+                    isFallback: scoreResult.isFallback || false,
+                    hasImage: cropImageBase64 !== null,
+                    imageBase64: cropImageBase64
                 };
 
                 // Store in localStorage for dashboard

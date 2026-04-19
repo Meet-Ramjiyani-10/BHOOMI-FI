@@ -7,16 +7,16 @@ require('dotenv').config();
 const weatherService = require('./weatherService');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:5001';
+const PORT = process.env.PORT || 8888;
+const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:5000';
 
 // Middleware
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Serve static frontend files from root
-app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // In-memory storage (replace with database in production)
 let farmers = [];
@@ -318,8 +318,8 @@ app.post('/api/schemes/match', (req, res) => {
 
         GOVERNMENT_SCHEMES.forEach(scheme => {
             const eligible = area >= scheme.minLandArea &&
-                             area <= scheme.maxLandArea &&
-                             score >= scheme.minScore;
+                area <= scheme.maxLandArea &&
+                score >= scheme.minScore;
 
             if (eligible) {
                 eligibleSchemes.push({ ...scheme, eligible: true });
@@ -450,11 +450,45 @@ app.get('/api/weather/all-districts', async (req, res) => {
     });
 });
 
-// Catch-all: serve index.html for root
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'index.html'));
+// 8. Image Analysis (CV Model)
+app.post('/api/image/analyze', async (req, res) => {
+    try {
+        const response = await fetch('http://localhost:5000/analyze-image', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body)
+        });
+        const data = await response.json();
+        res.json(data);
+    } catch (err) {
+        console.error('CV model proxy error:', err.message);
+        res.status(500).json({
+            success: false,
+            error: 'CV model service unavailable',
+            final_harvest_score: req.body.existing_rf_score || 50,
+            model_available: false
+        });
+    }
 });
 
+// 9. CV Model Info
+app.get('/api/cv/model-info', async (req, res) => {
+    try {
+        const response = await fetch('http://localhost:5000/cv-model-info');
+        const data = await response.json();
+        res.json(data);
+    } catch (err) {
+        res.status(500).json({ 
+            loaded: false, 
+            error: 'CV model service unavailable' 
+        });
+    }
+});
+
+// Catch-all: serve index.html for root
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
+});
 // Start server
 app.listen(PORT, () => {
     console.log('\n' + '='.repeat(55));

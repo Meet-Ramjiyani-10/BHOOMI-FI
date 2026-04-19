@@ -669,6 +669,176 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 24px rgba(0,0,0,0.1);
         }
+
+        .cv-analysis-card {
+            background: linear-gradient(135deg, #0d2818, #1a3a28);
+            border: 1px solid #2d6a4f;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 24px auto;
+            max-width: 1200px;
+        }
+        .cv-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .cv-icon { font-size: 2rem; }
+        .cv-card-header h3 {
+            color: #fff;
+            font-family: 'Fraunces', serif;
+            margin: 0 0 4px 0;
+        }
+        .cv-card-header p {
+            color: #a8d5b5;
+            font-size: 0.85rem;
+            margin: 0;
+            line-height: normal;
+        }
+        .cv-confidence-badge {
+            margin-left: auto;
+            background: rgba(45,106,79,0.4);
+            border: 1px solid #40916c;
+            color: #74c69d;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+        .cv-condition-banner {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .cv-condition-healthy { 
+            background: rgba(74,201,97,0.15); 
+            color: #74c69d; 
+            border: 1px solid #40916c;
+        }
+        .cv-condition-mild_stress { 
+            background: rgba(255,193,7,0.15); 
+            color: #ffc107; 
+            border: 1px solid #ffc107;
+        }
+        .cv-condition-diseased { 
+            background: rgba(255,111,0,0.15); 
+            color: #ff6f00; 
+            border: 1px solid #ff6f00;
+        }
+        .cv-condition-severe_damage { 
+            background: rgba(220,53,69,0.15); 
+            color: #dc3545; 
+            border: 1px solid #dc3545;
+        }
+        .cv-score-impact {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            background: rgba(0,0,0,0.2);
+            padding: 16px;
+            border-radius: 12px;
+        }
+        .cv-score-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .cv-score-label {
+            color: #a8d5b5;
+            font-size: 0.75rem;
+        }
+        .cv-score-value {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'Fraunces', serif;
+            line-height: normal;
+        }
+        .cv-score-final .cv-score-value { color: #74c69d; }
+        .cv-arrow { color: #40916c; font-size: 1.5rem; }
+        .cv-delta {
+            margin-left: auto;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 8px;
+        }
+        .cv-delta-positive { 
+            color: #74c69d; 
+            background: rgba(74,201,97,0.15);
+        }
+        .cv-delta-negative { 
+            color: #dc3545; 
+            background: rgba(220,53,69,0.15);
+        }
+        .cv-delta-neutral { 
+            color: #a8d5b5; 
+            background: rgba(0,0,0,0.2);
+        }
+        .cv-probabilities {
+            margin-bottom: 20px;
+        }
+        .cv-prob-title {
+            color: #a8d5b5;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        .cv-prob-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .cv-prob-label {
+            color: #fff;
+            font-size: 0.8rem;
+            width: 100px;
+            flex-shrink: 0;
+            text-transform: capitalize;
+        }
+        .cv-prob-bar-bg {
+            flex: 1;
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+        }
+        .cv-prob-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+        .cv-prob-pct {
+            color: #a8d5b5;
+            font-size: 0.75rem;
+            width: 40px;
+            text-align: right;
+        }
+        .cv-advice-box {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            background: rgba(45,106,79,0.15);
+            border: 1px solid rgba(45,106,79,0.4);
+            border-radius: 10px;
+            padding: 14px;
+        }
+        .cv-advice-box p {
+            color: #d8f3dc;
+            font-size: 0.85rem;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Hide card if no image was uploaded */
+        #cvAnalysisCard { display: none; }
+        #cvAnalysisCard.visible { display: block; }
     </style>
 </head>
 <body>
@@ -760,6 +930,41 @@
                 <!-- Factors will be populated by JavaScript -->
             </div>
         </section>
+
+<div class="cv-analysis-card" id="cvAnalysisCard">
+  <div class="cv-card-header">
+    <span class="cv-icon">📸</span>
+    <div>
+      <h3>AI Crop Photo Analysis</h3>
+      <p>Visual health assessment from your uploaded photo</p>
+    </div>
+    <div class="cv-confidence-badge">Analyzing...</div>
+  </div>
+
+  <div class="cv-condition-banner">Detecting condition...</div>
+
+  <div class="cv-score-impact">
+    <div class="cv-score-box">
+      <span class="cv-score-label">Farm Data Score</span>
+      <span class="cv-score-value" id="rfScoreDisplay">--</span>
+    </div>
+    <div class="cv-arrow">→</div>
+    <div class="cv-score-box cv-score-final">
+      <span class="cv-score-label">Final Score</span>
+      <span class="cv-score-value" id="finalScoreDisplay">--</span>
+    </div>
+    <div class="cv-delta" id="scoreDelta">--</div>
+  </div>
+
+  <div class="cv-probabilities">
+    <p class="cv-prob-title">Condition Breakdown</p>
+  </div>
+
+  <div class="cv-advice-box">
+    <span>💡</span>
+    <p id="cvAdviceText">Loading advice...</p>
+  </div>
+</div>
 
         <!-- Government Schemes Section (Multi-scheme grid) -->
         <section class="scheme-section">
@@ -989,6 +1194,68 @@
                     factorsGrid.appendChild(card);
                 });
             }
+
+const cvCard = document.getElementById('cvAnalysisCard');
+if (farmer.hasImage && farmer.imageAnalysis) {
+    const ia = farmer.imageAnalysis;
+    const conditionKey = ia.condition_key || 'unknown';
+    
+    const emojiMap = {
+        healthy: '🌿',
+        mild_stress: '🟡',
+        diseased: '🔴',
+        severe_damage: '⚠️'
+    };
+    
+    const colorMap = {
+        healthy: '#74c69d',
+        mild_stress: '#ffc107',
+        diseased: '#ff6f00',
+        severe_damage: '#dc3545'
+    };
+    
+    cvCard.querySelector('.cv-confidence-badge').textContent = 
+        ia.confidence + '% confident';
+    
+    const banner = cvCard.querySelector('.cv-condition-banner');
+    banner.className = 'cv-condition-banner cv-condition-' + conditionKey;
+    banner.textContent = (emojiMap[conditionKey] || '📸') + ' ' + ia.crop_condition;
+    
+    document.getElementById('rfScoreDisplay').textContent = 
+        farmer.rfOnlyScore || farmer.harvestScore;
+    document.getElementById('finalScoreDisplay').textContent = 
+        farmer.finalHarvestScore || farmer.harvestScore;
+    
+    const delta = ia.merged_score ? ia.merged_score.score_delta : 0;
+    const deltaEl = document.getElementById('scoreDelta');
+    if (delta > 0) {
+        deltaEl.className = 'cv-delta cv-delta-positive';
+        deltaEl.textContent = '+' + delta;
+    } else if (delta < 0) {
+        deltaEl.className = 'cv-delta cv-delta-negative';
+        deltaEl.textContent = delta;
+    } else {
+        deltaEl.className = 'cv-delta cv-delta-neutral';
+        deltaEl.textContent = 'No change';
+    }
+    
+    const probs = ia.class_probabilities || {};
+    const probContainer = cvCard.querySelector('.cv-probabilities');
+    let probHTML = '<p class="cv-prob-title">Condition Breakdown</p>';
+    for (const [cls, pct] of Object.entries(probs)) {
+        probHTML += '<div class="cv-prob-row">' +
+            '<span class="cv-prob-label">' + cls.replace('_', ' ') + '</span>' +
+            '<div class="cv-prob-bar-bg">' +
+            '<div class="cv-prob-bar-fill" style="width:' + pct + '%;background:' + 
+            (colorMap[cls] || '#74c69d') + '"></div></div>' +
+            '<span class="cv-prob-pct">' + pct + '%</span></div>';
+    }
+    probContainer.innerHTML = probHTML;
+    
+    document.getElementById('cvAdviceText').textContent = ia.advice;
+    
+    cvCard.style.display = 'block';
+}
 
             // ==================== GOVERNMENT SCHEMES (FROM API) ====================
             const schemesGrid = document.getElementById('schemesGrid');
