@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load trained model
-model = joblib.load('model.pkl')
+model = joblib.load('harvest_score_model.pkl')
 crop_encoder = joblib.load('crop_encoder.pkl')
 district_encoder = joblib.load('district_encoder.pkl')
 irrigation_encoder = joblib.load('irrigation_encoder.pkl')
@@ -68,4 +68,4 @@ def predict():
     })
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run(port=5000, debug=False)

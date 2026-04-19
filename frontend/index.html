@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BhoomiFi — AI-Powered Credit for Farmers</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary-green: #4caf50;
@@ -41,13 +44,31 @@
         }
 
         /* Typography */
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             font-family: 'Fraunces', serif;
         }
 
-        h1 { font-size: 3.5rem; line-height: 1.1; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
-        h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; text-align: center; color: var(--text-main); }
-        p { line-height: 1.6; }
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: var(--text-main);
+        }
+
+        p {
+            line-height: 1.6;
+        }
 
         .badge {
             display: inline-block;
@@ -148,7 +169,7 @@
             background: rgba(13, 40, 24, 0.95);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .navbar.scrolled {
@@ -252,17 +273,17 @@
             border-radius: 999px;
             margin-bottom: 18px;
             letter-spacing: 0.5px;
-            animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
             animation-delay: 0ms;
         }
 
         .hero-headline {
-            animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
             animation-delay: 150ms;
         }
 
         .hero-subtitle {
-            animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
             animation-delay: 300ms;
         }
 
@@ -272,7 +293,7 @@
             flex-wrap: wrap;
             gap: 12px;
             margin-bottom: 2rem;
-            animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
             animation-delay: 450ms;
         }
 
@@ -280,8 +301,8 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 999px;
             padding: 6px 14px;
             font-size: 0.85rem;
@@ -300,7 +321,7 @@
             display: flex;
             gap: 1rem;
             margin-bottom: 1rem;
-            animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
             animation-delay: 600ms;
         }
 
@@ -319,7 +340,7 @@
         }
 
         .hero-card {
-            animation: slideInRight 0.8s cubic-bezier(0.16,1,0.3,1) both;
+            animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
             animation-delay: 500ms;
         }
 
@@ -338,9 +359,17 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         .flow-icons {
@@ -357,7 +386,7 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        .floating-card > p:first-of-type {
+        .floating-card>p:first-of-type {
             font-weight: 600;
             font-size: 1.125rem;
             margin: 0 0 1rem 0;
@@ -395,7 +424,7 @@
             opacity: 0;
             transform: translateY(40px);
             transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal.visible {
@@ -405,13 +434,27 @@
 
         /* Hero Entrance Animations */
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(50px); }
-            to   { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         /* Features Section */
@@ -431,7 +474,7 @@
             border-radius: 1rem;
             text-align: center;
             box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             transition: var(--transition);
         }
 
@@ -571,20 +614,20 @@
             background: white;
             border-radius: 1rem;
             padding: 2rem 1.75rem;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
             border-top: 4px solid #2d9e5f;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .why-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
         }
 
         .why-icon {
             width: 52px;
             height: 52px;
-            background: rgba(45,158,95,0.1);
+            background: rgba(45, 158, 95, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -617,8 +660,8 @@
             background: white;
             border-radius: 0.875rem;
             margin-bottom: 0.875rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.06);
             overflow: hidden;
         }
 
@@ -653,7 +696,7 @@
             font-weight: 300;
             color: #2d9e5f;
             flex-shrink: 0;
-            transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
             line-height: 1;
         }
 
@@ -668,8 +711,8 @@
         .faq-answer {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1),
-                        padding 0.3s ease;
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                padding 0.3s ease;
             padding: 0 1.5rem;
         }
 
@@ -796,28 +839,44 @@
             background: linear-gradient(145deg, #ffffff 0%, #f8fdf8 100%);
             border-radius: 1.5rem;
             border-top: 5px solid #2d9e5f;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.25);
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.25);
             padding: 2rem;
             max-width: 440px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            animation: popupEnter 0.4s cubic-bezier(0.16,1,0.3,1) both;
+            animation: popupEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         @keyframes popupEnter {
-            from { opacity: 0; transform: scale(0.92) translateY(20px); }
-            to   { opacity: 1; transform: scale(1) translateY(0); }
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         @keyframes analyzing-pulse {
-            0%, 100% { border-color: rgba(45, 158, 95, 0.3); box-shadow: 0 32px 80px rgba(0,0,0,0.25), 0 0 0 0 rgba(45,158,95,0); }
-            50% { border-color: rgba(45, 158, 95, 0.8); box-shadow: 0 32px 80px rgba(0,0,0,0.25), 0 0 20px 4px rgba(45,158,95,0.2); }
+
+            0%,
+            100% {
+                border-color: rgba(45, 158, 95, 0.3);
+                box-shadow: 0 32px 80px rgba(0, 0, 0, 0.25), 0 0 0 0 rgba(45, 158, 95, 0);
+            }
+
+            50% {
+                border-color: rgba(45, 158, 95, 0.8);
+                box-shadow: 0 32px 80px rgba(0, 0, 0, 0.25), 0 0 20px 4px rgba(45, 158, 95, 0.2);
+            }
         }
 
         .popup-form.analyzing {
             animation: analyzing-pulse 1.5s ease-in-out infinite;
-            border: 2px solid rgba(45,158,95,0.3);
+            border: 2px solid rgba(45, 158, 95, 0.3);
         }
 
         .progress-steps {
@@ -865,7 +924,7 @@
 
         .popup-badge {
             display: inline-block;
-            background: rgba(45,158,95,0.1);
+            background: rgba(45, 158, 95, 0.1);
             color: #2d9e5f;
             border-radius: 999px;
             padding: 4px 14px;
@@ -903,7 +962,7 @@
 
         .popup-form .form-control:focus {
             border-color: #2d9e5f;
-            box-shadow: 0 0 0 3px rgba(45,158,95,0.12);
+            box-shadow: 0 0 0 3px rgba(45, 158, 95, 0.12);
             outline: none;
         }
 
@@ -926,7 +985,7 @@
             font-weight: 700;
             letter-spacing: 0.02em;
             padding: 1rem 2rem;
-            box-shadow: 0 4px 16px rgba(45,158,95,0.35);
+            box-shadow: 0 4px 16px rgba(45, 158, 95, 0.35);
             width: auto;
             margin-top: 0;
             border: none;
@@ -937,7 +996,7 @@
 
         .popup-buttons .btn-green:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(45,158,95,0.45);
+            box-shadow: 0 6px 20px rgba(45, 158, 95, 0.45);
         }
 
         .popup-buttons .btn-green:disabled {
@@ -976,7 +1035,7 @@
             border-radius: 1rem;
             padding: 2rem;
             border-left: 4px solid #2d9e5f;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
         }
 
         .testimonial-stars {
@@ -1012,7 +1071,7 @@
         }
 
         .testimonial-score {
-            background: rgba(34,197,94,0.1);
+            background: rgba(34, 197, 94, 0.1);
             color: #16a34a;
             border-radius: 999px;
             padding: 3px 10px;
@@ -1022,30 +1081,40 @@
 
         /* Responsive Design */
         @media (max-width: 992px) {
-            h1 { font-size: 2.75rem; }
+            h1 {
+                font-size: 2.75rem;
+            }
+
             .hero-content {
                 grid-template-columns: 1fr;
                 text-align: center;
                 gap: 3rem;
             }
+
             .hero-buttons {
                 justify-content: center;
             }
+
             .hero-stats {
                 justify-content: center;
             }
+
             .card-features {
                 text-align: center;
             }
+
             .process-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
             .testimonials-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
             .footer-content {
                 grid-template-columns: 1fr 1fr;
             }
+
             .why-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -1055,34 +1124,49 @@
             .navbar {
                 padding: 1rem 5%;
             }
+
             .nav-links {
-                display: none; 
+                display: none;
             }
+
             .hero-content {
                 margin-top: 2rem;
             }
-            h1 { font-size: 2.25rem; }
+
+            h1 {
+                font-size: 2.25rem;
+            }
+
             .footer-content {
                 grid-template-columns: 1fr;
                 gap: 2.5rem;
             }
+
             .process-grid {
                 grid-template-columns: 1fr;
             }
+
             .testimonials-grid {
                 grid-template-columns: 1fr;
             }
-            .cta-content h2 { font-size: 2rem; }
+
+            .cta-content h2 {
+                font-size: 2rem;
+            }
+
             .hero-stats {
                 flex-direction: column;
                 align-items: center;
             }
+
             .why-grid {
                 grid-template-columns: 1fr;
             }
+
             .faq-accordion {
                 padding: 0 0.5rem;
             }
+
             .faq-q-text {
                 font-size: 0.92rem;
             }
@@ -1120,7 +1204,7 @@
             background: #2d9e5f;
             color: white;
             border-color: #2d9e5f;
-            box-shadow: 0 4px 12px rgba(45,158,95,0.3);
+            box-shadow: 0 4px 12px rgba(45, 158, 95, 0.3);
         }
 
         /* ── GALLERY COUNT ── */
@@ -1144,14 +1228,14 @@
             background: white;
             border-radius: 1rem;
             overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+            border: 1px solid rgba(0, 0, 0, 0.06);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .gallery-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
         }
 
         .gallery-card.hidden {
@@ -1183,11 +1267,9 @@
         .gallery-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(
-                to top,
-                rgba(13,40,24,0.75) 0%,
-                transparent 60%
-            );
+            background: linear-gradient(to top,
+                    rgba(13, 40, 24, 0.75) 0%,
+                    transparent 60%);
             opacity: 0;
             transition: opacity 0.3s ease;
             display: flex;
@@ -1257,11 +1339,30 @@
             font-family: 'DM Sans', sans-serif;
         }
 
-        .crops-tag   { background: rgba(34,197,94,0.12);  color: #16a34a; }
-        .farming-tag { background: rgba(245,158,11,0.12); color: #b45309; }
-        .tech-tag    { background: rgba(59,130,246,0.12); color: #1d4ed8; }
-        .success-tag { background: rgba(168,85,247,0.12); color: #7e22ce; }
-        .scheme-tag  { background: rgba(239,68,68,0.12);  color: #b91c1c; }
+        .crops-tag {
+            background: rgba(34, 197, 94, 0.12);
+            color: #16a34a;
+        }
+
+        .farming-tag {
+            background: rgba(245, 158, 11, 0.12);
+            color: #b45309;
+        }
+
+        .tech-tag {
+            background: rgba(59, 130, 246, 0.12);
+            color: #1d4ed8;
+        }
+
+        .success-tag {
+            background: rgba(168, 85, 247, 0.12);
+            color: #7e22ce;
+        }
+
+        .scheme-tag {
+            background: rgba(239, 68, 68, 0.12);
+            color: #b91c1c;
+        }
 
         /* ── EMPTY STATE ── */
         .gallery-empty {
@@ -1274,12 +1375,19 @@
 
         /* ── FILTER ANIMATION ── */
         @keyframes cardAppear {
-            from { opacity: 0; transform: scale(0.95) translateY(12px); }
-            to   { opacity: 1; transform: scale(1) translateY(0); }
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .gallery-card.appearing {
-            animation: cardAppear 0.35s cubic-bezier(0.16,1,0.3,1) both;
+            animation: cardAppear 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         /* ── GALLERY RESPONSIVE ── */
@@ -1293,9 +1401,11 @@
             .gallery-grid {
                 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
+
             .gallery-filters {
                 gap: 0.5rem;
             }
+
             .filter-btn {
                 font-size: 0.8rem;
                 padding: 0.45rem 1rem;
@@ -1320,10 +1430,10 @@
             border-radius: 999px;
             border: none;
             cursor: pointer;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             padding: 3px;
@@ -1333,8 +1443,8 @@
         }
 
         .theme-toggle:hover {
-            background: rgba(255,255,255,0.25);
-            border-color: rgba(255,255,255,0.35);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.35);
         }
 
         .theme-toggle-thumb {
@@ -1347,9 +1457,9 @@
             justify-content: center;
             font-size: 12px;
             transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-                        background 0.3s ease;
+                background 0.3s ease;
             transform: translateX(0);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
             line-height: 1;
         }
 
@@ -1727,9 +1837,9 @@
                 margin-left: auto;
             }
         }
-
     </style>
 </head>
+
 <body>
 
     <!-- Popup Form Overlay -->
@@ -1804,21 +1914,41 @@
             </div>
             <div class="form-group">
                 <label for="popupLandSize">Land Area (Hectares)</label>
-                <input type="number" id="popupLandSize" class="form-control" placeholder="e.g. 2.5" step="0.1" min="0.1" required>
+                <input type="number" id="popupLandSize" class="form-control" placeholder="e.g. 2.5" step="0.1" min="0.1"
+                    required>
             </div>
             <div class="form-group">
-                <label for="popupSoilQuality">Soil Quality (0-100) <span style="font-weight:400;color:var(--text-light);">— optional</span></label>
-                <input type="range" id="popupSoilQuality" class="form-control" min="0" max="100" value="65" style="padding: 0.5rem 0;">
-                <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-light);"><span>Poor (0)</span><span id="soilQualityValue" style="font-weight:600;color:#2d9e5f;">65</span><span>Excellent (100)</span></div>
+                <label for="popupSoilQuality">Soil Quality (0-100) <span
+                        style="font-weight:400;color:var(--text-light);">— optional</span></label>
+                <input type="range" id="popupSoilQuality" class="form-control" min="0" max="100" value="65"
+                    style="padding: 0.5rem 0;">
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-light);">
+                    <span>Poor (0)</span><span id="soilQualityValue"
+                        style="font-weight:600;color:#2d9e5f;">65</span><span>Excellent (100)</span></div>
             </div>
             <!-- Loading indicator (hidden by default) -->
             <div id="popupLoading" style="display:none;text-align:center;padding:1rem 0;">
-                <div style="display:inline-block;width:40px;height:40px;border:3px solid #e0e0e0;border-top:3px solid #2d9e5f;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
-                <p style="margin-top:0.75rem;color:var(--text-light);font-size:0.9rem;" id="loadingText">Fetching weather data & analyzing...</p>
+                <div
+                    style="display:inline-block;width:40px;height:40px;border:3px solid #e0e0e0;border-top:3px solid #2d9e5f;border-radius:50%;animation:spin 0.8s linear infinite;">
+                </div>
+                <p style="margin-top:0.75rem;color:var(--text-light);font-size:0.9rem;" id="loadingText">Fetching
+                    weather data & analyzing...</p>
             </div>
-            <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+            <style>
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            </style>
             <!-- Error display -->
-            <div id="popupError" style="display:none;background:rgba(239,68,68,0.1);color:#dc2626;padding:0.75rem 1rem;border-radius:0.5rem;font-size:0.9rem;margin-bottom:0.5rem;"></div>
+            <div id="popupError"
+                style="display:none;background:rgba(239,68,68,0.1);color:#dc2626;padding:0.75rem 1rem;border-radius:0.5rem;font-size:0.9rem;margin-bottom:0.5rem;">
+            </div>
             <div class="popup-buttons">
                 <button onclick="generateScore()" id="popupSubmitBtn" class="btn btn-green">🔍 Calculate Score</button>
                 <button onclick="closeForm()" class="btn btn-close">Cancel</button>
@@ -1837,6 +1967,7 @@
             <li><a href="#faq">FAQ</a></li>
             <li><a href="#gallery">Gallery</a></li>
             <li><a href="#contact">Contact</a></li>
+            <li><a href="/admin.html" style="color: #86efac; font-weight: 700;">⚙️ Admin</a></li>
         </ul>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark/light mode">
             <span class="icon-sun">☀️</span>
@@ -1852,8 +1983,9 @@
             <div class="hero-text">
                 <span class="hero-badge">🌾 AI-Powered Agri-Fintech Platform</span>
                 <h1 class="hero-headline">AI-Powered Credit for Farmers</h1>
-                <p class="hero-subtitle">Upload your crop data, generate a harvest score in seconds, and get fair loan offers from trusted lenders.</p>
-                
+                <p class="hero-subtitle">Upload your crop data, generate a harvest score in seconds, and get fair loan
+                    offers from trusted lenders.</p>
+
                 <div class="hero-stats">
                     <div class="stat-pill">
                         <span>👥</span>
@@ -1903,7 +2035,8 @@
             <div class="section-header">
                 <span class="badge">Features</span>
                 <h2>Why Farmers Love BhoomiFi</h2>
-                <p class="process-subtext">We combine cutting-edge AI with a farmer-first approach to make credit accessible, transparent, and fair.</p>
+                <p class="process-subtext">We combine cutting-edge AI with a farmer-first approach to make credit
+                    accessible, transparent, and fair.</p>
             </div>
             <div class="features-grid">
                 <!-- Feature 1 -->
@@ -1941,8 +2074,10 @@
                 <span class="badge">Process</span>
                 <h2>How It Works</h2>
             </div>
-            <p class="process-subtext">From crop data to loan disbursal — the entire journey in 8 simple steps.<br><em style="font-size: 0.9rem; color: var(--text-light);">Powered by Claude AI for intelligent credit assessment.</em></p>
-            
+            <p class="process-subtext">From crop data to loan disbursal — the entire journey in 8 simple steps.<br><em
+                    style="font-size: 0.9rem; color: var(--text-light);">Powered by Claude AI for intelligent credit
+                    assessment.</em></p>
+
             <div class="process-grid">
                 <!-- Step 1 -->
                 <div class="process-card reveal" style="transition-delay: 0ms;">
@@ -2006,7 +2141,8 @@
             <div class="testimonials-grid">
                 <div class="testimonial-card reveal" style="transition-delay: 0ms;">
                     <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-quote">"BhoomiFi gave me a loan at 8.5% when moneylenders wanted 24%. I expanded my cotton farm from 3 to 7 acres this season."</p>
+                    <p class="testimonial-quote">"BhoomiFi gave me a loan at 8.5% when moneylenders wanted 24%. I
+                        expanded my cotton farm from 3 to 7 acres this season."</p>
                     <div class="testimonial-footer">
                         <div>
                             <div class="testimonial-author">Ramesh Patil</div>
@@ -2017,7 +2153,8 @@
                 </div>
                 <div class="testimonial-card reveal" style="transition-delay: 100ms;">
                     <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-quote">"I never thought I could get a bank loan without going to the city. BhoomiFi's score was accepted by Punjab National Bank directly."</p>
+                    <p class="testimonial-quote">"I never thought I could get a bank loan without going to the city.
+                        BhoomiFi's score was accepted by Punjab National Bank directly."</p>
                     <div class="testimonial-footer">
                         <div>
                             <div class="testimonial-author">Gurpreet Singh</div>
@@ -2028,7 +2165,8 @@
                 </div>
                 <div class="testimonial-card reveal" style="transition-delay: 200ms;">
                     <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-quote">"The government scheme matching showed me PMFBY crop insurance I didn't know I qualified for. Saved me during last year's drought."</p>
+                    <p class="testimonial-quote">"The government scheme matching showed me PMFBY crop insurance I didn't
+                        know I qualified for. Saved me during last year's drought."</p>
                     <div class="testimonial-footer">
                         <div>
                             <div class="testimonial-author">Lakshmi Devi</div>
@@ -2047,43 +2185,57 @@
             <!-- Why Choose Us -->
             <div style="text-align: center; margin-bottom: 3rem;">
                 <span class="badge">Why BhoomiFi</span>
-                <h2 style="font-family: 'Fraunces', serif; color: var(--text-main); font-size: 2.5rem;">Built Different. Built for Bharat.</h2>
-                <p style="color: var(--text-light); max-width: 650px; margin: 0 auto; line-height: 1.7;">Most fintech platforms are built for someone who already has a credit card. We built BhoomiFi for someone who has never needed one — because they grow their own living from the ground up.</p>
+                <h2 style="font-family: 'Fraunces', serif; color: var(--text-main); font-size: 2.5rem;">Built Different.
+                    Built for Bharat.</h2>
+                <p style="color: var(--text-light); max-width: 650px; margin: 0 auto; line-height: 1.7;">Most fintech
+                    platforms are built for someone who already has a credit card. We built BhoomiFi for someone who has
+                    never needed one — because they grow their own living from the ground up.</p>
             </div>
 
             <div class="why-grid">
                 <div class="why-card reveal" style="transition-delay: 0ms;">
                     <div class="why-icon">🤖</div>
                     <h3>AI That Actually Explains Itself</h3>
-                    <p>Most credit systems are black boxes. BhoomiFi's Harvest Score tells you exactly which factors pushed your score up or down — crop health, land size, regional yield data — in plain language, not jargon.</p>
+                    <p>Most credit systems are black boxes. BhoomiFi's Harvest Score tells you exactly which factors
+                        pushed your score up or down — crop health, land size, regional yield data — in plain language,
+                        not jargon.</p>
                 </div>
                 <div class="why-card reveal" style="transition-delay: 150ms;">
                     <div class="why-icon">🏛️</div>
                     <h3>Government Schemes You Didn't Know About</h3>
-                    <p>Billions in agricultural subsidies go unclaimed every year because farmers don't know they qualify. Our system automatically matches your profile to PM-Kisan, PMFBY, Kisan Credit Card, and more.</p>
+                    <p>Billions in agricultural subsidies go unclaimed every year because farmers don't know they
+                        qualify. Our system automatically matches your profile to PM-Kisan, PMFBY, Kisan Credit Card,
+                        and more.</p>
                 </div>
                 <div class="why-card reveal" style="transition-delay: 300ms;">
                     <div class="why-icon">⚖️</div>
                     <h3>Fair Credit. No Middlemen.</h3>
-                    <p>Instead of going to one lender who sets the terms, BhoomiFi brings multiple lenders to you. They compete for your business. You pick the lowest rate. That's how credit should work.</p>
+                    <p>Instead of going to one lender who sets the terms, BhoomiFi brings multiple lenders to you. They
+                        compete for your business. You pick the lowest rate. That's how credit should work.</p>
                 </div>
             </div>
 
             <!-- FAQ Accordion -->
             <div style="text-align: center;">
                 <span class="badge">FAQ</span>
-                <h2 style="font-family: 'Fraunces', serif; color: var(--text-main); font-size: 2rem;">Questions Farmers Actually Ask</h2>
-                <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 2.5rem;">No bank jargon. No fine print. Just honest answers.</p>
+                <h2 style="font-family: 'Fraunces', serif; color: var(--text-main); font-size: 2rem;">Questions Farmers
+                    Actually Ask</h2>
+                <p style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 2.5rem;">No bank jargon. No fine
+                    print. Just honest answers.</p>
             </div>
 
             <div class="faq-accordion reveal">
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false">
-                        <span class="faq-q-text">Do I need a CIBIL score or any existing credit history to use BhoomiFi?</span>
+                        <span class="faq-q-text">Do I need a CIBIL score or any existing credit history to use
+                            BhoomiFi?</span>
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>No — that's exactly the problem we're solving. BhoomiFi was designed for farmers who have never had a credit card or formal loan. Your Harvest Score is built entirely from your agricultural data: crop type, land size, location, and farming conditions. No CIBIL score required, ever.</p>
+                        <p>No — that's exactly the problem we're solving. BhoomiFi was designed for farmers who have
+                            never had a credit card or formal loan. Your Harvest Score is built entirely from your
+                            agricultural data: crop type, land size, location, and farming conditions. No CIBIL score
+                            required, ever.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -2092,7 +2244,10 @@
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>Your score is generated by a machine learning model trained on real agricultural yield data from across India. It considers crop viability in your region, land size, estimated yield potential, and risk factors like seasonal patterns. The AI then explains every single factor — so you always know why you got the score you did. No hidden logic.</p>
+                        <p>Your score is generated by a machine learning model trained on real agricultural yield data
+                            from across India. It considers crop viability in your region, land size, estimated yield
+                            potential, and risk factors like seasonal patterns. The AI then explains every single factor
+                            — so you always know why you got the score you did. No hidden logic.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -2101,7 +2256,10 @@
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>For the initial Harvest Score, you only need to provide your crop type, land size in acres, and your village or district location. No documents are required at this stage. If a lender decides to proceed with a loan offer, they may request land records (7/12 extract) separately.</p>
+                        <p>For the initial Harvest Score, you only need to provide your crop type, land size in acres,
+                            and your village or district location. No documents are required at this stage. If a lender
+                            decides to proceed with a loan offer, they may request land records (7/12 extract)
+                            separately.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -2110,7 +2268,10 @@
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>Your data is used only to generate your Harvest Score and match you to relevant loan offers and schemes. We do not sell your data to third parties. Lenders only see your score and profile after you choose to share it — they cannot access your raw farm data without your consent.</p>
+                        <p>Your data is used only to generate your Harvest Score and match you to relevant loan offers
+                            and schemes. We do not sell your data to third parties. Lenders only see your score and
+                            profile after you choose to share it — they cannot access your raw farm data without your
+                            consent.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -2119,7 +2280,10 @@
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>Once your Harvest Score is generated, BhoomiFi shares your credit profile (score, crop, location, land size) with registered lenders in our network. Lenders then submit loan offers — interest rate, maximum loan amount, tenure. You see all offers side by side and choose the one that works for you. You are never locked into a single lender.</p>
+                        <p>Once your Harvest Score is generated, BhoomiFi shares your credit profile (score, crop,
+                            location, land size) with registered lenders in our network. Lenders then submit loan offers
+                            — interest rate, maximum loan amount, tenure. You see all offers side by side and choose the
+                            one that works for you. You are never locked into a single lender.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -2128,7 +2292,10 @@
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>BhoomiFi currently matches farmers to PM-Kisan Samman Nidhi (direct income support), Pradhan Mantri Fasal Bima Yojana or PMFBY (crop insurance), Kisan Credit Card or KCC (revolving credit for farm inputs), and the Soil Health Card scheme. More schemes are added regularly. Eligibility is determined automatically based on your farm profile.</p>
+                        <p>BhoomiFi currently matches farmers to PM-Kisan Samman Nidhi (direct income support), Pradhan
+                            Mantri Fasal Bima Yojana or PMFBY (crop insurance), Kisan Credit Card or KCC (revolving
+                            credit for farm inputs), and the Soil Health Card scheme. More schemes are added regularly.
+                            Eligibility is determined automatically based on your farm profile.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -2137,7 +2304,9 @@
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>Yes — completely free. Farmers never pay to get a Harvest Score, view loan offers, or discover government schemes. BhoomiFi earns from lenders who pay a small fee when a farmer successfully accepts a loan offer. Your access is always free, always will be.</p>
+                        <p>Yes — completely free. Farmers never pay to get a Harvest Score, view loan offers, or
+                            discover government schemes. BhoomiFi earns from lenders who pay a small fee when a farmer
+                            successfully accepts a loan offer. Your access is always free, always will be.</p>
                     </div>
                 </div>
             </div>
@@ -2189,12 +2358,9 @@
                 <!-- CROPS CATEGORY — 3 items -->
                 <div class="gallery-card reveal" data-category="crops" style="transition-delay:0ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=400&h=280&fit=crop"
-                            alt="Wheat field ready for harvest"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=400&h=280&fit=crop"
+                            alt="Wheat field ready for harvest" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Wheat Fields, Punjab</span>
                         </div>
@@ -2203,18 +2369,15 @@
                         <span class="gallery-tag crops-tag">Crops</span>
                         <h4>Golden Wheat at Harvest</h4>
                         <p>Prime wheat crop in northern India, representing BhoomiFi's
-                        highest-scoring crop category.</p>
+                            highest-scoring crop category.</p>
                     </div>
                 </div>
 
                 <div class="gallery-card reveal" data-category="crops" style="transition-delay:100ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1536657464919-892534f60d6e?w=400&h=280&fit=crop"
-                            alt="Rice paddy fields"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1536657464919-892534f60d6e?w=400&h=280&fit=crop"
+                            alt="Rice paddy fields" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Rice Paddies, Andhra Pradesh</span>
                         </div>
@@ -2223,18 +2386,15 @@
                         <span class="gallery-tag crops-tag">Crops</span>
                         <h4>Flooded Rice Paddies</h4>
                         <p>Wet paddy cultivation across Andhra Pradesh — one of India's
-                        most critical food crops.</p>
+                            most critical food crops.</p>
                     </div>
                 </div>
 
                 <div class="gallery-card reveal" data-category="crops" style="transition-delay:200ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1593483316242-efb5420596ca?w=400&h=280&fit=crop"
-                            alt="Cotton crop in field"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1593483316242-efb5420596ca?w=400&h=280&fit=crop"
+                            alt="Cotton crop in field" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Cotton, Vidarbha</span>
                         </div>
@@ -2243,19 +2403,16 @@
                         <span class="gallery-tag crops-tag">Crops</span>
                         <h4>Cotton Ready for Picking</h4>
                         <p>Maharashtra's Vidarbha region is India's cotton belt —
-                        a key BhoomiFi use case for credit access.</p>
+                            a key BhoomiFi use case for credit access.</p>
                     </div>
                 </div>
 
                 <!-- FARMING CATEGORY — 3 items -->
                 <div class="gallery-card reveal" data-category="farming" style="transition-delay:0ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400&h=280&fit=crop"
-                            alt="Farmer working in field"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400&h=280&fit=crop"
+                            alt="Farmer working in field" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Field Preparation</span>
                         </div>
@@ -2264,18 +2421,15 @@
                         <span class="gallery-tag farming-tag">Farming</span>
                         <h4>Early Morning Field Work</h4>
                         <p>Indian farmers begin their day before sunrise — the dedication
-                        that our credit system needs to recognize.</p>
+                            that our credit system needs to recognize.</p>
                     </div>
                 </div>
 
                 <div class="gallery-card reveal" data-category="farming" style="transition-delay:100ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=400&h=280&fit=crop"
-                            alt="Irrigation canal in farmland"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=400&h=280&fit=crop"
+                            alt="Irrigation canal in farmland" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Drip Irrigation</span>
                         </div>
@@ -2284,18 +2438,15 @@
                         <span class="gallery-tag farming-tag">Farming</span>
                         <h4>Drip Irrigation Systems</h4>
                         <p>Modern irrigation positively impacts Harvest Score — water
-                        efficiency is a key yield factor in our AI model.</p>
+                            efficiency is a key yield factor in our AI model.</p>
                     </div>
                 </div>
 
                 <div class="gallery-card reveal" data-category="farming" style="transition-delay:200ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&h=280&fit=crop"
-                            alt="Soil preparation and tilling"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&h=280&fit=crop"
+                            alt="Soil preparation and tilling" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Soil Health</span>
                         </div>
@@ -2304,19 +2455,16 @@
                         <span class="gallery-tag farming-tag">Farming</span>
                         <h4>Soil Health Preparation</h4>
                         <p>Healthy soil is the foundation of a strong Harvest Score.
-                        Good tillage directly boosts credit eligibility.</p>
+                            Good tillage directly boosts credit eligibility.</p>
                     </div>
                 </div>
 
                 <!-- TECHNOLOGY CATEGORY — 3 items -->
                 <div class="gallery-card reveal" data-category="technology" style="transition-delay:0ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=400&h=280&fit=crop"
-                            alt="Agricultural drone spraying crops"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=400&h=280&fit=crop"
+                            alt="Agricultural drone spraying crops" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Drone Farming</span>
                         </div>
@@ -2325,18 +2473,15 @@
                         <span class="gallery-tag tech-tag">Technology</span>
                         <h4>Drone-Based Crop Monitoring</h4>
                         <p>Aerial crop monitoring gives BhoomiFi's AI richer data for
-                        more accurate yield predictions and scoring.</p>
+                            more accurate yield predictions and scoring.</p>
                     </div>
                 </div>
 
                 <div class="gallery-card reveal" data-category="technology" style="transition-delay:100ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=280&fit=crop"
-                            alt="Farmer using smartphone in field"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=280&fit=crop"
+                            alt="Farmer using smartphone in field" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Digital Access</span>
                         </div>
@@ -2345,18 +2490,15 @@
                         <span class="gallery-tag tech-tag">Technology</span>
                         <h4>Mobile-First Farming</h4>
                         <p>BhoomiFi is designed for any browser on any device — because
-                        most farmers access the internet on their phones.</p>
+                            most farmers access the internet on their phones.</p>
                     </div>
                 </div>
 
                 <div class="gallery-card reveal" data-category="technology" style="transition-delay:200ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=280&fit=crop"
-                            alt="Data analytics dashboard"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=280&fit=crop"
+                            alt="Data analytics dashboard" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">AI Analytics</span>
                         </div>
@@ -2365,19 +2507,16 @@
                         <span class="gallery-tag tech-tag">Technology</span>
                         <h4>AI-Powered Score Analytics</h4>
                         <p>Every Harvest Score is backed by a Random Forest ML model
-                        trained on real Indian agricultural yield datasets.</p>
+                            trained on real Indian agricultural yield datasets.</p>
                     </div>
                 </div>
 
                 <!-- SUCCESS STORIES CATEGORY — 3 items -->
                 <div class="gallery-card reveal" data-category="success" style="transition-delay:0ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=280&fit=crop"
-                            alt="Happy farmer in his field"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=280&fit=crop"
+                            alt="Happy farmer in his field" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Ramesh Patil · Score 78</span>
                         </div>
@@ -2386,18 +2525,15 @@
                         <span class="gallery-tag success-tag">Success Story</span>
                         <h4>From 24% to 8.5% Interest</h4>
                         <p>Ramesh expanded his cotton farm from 3 to 7 acres after
-                        BhoomiFi connected him to a PNB loan at 8.5% annual interest.</p>
+                            BhoomiFi connected him to a PNB loan at 8.5% annual interest.</p>
                     </div>
                 </div>
 
                 <div class="gallery-card reveal" data-category="success" style="transition-delay:100ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400&h=280&fit=crop"
-                            alt="Farmer community gathering"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400&h=280&fit=crop"
+                            alt="Farmer community gathering" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Community Impact</span>
                         </div>
@@ -2406,18 +2542,15 @@
                         <span class="gallery-tag success-tag">Success Story</span>
                         <h4>Village-Level Credit Access</h4>
                         <p>When one farmer gets a fair loan, the entire farming community
-                        benefits — better inputs, better yields, better seasons.</p>
+                            benefits — better inputs, better yields, better seasons.</p>
                     </div>
                 </div>
 
                 <div class="gallery-card reveal" data-category="success" style="transition-delay:200ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=400&h=280&fit=crop"
-                            alt="Woman farmer in field"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=400&h=280&fit=crop"
+                            alt="Woman farmer in field" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Lakshmi Devi · Score 71</span>
                         </div>
@@ -2426,19 +2559,16 @@
                         <span class="gallery-tag success-tag">Success Story</span>
                         <h4>Women Farmers, First-Time Credit</h4>
                         <p>Lakshmi had never taken a formal loan. BhoomiFi's score gave
-                        her a voice in the banking system for the first time.</p>
+                            her a voice in the banking system for the first time.</p>
                     </div>
                 </div>
 
                 <!-- SCHEMES CATEGORY — 3 items -->
                 <div class="gallery-card reveal" data-category="schemes" style="transition-delay:0ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&h=280&fit=crop"
-                            alt="Government agricultural office"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&h=280&fit=crop"
+                            alt="Government agricultural office" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">PM-Kisan Scheme</span>
                         </div>
@@ -2447,18 +2577,15 @@
                         <span class="gallery-tag scheme-tag">Schemes</span>
                         <h4>PM-Kisan Samman Nidhi</h4>
                         <p>₹6,000 per year in direct income support for eligible small
-                        and marginal farmers — automatically matched by BhoomiFi.</p>
+                            and marginal farmers — automatically matched by BhoomiFi.</p>
                     </div>
                 </div>
 
                 <div class="gallery-card reveal" data-category="schemes" style="transition-delay:100ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=400&h=280&fit=crop"
-                            alt="Crop insurance paperwork"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=400&h=280&fit=crop"
+                            alt="Crop insurance paperwork" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">PMFBY Insurance</span>
                         </div>
@@ -2467,18 +2594,15 @@
                         <span class="gallery-tag scheme-tag">Schemes</span>
                         <h4>PMFBY Crop Insurance</h4>
                         <p>Pradhan Mantri Fasal Bima Yojana protects farmers against
-                        crop loss from drought, flood, and pest damage.</p>
+                            crop loss from drought, flood, and pest damage.</p>
                     </div>
                 </div>
 
                 <div class="gallery-card reveal" data-category="schemes" style="transition-delay:200ms">
                     <div class="gallery-img-wrap">
-                        <img
-                            src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=280&fit=crop"
-                            alt="Kisan credit card"
-                            loading="lazy"
-                            onerror="this.parentElement.classList.add('img-error')"
-                        />
+                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=280&fit=crop"
+                            alt="Kisan credit card" loading="lazy"
+                            onerror="this.parentElement.classList.add('img-error')" />
                         <div class="gallery-overlay">
                             <span class="gallery-overlay-text">Kisan Credit Card</span>
                         </div>
@@ -2487,7 +2611,7 @@
                         <span class="gallery-tag scheme-tag">Schemes</span>
                         <h4>Kisan Credit Card (KCC)</h4>
                         <p>A revolving credit facility for farm inputs — seeds,
-                        fertilizer, pesticides — at subsidized interest rates.</p>
+                            fertilizer, pesticides — at subsidized interest rates.</p>
                     </div>
                 </div>
 
@@ -2594,7 +2718,7 @@
             });
         });
 
-        document.getElementById('seeHowLink').addEventListener('click', function(e) {
+        document.getElementById('seeHowLink').addEventListener('click', function (e) {
             e.preventDefault();
             document.querySelector('#how-it-works').scrollIntoView({ behavior: 'smooth' });
         });
@@ -2629,7 +2753,7 @@
         const soilSlider = document.getElementById('popupSoilQuality');
         const soilValueDisplay = document.getElementById('soilQualityValue');
         if (soilSlider && soilValueDisplay) {
-            soilSlider.addEventListener('input', function() {
+            soilSlider.addEventListener('input', function () {
                 soilValueDisplay.textContent = this.value;
             });
         }
@@ -2656,7 +2780,7 @@
             document.querySelector('.popup-form').classList.remove('analyzing');
         }
 
-        document.getElementById('popupOverlay').addEventListener('click', function(e) {
+        document.getElementById('popupOverlay').addEventListener('click', function (e) {
             if (e.target === this) closeForm();
         });
 
@@ -2779,7 +2903,7 @@
                             name: schemesResult.eligibleSchemes[0].name,
                             benefit: schemesResult.eligibleSchemes[0].benefit,
                             eligibility: schemesResult.eligibleSchemes[0].description
-                          }
+                        }
                         : { name: 'Kisan Credit Card', benefit: 'Loans up to ₹3 lakh at 4%', eligibility: 'All farmers eligible' },
                     // Loan bids
                     loanBids: bidsResult.bids || [],
@@ -2793,48 +2917,86 @@
                 // Store in localStorage for dashboard
                 localStorage.setItem('farmerData', JSON.stringify(dashboardData));
 
-                // Log to SQLite DB (silent — failures don't break flow)
+                // // Read all popup field values
+                // const fullName      = document.getElementById('popupName').value;
+                // const phone         = document.getElementById('popupPhone').value;
+                // const cropType2     = document.getElementById('popupCropType').value;
+                // const district2     = document.getElementById('popupDistrict').value;
+                // const irrigation2   = document.getElementById('popupIrrigation').value;
+                // const landSize      = document.getElementById('popupLandSize').value;
+                // const soilQuality2  = document.getElementById('popupSoilQuality').value;
+
+                // Log to MySQL
                 try {
-                    const logRes = await fetch('http://localhost:5001/log/farmer', {
+                    const mysqlRes = await fetch('http://127.0.0.1:5001/farmers', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             name: farmerName,
                             crop_type: cropType,
-                            land_size: landArea,
+                            land_size: parseFloat(landArea),
                             location: district,
-                            description: ''
+                            description: `Phone: ${phone} | Irrigation: ${irrigation} | Soil Quality: ${soilQuality}`
                         })
                     });
-                    const logData = await logRes.json();
-                    if (logData.success) {
-                        try {
-                            await fetch('http://localhost:5001/log/score', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    farmer_id: logData.farmer_id,
-                                    harvest_score: dashboardData.harvestScore,
-                                    grade: dashboardData.grade,
-                                    risk_level: dashboardData.riskLevel,
-                                    eligible: dashboardData.eligible,
-                                    recommended_loan: dashboardData.recommendedLoanAmount,
-                                    government_scheme: dashboardData.governmentScheme.name
-                                })
-                            });
-                        } catch(e) {
-                            console.warn('Score logging failed silently:', e);
-                        }
+                    const mysqlData = await mysqlRes.json();
+
+                    if (mysqlData.success && mysqlData.farmer_id) {
+                        await fetch('http://127.0.0.1:5001/scores', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                farmer_id: mysqlData.farmer_id,
+                                harvest_score: dashboardData.harvestScore,
+                                grade: dashboardData.grade,
+                                risk_level: dashboardData.riskLevel,
+                                eligible: dashboardData.eligible,
+                                recommended_loan: dashboardData.recommendedLoanAmount,
+                                government_scheme: dashboardData.governmentScheme.name
+                            })
+                        });
                     }
-                } catch(e) {
-                    console.warn('DB logging failed silently:', e);
+                } catch (e) {
+                    console.warn('MySQL logging failed silently:', e);
                 }
 
-                // Short delay before redirect so user sees completion
-                setTimeout(() => {
-                    closeForm();
-                    window.location.href = 'dashboard.html';
-                }, 500);
+                // Log to MongoDB
+                try {
+                    const mongoRes = await fetch('http://127.0.0.1:5002/mongo/farmers', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: farmerName,
+                            crop_type: cropType,
+                            land_size: parseFloat(landArea),
+                            location: district,
+                            description: `Phone: ${phone} | Irrigation: ${irrigation} | Soil Quality: ${soilQuality}`
+                        })
+                    });
+                    const mongoData = await mongoRes.json();
+
+                    if (mongoData.success && mongoData.farmer_id) {
+                        await fetch('http://127.0.0.1:5002/mongo/scores', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                farmer_id: mongoData.farmer_id,
+                                harvest_score: dashboardData.harvestScore,
+                                grade: dashboardData.grade,
+                                risk_level: dashboardData.riskLevel,
+                                eligible: dashboardData.eligible,
+                                recommended_loan: dashboardData.recommendedLoanAmount,
+                                government_scheme: dashboardData.governmentScheme.name
+                            })
+                        });
+                    }
+                } catch (e) {
+                    console.warn('MongoDB logging failed silently:', e);
+                }
+
+                // Always runs regardless of DB logging success
+                closeForm();
+                window.location.href = 'dashboard.html';
 
             } catch (error) {
                 console.error('Score generation error:', error);
@@ -2871,7 +3033,7 @@
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         // ── GALLERY FILTER LOGIC ──
-        (function() {
+        (function () {
             const filterBtns = document.querySelectorAll('.filter-btn');
             const galleryCards = document.querySelectorAll('.gallery-card');
             const galleryCount = document.getElementById('galleryCount');
@@ -2884,7 +3046,7 @@
                     visibleCount === 0
                         ? 'No items found'
                         : `Showing ${visibleCount} item${visibleCount !== 1 ? 's' : ''}` +
-                          (filterName !== 'all' ? ` in "${label}"` : '');
+                        (filterName !== 'all' ? ` in "${label}"` : '');
             }
 
             function filterGallery(filter) {
@@ -2980,4 +3142,5 @@
         })();
     </script>
 </body>
+
 </html>

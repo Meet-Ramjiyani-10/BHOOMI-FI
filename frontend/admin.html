@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BhoomiFi Admin Dashboard — Manage farmer records across MySQL and MongoDB databases">
+  <title>BhoomiFi — Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── CSS Variables ── */
+    :root {
+      --dark-green: #0d2818;
+      --mid-green: #1a4a2e;
+      --accent-green: #2d9e5f;
+      --light-green: #f0faf4;
+      --white: #ffffff;
+      --text-main: #1a3a2a;
+      --text-muted: #666666;
+      --danger: #ef4444;
+      --amber: #f59e0b;
+      --border: rgba(0,0,0,0.08);
+    }
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f4f7f4;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    h1, h2, h3 { font-family: 'Fraunces', serif; }
+
+    /* ── Page Grid Layout ── */
+    .page-grid {
+      display: grid;
+      grid-template-areas:
+        "navbar navbar"
+        "sidebar main";
+      grid-template-columns: 240px 1fr;
+      grid-template-rows: 60px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      grid-area: navbar;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(135deg, #0d2818, #1a4a2e);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-logo {
+      font-family: 'Fraunces', serif;
+      color: var(--white);
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-shadow: 0 0 20px rgba(45,158,95,0.55);
+    }
+
+    .navbar-badge {
+      background: rgba(45,158,95,0.25);
+      color: #86efac;
+      font-size: 0.7rem;
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-left: 0.75rem;
+      font-weight: 600;
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      margin-right: 1rem;
+      padding: 4px;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .navbar-right a {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .navbar-right a:hover { color: white; }
+
+    .db-status {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: #a3c4a8;
+      align-items: center;
+    }
+
+    .db-dot {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .db-dot::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      display: inline-block;
+      border-radius: 50%;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      grid-area: sidebar;
+      position: fixed;
+      left: 0;
+      top: 60px;
+      width: 240px;
+      height: calc(100vh - 60px);
+      background: var(--dark-green);
+      padding: 1.5rem 0;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      overflow-y: auto;
+      z-index: 900;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-label {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em;
+      padding: 0 1.5rem;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 1rem 1.5rem;
+    }
+
+    .sidebar-btn {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      text-align: left;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-btn:hover {
+      background: rgba(255,255,255,0.06);
+      color: white;
+    }
+
+    .sidebar-btn.active {
+      background: rgba(45,158,95,0.2);
+      color: #86efac;
+      border-left: 3px solid var(--accent-green);
+    }
+
+    .sidebar-btn.danger-btn {
+      color: rgba(239,68,68,0.7);
+    }
+    .sidebar-btn.danger-btn:hover {
+      color: #ef4444;
+      background: rgba(239,68,68,0.08);
+    }
+
+    /* ── Main Content ── */
+    .main-content {
+      grid-area: main;
+      margin-left: 240px;
+      margin-top: 60px;
+      padding: 2rem;
+      min-height: calc(100vh - 60px);
+    }
+
+    .view { display: none; }
+
+    /* ── View Headers ── */
+    .view-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .view-header h2 {
+      color: var(--text-main);
+      font-size: 1.6rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .view-header .subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .search-input {
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      border: 1.5px solid #d0e8d0;
+      font-size: 0.875rem;
+      width: 260px;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 0 3px rgba(45,158,95,0.1);
+    }
+
+    /* ── Stats Strip ── */
+    .stats-strip {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 0.75rem;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      flex: 1;
+    }
+
+    .stat-card .stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-main);
+      font-family: 'Fraunces', serif;
+    }
+
+    .stat-card .stat-label {
+      font-size: 0.75rem;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-top: 0.25rem;
+    }
+
+    /* ── Table Container ── */
+    .table-container {
+      background: var(--white);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      margin-top: 1.5rem;
+    }
+
+    .table-scroll { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead { background: #f8fdf8; }
+
+    th {
+      padding: 0.875rem 1rem;
+      text-align: left;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid #e8f5e9;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.875rem 1rem;
+      font-size: 0.875rem;
+      color: #333;
+      vertical-align: middle;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.15s ease;
+    }
+    tbody tr:hover { background: #fafffe; }
+
+    .score-cell { font-weight: 700; color: var(--accent-green); }
+
+    .badge {
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-block;
+    }
+    .badge-yes { background: rgba(34,197,94,0.12); color: #16a34a; }
+    .badge-no  { background: rgba(239,68,68,0.12); color: #dc2626; }
+
+    .btn-edit {
+      background: rgba(245,158,11,0.1);
+      color: #b45309;
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s ease;
+    }
+    .btn-edit:hover { background: var(--amber); color: white; }
+
+    .btn-delete {
+      background: rgba(239,68,68,0.1);
+      color: #dc2626;
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-left: 6px;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s ease;
+    }
+    .btn-delete:hover { background: var(--danger); color: white; }
+
+    .table-loading, .table-empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Spinner */
+    .spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid #e0e0e0;
+      border-top-color: var(--accent-green);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Stats Overview ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .stats-panel {
+      background: var(--white);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    .stats-panel-header {
+      font-weight: 700;
+      color: var(--text-main);
+      font-size: 1.05rem;
+      border-bottom: 1px solid #e8f5e9;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .stat-row .label { color: var(--text-muted); font-size: 0.9rem; }
+    .stat-row .value { font-weight: 700; color: var(--text-main); font-size: 0.95rem; }
+
+    .chart-card {
+      background: var(--white);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      margin-top: 2rem;
+    }
+
+    .chart-card h3 {
+      font-size: 1.1rem;
+      color: var(--text-main);
+      margin-bottom: 1.5rem;
+    }
+
+    .bar-chart-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .bar-chart-group h4 {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      gap: 0.75rem;
+    }
+
+    .bar-label {
+      width: 120px;
+      font-size: 0.85rem;
+      color: #555;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .bar-track {
+      flex: 1;
+      background: #f0f5f0;
+      border-radius: 4px;
+      height: 24px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--accent-green);
+      border-radius: 0 4px 4px 0;
+      transition: width 0.6s ease;
+      min-width: 2px;
+    }
+
+    .bar-count {
+      width: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      flex-shrink: 0;
+    }
+
+    /* ── Add Farmer Form ── */
+    .form-card {
+      background: var(--white);
+      border-radius: 1rem;
+      padding: 2.5rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      max-width: 600px;
+      margin: 1.5rem auto 0;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-main);
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 1.5px solid #d0e8d0;
+      border-radius: 0.625rem;
+      font-size: 0.95rem;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s ease;
+      outline: none;
+      background: var(--white);
+      color: var(--text-main);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 0 3px rgba(45,158,95,0.1);
+    }
+
+    .form-group textarea { resize: vertical; }
+
+    .db-toggle-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .db-toggle-group .toggle-label {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      color: var(--text-main);
+      font-size: 0.9rem;
+    }
+
+    .db-toggles {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .db-toggle-btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s ease;
+      background: var(--white);
+      border: 1.5px solid #d0e8d0;
+      color: var(--text-muted);
+    }
+
+    .db-toggle-btn.active {
+      background: var(--accent-green);
+      color: white;
+      border-color: var(--accent-green);
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #2d9e5f, #22c55e);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 0.875rem 2rem;
+      font-size: 1rem;
+      font-weight: 700;
+      width: 100%;
+      margin-top: 1.5rem;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      box-shadow: 0 4px 16px rgba(45,158,95,0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(45,158,95,0.45);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    #addResult {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    #addResult.success {
+      display: block;
+      background: rgba(34,197,94,0.1);
+      color: #16a34a;
+      border: 1px solid rgba(34,197,94,0.3);
+    }
+
+    #addResult.error {
+      display: block;
+      background: rgba(239,68,68,0.1);
+      color: #dc2626;
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: var(--white);
+      border-radius: 1.25rem;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.25);
+      animation: modalEnter 0.35s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    @keyframes modalEnter {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .modal-header h3 {
+      color: var(--text-main);
+      font-size: 1.25rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      padding: 4px;
+    }
+    .modal-close:hover { color: #333; }
+
+    .modal-body { padding: 1.5rem 2rem; }
+
+    .modal-body .form-group { margin-bottom: 1rem; }
+
+    .modal-footer {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 2rem 1.5rem;
+      justify-content: flex-end;
+    }
+
+    .btn-save {
+      background: var(--accent-green);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 0.625rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s ease;
+    }
+    .btn-save:hover { background: #22c55e; }
+
+    .btn-cancel {
+      background: var(--white);
+      color: var(--text-muted);
+      border: 1.5px solid #e0e0e0;
+      border-radius: 999px;
+      padding: 0.625rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s ease;
+    }
+    .btn-cancel:hover { background: #f5f5f5; }
+
+    /* ── Toast Container ── */
+    .toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--white);
+      border-radius: 0.75rem;
+      padding: 1rem 1.5rem;
+      min-width: 280px;
+      max-width: 400px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: #333;
+      font-family: 'DM Sans', sans-serif;
+      pointer-events: auto;
+      animation: toastIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
+      border-left: 4px solid #22c55e;
+    }
+
+    .toast.success { border-left-color: #22c55e; }
+    .toast.error   { border-left-color: #ef4444; }
+    .toast.warning { border-left-color: #f59e0b; }
+
+    .toast.confirm {
+      border-left-color: #ef4444;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .toast-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .toast-btn {
+      padding: 4px 14px;
+      border-radius: 6px;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.15s ease;
+    }
+
+    .toast-btn-confirm {
+      background: var(--danger);
+      color: white;
+    }
+    .toast-btn-confirm:hover { background: #dc2626; }
+
+    .toast-btn-cancel {
+      background: #f0f0f0;
+      color: #666;
+    }
+    .toast-btn-cancel:hover { background: #e0e0e0; }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(100px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(100px); }
+    }
+
+    .toast-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .hamburger { display: block; }
+
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .stats-strip {
+        flex-direction: column;
+      }
+
+      .table-container {
+        border-radius: 0.75rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bar-chart-section {
+        grid-template-columns: 1fr;
+      }
+
+      .search-input {
+        width: 100%;
+      }
+
+      .view-header {
+        flex-direction: column;
+      }
+
+      .navbar-right a { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ Toast Container ══ -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ══ Edit Modal ══ -->
+  <div id="editModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Edit Farmer</h3>
+        <button id="closeModal" class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editFarmerId">
+        <input type="hidden" id="editDbType">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="editName">
+        </div>
+        <div class="form-group">
+          <label>Crop Type</label>
+          <input type="text" id="editCropType">
+        </div>
+        <div class="form-group">
+          <label>Land Size (Acres)</label>
+          <input type="number" step="0.1" id="editLandSize">
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="editLocation">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea rows="3" id="editDescription"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelEditBtn" class="btn-cancel">Cancel</button>
+        <button id="saveEditBtn" class="btn-save">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Page Grid ══ -->
+  <div class="page-grid">
+
+    <!-- ── Navbar ── -->
+    <nav class="navbar">
+      <div class="navbar-left">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle sidebar">☰</button>
+        <span class="navbar-logo">⚡ BhoomiFi</span>
+        <span class="navbar-badge">Admin Panel</span>
+      </div>
+      <div class="navbar-right">
+        <a href="index.html">← Back to Site</a>
+        <div class="db-status">
+          <span class="db-dot">MySQL</span>
+          <span class="db-dot">MongoDB</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-label">DATABASE VIEWS</div>
+      <button class="sidebar-btn active" data-view="mysql-farmers">🗄️ MySQL — Farmers</button>
+      <button class="sidebar-btn" data-view="mongo-farmers">🍃 MongoDB — Farmers</button>
+      <button class="sidebar-btn" data-view="stats">📊 Stats Overview</button>
+      <button class="sidebar-btn" data-view="add-farmer">➕ Add Farmer</button>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-label">QUICK ACTIONS</div>
+      <button class="sidebar-btn" onclick="refreshCurrentView()">🔄 Refresh Data</button>
+      <button class="sidebar-btn danger-btn" onclick="clearAllMySQL()">🗑️ Clear All MySQL</button>
+    </aside>
+
+    <!-- ── Main Content ── -->
+    <main class="main-content">
+
+      <!-- ═══ VIEW 1: MySQL Farmers ═══ -->
+      <div id="view-mysql-farmers" class="view">
+        <div class="view-header">
+          <div>
+            <h2>MySQL — Farmer Records</h2>
+            <p class="subtitle">Relational database — farmers and harvest_scores tables</p>
+          </div>
+          <input type="text" class="search-input" id="mysqlSearch" placeholder="Search by name or crop...">
+        </div>
+
+        <div class="stats-strip">
+          <div class="stat-card">
+            <div class="stat-value" id="mysqlTotalCount">—</div>
+            <div class="stat-label">Total Farmers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="mysqlEligibleCount">—</div>
+            <div class="stat-label">Loan Eligible</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="mysqlAvgScore">—</div>
+            <div class="stat-label">Avg Harvest Score</div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <div class="table-scroll">
+            <table id="mysqlTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Crop Type</th>
+                  <th>Land Size</th>
+                  <th>Location</th>
+                  <th>Score</th>
+                  <th>Grade</th>
+                  <th>Eligible</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="mysqlTableBody">
+                <tr><td colspan="9" class="table-loading"><span class="spinner"></span> Loading farmers...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VIEW 2: MongoDB Farmers ═══ -->
+      <div id="view-mongo-farmers" class="view">
+        <div class="view-header">
+          <div>
+            <h2>MongoDB — Farmer Documents</h2>
+            <p class="subtitle">Document database — farmers collection</p>
+          </div>
+          <input type="text" class="search-input" id="mongoSearch" placeholder="Search by name or crop...">
+        </div>
+
+        <div class="stats-strip">
+          <div class="stat-card">
+            <div class="stat-value" id="mongoTotalCount">—</div>
+            <div class="stat-label">Total Farmers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="mongoEligibleCount">—</div>
+            <div class="stat-label">Loan Eligible</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="mongoAvgScore">—</div>
+            <div class="stat-label">Avg Harvest Score</div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <div class="table-scroll">
+            <table id="mongoTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Crop Type</th>
+                  <th>Land Size</th>
+                  <th>Location</th>
+                  <th>Score</th>
+                  <th>Grade</th>
+                  <th>Eligible</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="mongoTableBody">
+                <tr><td colspan="9" class="table-loading"><span class="spinner"></span> Loading farmers...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VIEW 3: Stats Overview ═══ -->
+      <div id="view-stats" class="view">
+        <div class="view-header">
+          <div>
+            <h2>Stats Overview</h2>
+            <p class="subtitle">Aggregated data from both databases</p>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <!-- MySQL Stats Panel -->
+          <div class="stats-panel">
+            <div class="stats-panel-header">🗄️ MySQL Statistics</div>
+            <div class="stat-row">
+              <span class="label">Total Farmers</span>
+              <span class="value" id="statMysqlTotal">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Avg Harvest Score</span>
+              <span class="value" id="statMysqlAvg">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Loan Eligible</span>
+              <span class="value" id="statMysqlEligible">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Top Crop</span>
+              <span class="value" id="statMysqlTopCrop">—</span>
+            </div>
+          </div>
+
+          <!-- MongoDB Stats Panel -->
+          <div class="stats-panel">
+            <div class="stats-panel-header">🍃 MongoDB Statistics</div>
+            <div class="stat-row">
+              <span class="label">Total Farmers</span>
+              <span class="value" id="statMongoTotal">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Avg Harvest Score</span>
+              <span class="value" id="statMongoAvg">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Loan Eligible</span>
+              <span class="value" id="statMongoEligible">—</span>
+            </div>
+            <div class="stat-row">
+              <span class="label">Top Crop</span>
+              <span class="value" id="statMongoTopCrop">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Crops Bar Chart -->
+        <div class="chart-card">
+          <h3>📈 Top Crops Comparison</h3>
+          <div class="bar-chart-section">
+            <div class="bar-chart-group">
+              <h4>MySQL Top Crops</h4>
+              <div id="mysqlCropBars"></div>
+            </div>
+            <div class="bar-chart-group">
+              <h4>MongoDB Top Crops</h4>
+              <div id="mongoCropBars"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VIEW 4: Add Farmer ═══ -->
+      <div id="view-add-farmer" class="view">
+        <div class="view-header">
+          <div>
+            <h2>Add New Farmer</h2>
+            <p class="subtitle">Manually add a farmer record to both databases simultaneously</p>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <form id="addFarmerForm" autocomplete="off">
+            <div class="form-group">
+              <label for="addName">Name</label>
+              <input type="text" id="addName" required placeholder="Enter farmer name">
+            </div>
+            <div class="form-group">
+              <label for="addCropType">Crop Type</label>
+              <input type="text" id="addCropType" required placeholder="e.g. Rice, Wheat, Sugarcane">
+            </div>
+            <div class="form-group">
+              <label for="addLandSize">Land Size (Acres)</label>
+              <input type="number" id="addLandSize" step="0.1" required placeholder="e.g. 5.5">
+            </div>
+            <div class="form-group">
+              <label for="addLocation">Location</label>
+              <input type="text" id="addLocation" required placeholder="e.g. Maharashtra, India">
+            </div>
+            <div class="form-group">
+              <label for="addDescription">Description</label>
+              <textarea id="addDescription" rows="3" placeholder="Optional notes about the farmer"></textarea>
+            </div>
+
+            <div class="db-toggle-group">
+              <span class="toggle-label">Save to:</span>
+              <div class="db-toggles">
+                <button type="button" class="db-toggle-btn active" data-target="both">Both Databases</button>
+                <button type="button" class="db-toggle-btn" data-target="mysql">MySQL Only</button>
+                <button type="button" class="db-toggle-btn" data-target="mongo">MongoDB Only</button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="addSubmitBtn">Add Farmer →</button>
+          </form>
+          <div id="addResult"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // ══════════════════════════════════════════════════
+    // CONSTANTS
+    // ══════════════════════════════════════════════════
+    const MYSQL_URL = 'http://127.0.0.1:5001';
+    const MONGO_URL = 'http://127.0.0.1:5002';
+
+    // ══════════════════════════════════════════════════
+    // VIEW SWITCHING
+    // ══════════════════════════════════════════════════
+    const views = document.querySelectorAll('.view');
+    const sidebarBtns = document.querySelectorAll('.sidebar-btn[data-view]');
+
+    function showView(viewName) {
+      views.forEach(v => v.style.display = 'none');
+      const target = document.getElementById('view-' + viewName);
+      if (target) target.style.display = 'block';
+
+      sidebarBtns.forEach(b => b.classList.remove('active'));
+      const activeBtn = document.querySelector(`[data-view="${viewName}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Load data for the view
+      if (viewName === 'mysql-farmers') loadMySQLFarmers();
+      if (viewName === 'mongo-farmers') loadMongoFarmers();
+      if (viewName === 'stats') loadStats();
+
+      // Close sidebar on mobile
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    }
+
+    sidebarBtns.forEach(btn => {
+      btn.addEventListener('click', () => showView(btn.getAttribute('data-view')));
+    });
+
+    // Hamburger toggle
+    document.getElementById('hamburgerBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    // ══════════════════════════════════════════════════
+    // TOAST SYSTEM
+    // ══════════════════════════════════════════════════
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+
+      const icons = { success: '✅', error: '❌', warning: '⚠️' };
+      toast.innerHTML = `<span class="toast-icon">${icons[type] || '💬'}</span><span>${message}</span>`;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.animation = 'toastOut 0.35s ease forwards';
+        setTimeout(() => toast.remove(), 350);
+      }, 3000);
+    }
+
+    function showConfirmToast(message) {
+      return new Promise((resolve) => {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast confirm';
+        toast.innerHTML = `
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <span class="toast-icon">⚠️</span>
+            <span>${message}</span>
+          </div>
+          <div class="toast-actions">
+            <button class="toast-btn toast-btn-confirm">Confirm Delete</button>
+            <button class="toast-btn toast-btn-cancel">Cancel</button>
+          </div>
+        `;
+
+        const confirmBtn = toast.querySelector('.toast-btn-confirm');
+        const cancelBtn = toast.querySelector('.toast-btn-cancel');
+
+        function cleanup(result) {
+          toast.style.animation = 'toastOut 0.35s ease forwards';
+          setTimeout(() => toast.remove(), 350);
+          resolve(result);
+        }
+
+        confirmBtn.addEventListener('click', () => cleanup(true));
+        cancelBtn.addEventListener('click', () => cleanup(false));
+
+        container.appendChild(toast);
+      });
+    }
+
+    // ══════════════════════════════════════════════════
+    // ESCAPE HTML — prevent XSS in table cells
+    // ══════════════════════════════════════════════════
+    function esc(str) {
+      if (str == null) return '';
+      const d = document.createElement('div');
+      d.textContent = String(str);
+      return d.innerHTML;
+    }
+
+    // ══════════════════════════════════════════════════
+    // MYSQL OPERATIONS
+    // ══════════════════════════════════════════════════
+    async function loadMySQLFarmers() {
+      const tbody = document.getElementById('mysqlTableBody');
+      tbody.innerHTML = '<tr><td colspan="9" class="table-loading"><span class="spinner"></span> Loading farmers...</td></tr>';
+
+      try {
+        const res = await fetch(`${MYSQL_URL}/farmers`);
+        const json = await res.json();
+
+        if (!json.success) throw new Error(json.error || 'Failed to load');
+
+        const farmers = json.farmers || [];
+
+        if (farmers.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="9" class="table-empty">No farmers found.</td></tr>';
+        } else {
+          tbody.innerHTML = farmers.map(f => renderMySQLRow(f)).join('');
+        }
+
+        // Update stats strip
+        document.getElementById('mysqlTotalCount').textContent = farmers.length;
+        const eligible = farmers.filter(f => f.eligible === 1).length;
+        document.getElementById('mysqlEligibleCount').textContent = eligible;
+        const scores = farmers.filter(f => f.harvest_score != null).map(f => f.harvest_score);
+        const avg = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : '—';
+        document.getElementById('mysqlAvgScore').textContent = avg;
+
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="9" class="table-empty">Error: ${esc(err.message)}</td></tr>`;
+        showToast('Failed to load MySQL farmers: ' + err.message, 'error');
+      }
+    }
+
+    function renderMySQLRow(f) {
+      const score = f.harvest_score != null ? f.harvest_score : '—';
+      const grade = f.grade || '—';
+      const eligBadge = f.eligible === 1
+        ? '<span class="badge badge-yes">✓ Yes</span>'
+        : '<span class="badge badge-no">✗ No</span>';
+
+      // Escape fields for onclick — use data attributes instead
+      return `<tr>
+        <td>${esc(f.id)}</td>
+        <td>${esc(f.name)}</td>
+        <td>${esc(f.crop_type)}</td>
+        <td>${esc(f.land_size)}</td>
+        <td>${esc(f.location)}</td>
+        <td class="score-cell">${esc(score)}</td>
+        <td>${esc(grade)}</td>
+        <td>${eligBadge}</td>
+        <td style="white-space:nowrap;">
+          <button class="btn-edit" onclick="openEditModal('mysql','${f.id}','${esc(f.name).replace(/'/g, "\\'")}','${esc(f.crop_type).replace(/'/g, "\\'")}','${f.land_size}','${esc(f.location).replace(/'/g, "\\'")}','${esc(f.description || '').replace(/'/g, "\\'")}')" >✏️ Edit</button>
+          <button class="btn-delete" onclick="deleteMySQLFarmer(${f.id})">🗑️ Delete</button>
+        </td>
+      </tr>`;
+    }
+
+    async function deleteMySQLFarmer(id) {
+      const confirmed = await showConfirmToast('Delete this farmer from MySQL?');
+      if (!confirmed) return;
+
+      try {
+        const res = await fetch(`${MYSQL_URL}/farmers/${id}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.error || 'Delete failed');
+        showToast('Farmer deleted from MySQL', 'success');
+        loadMySQLFarmers();
+      } catch (err) {
+        showToast('Delete failed: ' + err.message, 'error');
+      }
+    }
+
+    async function saveMySQLEdit(id, data) {
+      try {
+        const res = await fetch(`${MYSQL_URL}/farmers/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.error || 'Update failed');
+        closeModal();
+        showToast('Farmer updated in MySQL', 'success');
+        loadMySQLFarmers();
+      } catch (err) {
+        showToast('Update failed: ' + err.message, 'error');
+      }
+    }
+
+    // ══════════════════════════════════════════════════
+    // MONGODB OPERATIONS
+    // ══════════════════════════════════════════════════
+    async function loadMongoFarmers() {
+      const tbody = document.getElementById('mongoTableBody');
+      tbody.innerHTML = '<tr><td colspan="9" class="table-loading"><span class="spinner"></span> Loading farmers...</td></tr>';
+
+      try {
+        const res = await fetch(`${MONGO_URL}/mongo/farmers`);
+        const json = await res.json();
+
+        if (!json.success) throw new Error(json.error || 'Failed to load');
+
+        const farmers = json.farmers || [];
+
+        if (farmers.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="9" class="table-empty">No farmers found.</td></tr>';
+        } else {
+          tbody.innerHTML = farmers.map(f => renderMongoRow(f)).join('');
+        }
+
+        // Update stats strip
+        document.getElementById('mongoTotalCount').textContent = farmers.length;
+        const eligible = farmers.filter(f => f.score && f.score.eligible).length;
+        document.getElementById('mongoEligibleCount').textContent = eligible;
+        const scores = farmers.filter(f => f.score && f.score.harvest_score != null).map(f => f.score.harvest_score);
+        const avg = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : '—';
+        document.getElementById('mongoAvgScore').textContent = avg;
+
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="9" class="table-empty">Error: ${esc(err.message)}</td></tr>`;
+        showToast('Failed to load MongoDB farmers: ' + err.message, 'error');
+      }
+    }
+
+    function renderMongoRow(f) {
+      const displayId = f._id ? f._id.substring(0, 8) + '...' : '—';
+      const score = f.score?.harvest_score != null ? f.score.harvest_score : '—';
+      const grade = f.score?.grade || '—';
+      const isEligible = f.score?.eligible;
+      const eligBadge = isEligible
+        ? '<span class="badge badge-yes">✓ Yes</span>'
+        : '<span class="badge badge-no">✗ No</span>';
+
+      return `<tr>
+        <td title="${esc(f._id)}">${esc(displayId)}</td>
+        <td>${esc(f.name)}</td>
+        <td>${esc(f.crop_type)}</td>
+        <td>${esc(f.land_size)}</td>
+        <td>${esc(f.location)}</td>
+        <td class="score-cell">${esc(score)}</td>
+        <td>${esc(grade)}</td>
+        <td>${eligBadge}</td>
+        <td style="white-space:nowrap;">
+          <button class="btn-edit" onclick="openEditModal('mongo','${f._id}','${esc(f.name).replace(/'/g, "\\'")}','${esc(f.crop_type).replace(/'/g, "\\'")}','${f.land_size}','${esc(f.location).replace(/'/g, "\\'")}','${esc(f.description || '').replace(/'/g, "\\'")}')" >✏️ Edit</button>
+          <button class="btn-delete" onclick="deleteMongoFarmer('${f._id}')">🗑️ Delete</button>
+        </td>
+      </tr>`;
+    }
+
+    async function deleteMongoFarmer(id) {
+      const confirmed = await showConfirmToast('Delete this farmer from MongoDB?');
+      if (!confirmed) return;
+
+      try {
+        const res = await fetch(`${MONGO_URL}/mongo/farmers/${id}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.error || 'Delete failed');
+        showToast('Farmer deleted from MongoDB', 'success');
+        loadMongoFarmers();
+      } catch (err) {
+        showToast('Delete failed: ' + err.message, 'error');
+      }
+    }
+
+    async function saveMongoEdit(id, data) {
+      try {
+        const res = await fetch(`${MONGO_URL}/mongo/farmers/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.error || 'Update failed');
+        closeModal();
+        showToast('Farmer updated in MongoDB', 'success');
+        loadMongoFarmers();
+      } catch (err) {
+        showToast('Update failed: ' + err.message, 'error');
+      }
+    }
+
+    // ══════════════════════════════════════════════════
+    // EDIT MODAL
+    // ══════════════════════════════════════════════════
+    function openEditModal(dbType, id, name, cropType, landSize, location, description) {
+      document.getElementById('editFarmerId').value = id;
+      document.getElementById('editDbType').value = dbType;
+      document.getElementById('editName').value = name;
+      document.getElementById('editCropType').value = cropType;
+      document.getElementById('editLandSize').value = landSize;
+      document.getElementById('editLocation').value = location;
+      document.getElementById('editDescription').value = description || '';
+      document.getElementById('editModal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('editModal').classList.remove('open');
+    }
+
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    document.getElementById('cancelEditBtn').addEventListener('click', closeModal);
+
+    // Close modal on clicking overlay background
+    document.getElementById('editModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    document.getElementById('saveEditBtn').addEventListener('click', async () => {
+      const dbType = document.getElementById('editDbType').value;
+      const id = document.getElementById('editFarmerId').value;
+      const data = {
+        name:        document.getElementById('editName').value,
+        crop_type:   document.getElementById('editCropType').value,
+        land_size:   document.getElementById('editLandSize').value,
+        location:    document.getElementById('editLocation').value,
+        description: document.getElementById('editDescription').value
+      };
+      if (dbType === 'mysql') await saveMySQLEdit(id, data);
+      if (dbType === 'mongo') await saveMongoEdit(id, data);
+    });
+
+    // ══════════════════════════════════════════════════
+    // ADD FARMER FORM
+    // ══════════════════════════════════════════════════
+    let activeTarget = 'both';
+
+    // Database toggle buttons
+    document.querySelectorAll('.db-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.db-toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeTarget = btn.getAttribute('data-target');
+      });
+    });
+
+    document.getElementById('addFarmerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('addSubmitBtn');
+      const resultDiv = document.getElementById('addResult');
+
+      const name = document.getElementById('addName').value.trim();
+      const crop_type = document.getElementById('addCropType').value.trim();
+      const land_size = document.getElementById('addLandSize').value;
+      const location = document.getElementById('addLocation').value.trim();
+      const description = document.getElementById('addDescription').value.trim();
+
+      if (!name || !crop_type || !land_size || !location) {
+        resultDiv.textContent = 'Please fill in all required fields.';
+        resultDiv.className = 'error';
+        resultDiv.style.display = 'block';
+        return;
+      }
+
+      const payload = { name, crop_type, land_size: parseFloat(land_size), location, description };
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Adding...';
+      resultDiv.style.display = 'none';
+
+      try {
+        const promises = [];
+
+        if (activeTarget === 'both' || activeTarget === 'mysql') {
+          promises.push(
+            fetch(`${MYSQL_URL}/farmers`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            }).then(r => r.json())
+          );
+        }
+
+        if (activeTarget === 'both' || activeTarget === 'mongo') {
+          promises.push(
+            fetch(`${MONGO_URL}/mongo/farmers`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            }).then(r => r.json())
+          );
+        }
+
+        const results = await Promise.all(promises);
+        const allSuccess = results.every(r => r.success);
+
+        if (allSuccess) {
+          resultDiv.textContent = 'Farmer added successfully!';
+          resultDiv.className = 'success';
+          resultDiv.style.display = 'block';
+          document.getElementById('addFarmerForm').reset();
+          showToast('Farmer added successfully', 'success');
+        } else {
+          const errors = results.filter(r => !r.success).map(r => r.error).join(', ');
+          throw new Error(errors);
+        }
+      } catch (err) {
+        resultDiv.textContent = 'Error: ' + err.message;
+        resultDiv.className = 'error';
+        resultDiv.style.display = 'block';
+        showToast('Failed to add farmer: ' + err.message, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Add Farmer →';
+      }
+    });
+
+    // ══════════════════════════════════════════════════
+    // STATS LOADING
+    // ══════════════════════════════════════════════════
+    async function loadStats() {
+      try {
+        const [mysqlRes, mongoRes] = await Promise.all([
+          fetch(`${MYSQL_URL}/stats`).then(r => r.json()).catch(() => null),
+          fetch(`${MONGO_URL}/mongo/stats`).then(r => r.json()).catch(() => null)
+        ]);
+
+        // MySQL stats
+        if (mysqlRes && mysqlRes.success) {
+          document.getElementById('statMysqlTotal').textContent = mysqlRes.total_farmers;
+          document.getElementById('statMysqlAvg').textContent = mysqlRes.average_harvest_score || '—';
+          document.getElementById('statMysqlEligible').textContent = mysqlRes.eligible_for_loan;
+          const topCrop = mysqlRes.top_crops && mysqlRes.top_crops.length > 0 ? mysqlRes.top_crops[0].crop : '—';
+          document.getElementById('statMysqlTopCrop').textContent = topCrop;
+          renderCropBars('mysqlCropBars', mysqlRes.top_crops || []);
+        } else {
+          document.getElementById('statMysqlTotal').textContent = 'N/A';
+          document.getElementById('statMysqlAvg').textContent = 'N/A';
+          document.getElementById('statMysqlEligible').textContent = 'N/A';
+          document.getElementById('statMysqlTopCrop').textContent = 'N/A';
+        }
+
+        // MongoDB stats
+        if (mongoRes && mongoRes.success) {
+          document.getElementById('statMongoTotal').textContent = mongoRes.total_farmers;
+          document.getElementById('statMongoAvg').textContent = mongoRes.average_harvest_score || '—';
+          document.getElementById('statMongoEligible').textContent = mongoRes.eligible_for_loan;
+          const topCrop = mongoRes.top_crops && mongoRes.top_crops.length > 0 ? mongoRes.top_crops[0].crop : '—';
+          document.getElementById('statMongoTopCrop').textContent = topCrop;
+          renderCropBars('mongoCropBars', mongoRes.top_crops || []);
+        } else {
+          document.getElementById('statMongoTotal').textContent = 'N/A';
+          document.getElementById('statMongoAvg').textContent = 'N/A';
+          document.getElementById('statMongoEligible').textContent = 'N/A';
+          document.getElementById('statMongoTopCrop').textContent = 'N/A';
+        }
+
+      } catch (err) {
+        showToast('Failed to load stats: ' + err.message, 'error');
+      }
+    }
+
+    function renderCropBars(containerId, crops) {
+      const container = document.getElementById(containerId);
+      if (!crops || crops.length === 0) {
+        container.innerHTML = '<p style="color:#999;font-size:0.85rem;">No crop data available.</p>';
+        return;
+      }
+
+      const maxCount = Math.max(...crops.map(c => c.count));
+
+      container.innerHTML = crops.map(c => {
+        const pct = maxCount > 0 ? (c.count / maxCount * 100) : 0;
+        return `<div class="bar-row">
+          <span class="bar-label">${esc(c.crop)}</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${pct}%"></div>
+          </div>
+          <span class="bar-count">${c.count}</span>
+        </div>`;
+      }).join('');
+    }
+
+    // ══════════════════════════════════════════════════
+    // SEARCH FILTERING
+    // ══════════════════════════════════════════════════
+    document.getElementById('mysqlSearch').addEventListener('input', function() {
+      const val = this.value.toLowerCase();
+      document.querySelectorAll('#mysqlTableBody tr').forEach(row => {
+        if (row.querySelector('.table-loading') || row.querySelector('.table-empty')) return;
+        const name = row.cells[1]?.textContent.toLowerCase() || '';
+        const crop = row.cells[2]?.textContent.toLowerCase() || '';
+        row.style.display = (name.includes(val) || crop.includes(val)) ? '' : 'none';
+      });
+    });
+
+    document.getElementById('mongoSearch').addEventListener('input', function() {
+      const val = this.value.toLowerCase();
+      document.querySelectorAll('#mongoTableBody tr').forEach(row => {
+        if (row.querySelector('.table-loading') || row.querySelector('.table-empty')) return;
+        const name = row.cells[1]?.textContent.toLowerCase() || '';
+        const crop = row.cells[2]?.textContent.toLowerCase() || '';
+        row.style.display = (name.includes(val) || crop.includes(val)) ? '' : 'none';
+      });
+    });
+
+    // ══════════════════════════════════════════════════
+    // REFRESH & CLEAR ALL
+    // ══════════════════════════════════════════════════
+    function refreshCurrentView() {
+      const active = document.querySelector('.sidebar-btn.active');
+      if (active) {
+        showView(active.getAttribute('data-view'));
+        showToast('Data refreshed', 'success');
+      }
+    }
+
+    async function clearAllMySQL() {
+      const confirmed = await showConfirmToast('This will delete ALL MySQL farmer records. Are you sure?');
+      if (!confirmed) return;
+
+      try {
+        // Fetch all farmers first
+        const res = await fetch(`${MYSQL_URL}/farmers`);
+        const json = await res.json();
+        if (!json.success) throw new Error(json.error);
+
+        const farmers = json.farmers || [];
+        if (farmers.length === 0) {
+          showToast('No farmers to delete', 'warning');
+          return;
+        }
+
+        showToast(`Deleting ${farmers.length} farmers...`, 'warning');
+
+        // Delete each one
+        for (const f of farmers) {
+          await fetch(`${MYSQL_URL}/farmers/${f.id}`, { method: 'DELETE' });
+        }
+
+        showToast(`All ${farmers.length} MySQL farmers deleted`, 'success');
+        loadMySQLFarmers();
+      } catch (err) {
+        showToast('Clear failed: ' + err.message, 'error');
+      }
+    }
+
+    // ══════════════════════════════════════════════════
+    // PAGE INIT
+    // ══════════════════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+      showView('mysql-farmers');
+    });
+  </script>
+</body>
+</html>
