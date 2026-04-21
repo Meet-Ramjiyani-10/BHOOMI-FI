@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="BhoomiFi Admin Dashboard — Manage farmer records across MySQL and MongoDB databases">
+  <meta name="description"
+    content="BhoomiFi Admin Dashboard — Manage farmer records across MySQL and MongoDB databases">
   <title>BhoomiFi — Admin Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
   <style>
     /* ── CSS Variables ── */
     :root {
@@ -18,11 +22,17 @@
       --text-muted: #666666;
       --danger: #ef4444;
       --amber: #f59e0b;
-      --border: rgba(0,0,0,0.08);
+      --border: rgba(0, 0, 0, 0.08);
     }
 
     /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: 'DM Sans', sans-serif;
@@ -31,7 +41,11 @@
       min-height: 100vh;
     }
 
-    h1, h2, h3 { font-family: 'Fraunces', serif; }
+    h1,
+    h2,
+    h3 {
+      font-family: 'Fraunces', serif;
+    }
 
     /* ── Page Grid Layout ── */
     .page-grid {
@@ -58,7 +72,7 @@
       justify-content: space-between;
       padding: 0 2rem;
       z-index: 1000;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
     }
 
     .navbar-left {
@@ -71,11 +85,11 @@
       color: var(--white);
       font-size: 1.4rem;
       font-weight: 700;
-      text-shadow: 0 0 20px rgba(45,158,95,0.55);
+      text-shadow: 0 0 20px rgba(45, 158, 95, 0.55);
     }
 
     .navbar-badge {
-      background: rgba(45,158,95,0.25);
+      background: rgba(45, 158, 95, 0.25);
       color: #86efac;
       font-size: 0.7rem;
       padding: 2px 10px;
@@ -102,12 +116,15 @@
     }
 
     .navbar-right a {
-      color: rgba(255,255,255,0.8);
+      color: rgba(255, 255, 255, 0.8);
       font-size: 0.85rem;
       text-decoration: none;
       transition: color 0.2s ease;
     }
-    .navbar-right a:hover { color: white; }
+
+    .navbar-right a:hover {
+      color: white;
+    }
 
     .db-status {
       display: flex;
@@ -142,7 +159,7 @@
       height: calc(100vh - 60px);
       background: var(--dark-green);
       padding: 1.5rem 0;
-      border-right: 1px solid rgba(255,255,255,0.06);
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
       overflow-y: auto;
       z-index: 900;
       transition: transform 0.3s ease;
@@ -150,7 +167,7 @@
 
     .sidebar-label {
       font-size: 0.7rem;
-      color: rgba(255,255,255,0.35);
+      color: rgba(255, 255, 255, 0.35);
       letter-spacing: 0.1em;
       padding: 0 1.5rem;
       margin-bottom: 0.75rem;
@@ -159,7 +176,7 @@
 
     .sidebar-divider {
       height: 1px;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.08);
       margin: 1rem 1.5rem;
     }
 
@@ -169,7 +186,7 @@
       border: none;
       padding: 0.75rem 1.5rem;
       text-align: left;
-      color: rgba(255,255,255,0.7);
+      color: rgba(255, 255, 255, 0.7);
       font-size: 0.9rem;
       font-family: 'DM Sans', sans-serif;
       cursor: pointer;
@@ -180,22 +197,23 @@
     }
 
     .sidebar-btn:hover {
-      background: rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.06);
       color: white;
     }
 
     .sidebar-btn.active {
-      background: rgba(45,158,95,0.2);
+      background: rgba(45, 158, 95, 0.2);
       color: #86efac;
       border-left: 3px solid var(--accent-green);
     }
 
     .sidebar-btn.danger-btn {
-      color: rgba(239,68,68,0.7);
+      color: rgba(239, 68, 68, 0.7);
     }
+
     .sidebar-btn.danger-btn:hover {
       color: #ef4444;
-      background: rgba(239,68,68,0.08);
+      background: rgba(239, 68, 68, 0.08);
     }
 
     /* ── Main Content ── */
@@ -207,7 +225,9 @@
       min-height: calc(100vh - 60px);
     }
 
-    .view { display: none; }
+    .view {
+      display: none;
+    }
 
     /* ── View Headers ── */
     .view-header {
@@ -243,7 +263,7 @@
 
     .search-input:focus {
       border-color: var(--accent-green);
-      box-shadow: 0 0 0 3px rgba(45,158,95,0.1);
+      box-shadow: 0 0 0 3px rgba(45, 158, 95, 0.1);
     }
 
     /* ── Stats Strip ── */
@@ -257,7 +277,7 @@
       background: var(--white);
       border-radius: 0.75rem;
       padding: 1rem 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
       flex: 1;
     }
 
@@ -281,18 +301,22 @@
       background: var(--white);
       border-radius: 1rem;
       overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
       margin-top: 1.5rem;
     }
 
-    .table-scroll { overflow-x: auto; }
+    .table-scroll {
+      overflow-x: auto;
+    }
 
     table {
       width: 100%;
       border-collapse: collapse;
     }
 
-    thead { background: #f8fdf8; }
+    thead {
+      background: #f8fdf8;
+    }
 
     th {
       padding: 0.875rem 1rem;
@@ -317,9 +341,15 @@
       border-bottom: 1px solid #f0f0f0;
       transition: background 0.15s ease;
     }
-    tbody tr:hover { background: #fafffe; }
 
-    .score-cell { font-weight: 700; color: var(--accent-green); }
+    tbody tr:hover {
+      background: #fafffe;
+    }
+
+    .score-cell {
+      font-weight: 700;
+      color: var(--accent-green);
+    }
 
     .badge {
       padding: 2px 10px;
@@ -328,13 +358,21 @@
       font-weight: 700;
       display: inline-block;
     }
-    .badge-yes { background: rgba(34,197,94,0.12); color: #16a34a; }
-    .badge-no  { background: rgba(239,68,68,0.12); color: #dc2626; }
+
+    .badge-yes {
+      background: rgba(34, 197, 94, 0.12);
+      color: #16a34a;
+    }
+
+    .badge-no {
+      background: rgba(239, 68, 68, 0.12);
+      color: #dc2626;
+    }
 
     .btn-edit {
-      background: rgba(245,158,11,0.1);
+      background: rgba(245, 158, 11, 0.1);
       color: #b45309;
-      border: 1px solid rgba(245,158,11,0.3);
+      border: 1px solid rgba(245, 158, 11, 0.3);
       border-radius: 6px;
       padding: 4px 12px;
       font-size: 0.8rem;
@@ -342,12 +380,16 @@
       font-family: 'DM Sans', sans-serif;
       transition: all 0.2s ease;
     }
-    .btn-edit:hover { background: var(--amber); color: white; }
+
+    .btn-edit:hover {
+      background: var(--amber);
+      color: white;
+    }
 
     .btn-delete {
-      background: rgba(239,68,68,0.1);
+      background: rgba(239, 68, 68, 0.1);
       color: #dc2626;
-      border: 1px solid rgba(239,68,68,0.3);
+      border: 1px solid rgba(239, 68, 68, 0.3);
       border-radius: 6px;
       padding: 4px 12px;
       font-size: 0.8rem;
@@ -356,9 +398,14 @@
       font-family: 'DM Sans', sans-serif;
       transition: all 0.2s ease;
     }
-    .btn-delete:hover { background: var(--danger); color: white; }
 
-    .table-loading, .table-empty {
+    .btn-delete:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    .table-loading,
+    .table-empty {
       text-align: center;
       padding: 3rem 1rem;
       color: var(--text-muted);
@@ -377,7 +424,12 @@
       vertical-align: middle;
       margin-right: 8px;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* ── Stats Overview ── */
     .stats-grid {
@@ -391,7 +443,7 @@
       background: var(--white);
       border-radius: 1rem;
       padding: 2rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
     }
 
     .stats-panel-header {
@@ -410,14 +462,22 @@
       border-bottom: 1px solid #f5f5f5;
     }
 
-    .stat-row .label { color: var(--text-muted); font-size: 0.9rem; }
-    .stat-row .value { font-weight: 700; color: var(--text-main); font-size: 0.95rem; }
+    .stat-row .label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .stat-row .value {
+      font-weight: 700;
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
 
     .chart-card {
       background: var(--white);
       border-radius: 1rem;
       padding: 2rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
       margin-top: 2rem;
     }
 
@@ -485,7 +545,7 @@
       background: var(--white);
       border-radius: 1rem;
       padding: 2.5rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
       max-width: 600px;
       margin: 1.5rem auto 0;
     }
@@ -519,10 +579,12 @@
     .form-group input:focus,
     .form-group textarea:focus {
       border-color: var(--accent-green);
-      box-shadow: 0 0 0 3px rgba(45,158,95,0.1);
+      box-shadow: 0 0 0 3px rgba(45, 158, 95, 0.1);
     }
 
-    .form-group textarea { resize: vertical; }
+    .form-group textarea {
+      resize: vertical;
+    }
 
     .db-toggle-group {
       margin-bottom: 1.5rem;
@@ -573,13 +635,13 @@
       margin-top: 1.5rem;
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
-      box-shadow: 0 4px 16px rgba(45,158,95,0.35);
+      box-shadow: 0 4px 16px rgba(45, 158, 95, 0.35);
       transition: all 0.2s ease;
     }
 
     .btn-submit:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(45,158,95,0.45);
+      box-shadow: 0 8px 24px rgba(45, 158, 95, 0.45);
     }
 
     .btn-submit:disabled {
@@ -598,16 +660,16 @@
 
     #addResult.success {
       display: block;
-      background: rgba(34,197,94,0.1);
+      background: rgba(34, 197, 94, 0.1);
       color: #16a34a;
-      border: 1px solid rgba(34,197,94,0.3);
+      border: 1px solid rgba(34, 197, 94, 0.3);
     }
 
     #addResult.error {
       display: block;
-      background: rgba(239,68,68,0.1);
+      background: rgba(239, 68, 68, 0.1);
       color: #dc2626;
-      border: 1px solid rgba(239,68,68,0.3);
+      border: 1px solid rgba(239, 68, 68, 0.3);
     }
 
     /* ── Modal ── */
@@ -615,27 +677,36 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.5);
       z-index: 2000;
       justify-content: center;
       align-items: center;
       backdrop-filter: blur(4px);
     }
 
-    .modal-overlay.open { display: flex; }
+    .modal-overlay.open {
+      display: flex;
+    }
 
     .modal-box {
       background: var(--white);
       border-radius: 1.25rem;
       width: 90%;
       max-width: 500px;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.25);
-      animation: modalEnter 0.35s cubic-bezier(0.16,1,0.3,1) both;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.25);
+      animation: modalEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     @keyframes modalEnter {
-      from { opacity: 0; transform: scale(0.92) translateY(20px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     .modal-header {
@@ -660,11 +731,18 @@
       transition: color 0.2s ease;
       padding: 4px;
     }
-    .modal-close:hover { color: #333; }
 
-    .modal-body { padding: 1.5rem 2rem; }
+    .modal-close:hover {
+      color: #333;
+    }
 
-    .modal-body .form-group { margin-bottom: 1rem; }
+    .modal-body {
+      padding: 1.5rem 2rem;
+    }
+
+    .modal-body .form-group {
+      margin-bottom: 1rem;
+    }
 
     .modal-footer {
       display: flex;
@@ -684,7 +762,10 @@
       font-family: 'DM Sans', sans-serif;
       transition: background 0.2s ease;
     }
-    .btn-save:hover { background: #22c55e; }
+
+    .btn-save:hover {
+      background: #22c55e;
+    }
 
     .btn-cancel {
       background: var(--white);
@@ -697,7 +778,10 @@
       font-family: 'DM Sans', sans-serif;
       transition: background 0.2s ease;
     }
-    .btn-cancel:hover { background: #f5f5f5; }
+
+    .btn-cancel:hover {
+      background: #f5f5f5;
+    }
 
     /* ── Toast Container ── */
     .toast-container {
@@ -717,7 +801,7 @@
       padding: 1rem 1.5rem;
       min-width: 280px;
       max-width: 400px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
       display: flex;
       align-items: center;
       gap: 0.75rem;
@@ -725,13 +809,21 @@
       color: #333;
       font-family: 'DM Sans', sans-serif;
       pointer-events: auto;
-      animation: toastIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
+      animation: toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
       border-left: 4px solid #22c55e;
     }
 
-    .toast.success { border-left-color: #22c55e; }
-    .toast.error   { border-left-color: #ef4444; }
-    .toast.warning { border-left-color: #f59e0b; }
+    .toast.success {
+      border-left-color: #22c55e;
+    }
+
+    .toast.error {
+      border-left-color: #ef4444;
+    }
+
+    .toast.warning {
+      border-left-color: #f59e0b;
+    }
 
     .toast.confirm {
       border-left-color: #ef4444;
@@ -760,22 +852,42 @@
       background: var(--danger);
       color: white;
     }
-    .toast-btn-confirm:hover { background: #dc2626; }
+
+    .toast-btn-confirm:hover {
+      background: #dc2626;
+    }
 
     .toast-btn-cancel {
       background: #f0f0f0;
       color: #666;
     }
-    .toast-btn-cancel:hover { background: #e0e0e0; }
+
+    .toast-btn-cancel:hover {
+      background: #e0e0e0;
+    }
 
     @keyframes toastIn {
-      from { opacity: 0; transform: translateX(100px); }
-      to   { opacity: 1; transform: translateX(0); }
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     @keyframes toastOut {
-      from { opacity: 1; transform: translateX(0); }
-      to   { opacity: 0; transform: translateX(100px); }
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateX(100px);
+      }
     }
 
     .toast-icon {
@@ -785,7 +897,9 @@
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
-      .hamburger { display: block; }
+      .hamburger {
+        display: block;
+      }
 
       .sidebar {
         transform: translateX(-100%);
@@ -823,10 +937,28 @@
         flex-direction: column;
       }
 
-      .navbar-right a { display: none; }
+      .navbar-right a {
+        display: none;
+      }
+    }
+    .stats-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .stats-card-header {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a3a2a;
+      font-family: 'Fraunces', serif;
+      border-bottom: 1px solid #e8f5e9;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
   </style>
 </head>
+
 <body>
 
   <!-- ══ Toast Container ══ -->
@@ -947,7 +1079,9 @@
                 </tr>
               </thead>
               <tbody id="mysqlTableBody">
-                <tr><td colspan="9" class="table-loading"><span class="spinner"></span> Loading farmers...</td></tr>
+                <tr>
+                  <td colspan="9" class="table-loading"><span class="spinner"></span> Loading farmers...</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -991,12 +1125,14 @@
                   <th>Location</th>
                   <th>Score</th>
                   <th>Grade</th>
-                  <th>Eligible</th>
+                  <th>SCHEMES & ELIGIBILITY</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="mongoTableBody">
-                <tr><td colspan="9" class="table-loading"><span class="spinner"></span> Loading farmers...</td></tr>
+                <tr>
+                  <td colspan="9" class="table-loading"><span class="spinner"></span> Loading farmers...</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -1057,17 +1193,19 @@
         </div>
 
         <!-- Top Crops Bar Chart -->
-        <div class="chart-card">
-          <h3>📈 Top Crops Comparison</h3>
-          <div class="bar-chart-section">
-            <div class="bar-chart-group">
-              <h4>MySQL Top Crops</h4>
-              <div id="mysqlCropBars"></div>
-            </div>
-            <div class="bar-chart-group">
-              <h4>MongoDB Top Crops</h4>
-              <div id="mongoCropBars"></div>
-            </div>
+          </div>
+        </div>
+
+        <div class="stats-card reveal" style="margin-top:2rem;">
+          <div class="stats-card-header">
+            🏛️ Scheme Eligibility Breakdown
+            <span style="font-size:0.8rem;font-weight:400;color:#999;
+            margin-left:0.5rem;">(MongoDB)</span>
+          </div>
+          <div id="schemeStatsContent">
+            <p style="color:#999;text-align:center;padding:2rem;">
+              Loading scheme data...
+            </p>
           </div>
         </div>
       </div>
@@ -1353,12 +1491,66 @@
 
     function renderMongoRow(f) {
       const displayId = f._id ? f._id.substring(0, 8) + '...' : '—';
-      const score = f.score?.harvest_score != null ? f.score.harvest_score : '—';
-      const grade = f.score?.grade || '—';
-      const isEligible = f.score?.eligible;
-      const eligBadge = isEligible
-        ? '<span class="badge badge-yes">✓ Yes</span>'
-        : '<span class="badge badge-no">✗ No</span>';
+      const scoreValue = f.score?.harvest_score != null ? f.score.harvest_score : '—';
+      const gradeValue = f.score?.grade || '—';
+      const rawEligibleSchemes = f.score?.eligible_schemes;
+      const eligibleSchemes = Array.isArray(rawEligibleSchemes)
+        ? rawEligibleSchemes
+            .map(s => (typeof s === 'string' ? s : s?.name))
+            .filter(s => typeof s === 'string' && s.trim() !== '')
+        : typeof rawEligibleSchemes === 'string'
+          ? rawEligibleSchemes.split(',').map(s => s.trim()).filter(Boolean)
+          : [];
+      const selectedScheme = f.score?.chosen_scheme
+        || (typeof f.score?.government_scheme === 'string'
+          ? f.score.government_scheme
+          : f.score?.government_scheme?.name)
+        || '';
+
+      // CASE 1 — farmer has no score yet
+      let schemesHtml = '';
+      if (!f.score) {
+        schemesHtml = `
+          <span style="background:rgba(0,0,0,0.06);color:#999;padding:2px 10px;
+          border-radius:999px;font-size:0.75rem;font-weight:600;">
+            No Score Yet
+          </span>`;
+      } 
+      // CASE 2 — farmer has score but eligible_schemes is empty or missing
+      else if (eligibleSchemes.length === 0) {
+        schemesHtml = `
+          <span style="background:rgba(239,68,68,0.12);color:#dc2626;padding:2px 
+          10px;border-radius:999px;font-size:0.75rem;font-weight:700;">
+            ✗ Not Eligible
+          </span>`;
+      } 
+      // CASE 3 — farmer has score and eligible_schemes has values
+      else {
+        const pills = eligibleSchemes.map(s => `
+          <span style="display:inline-block;background:rgba(34,197,94,0.1);
+          color:#16a34a;padding:2px 8px;border-radius:999px;font-size:0.72rem;
+          font-weight:600;margin:2px 2px 2px 0;">
+            ${esc(s)}
+          </span>`).join('');
+        
+        let chosenHtml = '';
+        if (selectedScheme) {
+          chosenHtml = `
+            <div style="margin-top:6px;padding-top:6px;border-top:1px solid 
+            #f0f0f0;font-size:0.75rem;color:#555;">
+              <span style="font-weight:600;color:#2d9e5f;">Selected: </span>
+              ${esc(selectedScheme)}
+            </div>`;
+        }
+        
+        schemesHtml = `
+          <div style="font-size:0.7rem;color:#666;font-weight:600;
+          text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">
+            Eligible Schemes
+          </div>
+          ${pills}
+          ${chosenHtml}`;
+      }
 
       return `<tr>
         <td title="${esc(f._id)}">${esc(displayId)}</td>
@@ -1366,9 +1558,12 @@
         <td>${esc(f.crop_type)}</td>
         <td>${esc(f.land_size)}</td>
         <td>${esc(f.location)}</td>
-        <td class="score-cell">${esc(score)}</td>
-        <td>${esc(grade)}</td>
-        <td>${eligBadge}</td>
+        <td class="score-cell">${esc(scoreValue)}</td>
+        <td>${esc(gradeValue)}</td>
+        <td style="padding:0.875rem 1rem;font-size:0.875rem;color:#333;
+        vertical-align:top;min-width:220px;">
+          ${schemesHtml}
+        </td>
         <td style="white-space:nowrap;">
           <button class="btn-edit" onclick="openEditModal('mongo','${f._id}','${esc(f.name).replace(/'/g, "\\'")}','${esc(f.crop_type).replace(/'/g, "\\'")}','${f.land_size}','${esc(f.location).replace(/'/g, "\\'")}','${esc(f.description || '').replace(/'/g, "\\'")}')" >✏️ Edit</button>
           <button class="btn-delete" onclick="deleteMongoFarmer('${f._id}')">🗑️ Delete</button>
@@ -1430,7 +1625,7 @@
     document.getElementById('cancelEditBtn').addEventListener('click', closeModal);
 
     // Close modal on clicking overlay background
-    document.getElementById('editModal').addEventListener('click', function(e) {
+    document.getElementById('editModal').addEventListener('click', function (e) {
       if (e.target === this) closeModal();
     });
 
@@ -1438,10 +1633,10 @@
       const dbType = document.getElementById('editDbType').value;
       const id = document.getElementById('editFarmerId').value;
       const data = {
-        name:        document.getElementById('editName').value,
-        crop_type:   document.getElementById('editCropType').value,
-        land_size:   document.getElementById('editLandSize').value,
-        location:    document.getElementById('editLocation').value,
+        name: document.getElementById('editName').value,
+        crop_type: document.getElementById('editCropType').value,
+        land_size: document.getElementById('editLandSize').value,
+        location: document.getElementById('editLocation').value,
         description: document.getElementById('editDescription').value
       };
       if (dbType === 'mysql') await saveMySQLEdit(id, data);
@@ -1573,6 +1768,126 @@
           document.getElementById('statMongoTopCrop').textContent = 'N/A';
         }
 
+        // CHANGE 3D — Scheme Stats
+        try {
+            const schemeRes = await fetch(MONGO_URL + '/mongo/schemes/stats');
+            const schemeData = await schemeRes.json();
+
+            if (schemeData.success) {
+                const container = document.getElementById('schemeStatsContent');
+
+                // Summary row
+                const summaryHTML = `
+                    <div style="display:flex;gap:1.5rem;margin-bottom:1.5rem;
+                    flex-wrap:wrap;">
+                        <div style="flex:1;min-width:140px;background:#f8fdf8;
+                        border-radius:0.75rem;padding:1rem;text-align:center;">
+                            <div style="font-size:1.75rem;font-weight:800;
+                            color:#1a3a2a;font-family:'Fraunces',serif;">
+                                ${schemeData.total_scored}
+                            </div>
+                            <div style="font-size:0.75rem;color:#999;
+                            text-transform:uppercase;letter-spacing:0.05em;">
+                                Total Scored
+                            </div>
+                        </div>
+                        <div style="flex:1;min-width:140px;background:#f0faf4;
+                        border-radius:0.75rem;padding:1rem;text-align:center;">
+                            <div style="font-size:1.75rem;font-weight:800;
+                            color:#16a34a;font-family:'Fraunces',serif;">
+                                ${schemeData.eligible_count}
+                            </div>
+                            <div style="font-size:0.75rem;color:#999;
+                            text-transform:uppercase;letter-spacing:0.05em;">
+                                Scheme Eligible
+                            </div>
+                        </div>
+                        <div style="flex:1;min-width:140px;background:#fff8f0;
+                        border-radius:0.75rem;padding:1rem;text-align:center;">
+                            <div style="font-size:1.75rem;font-weight:800;
+                            color:#b45309;font-family:'Fraunces',serif;">
+                                ${schemeData.scheme_frequency.length}
+                            </div>
+                            <div style="font-size:0.75rem;color:#999;
+                            text-transform:uppercase;letter-spacing:0.05em;">
+                                Unique Schemes Matched
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Scheme frequency bars
+                const maxCount = schemeData.scheme_frequency.length > 0
+                    ? schemeData.scheme_frequency[0].count : 1;
+
+                const schemeBarHTML = schemeData.scheme_frequency.length > 0
+                    ? schemeData.scheme_frequency.map(s => `
+                        <div style="display:flex;align-items:center;gap:1rem;
+                        margin-bottom:0.75rem;">
+                            <div style="width:220px;font-size:0.85rem;
+                            color:#333;flex-shrink:0;font-weight:500;">
+                                ${s.scheme}
+                            </div>
+                            <div style="flex:1;background:#f0f0f0;
+                            border-radius:4px;height:24px;overflow:hidden;">
+                                <div style="width:${Math.round(
+                                    (s.count / maxCount) * 100
+                                )}%;background:#2d9e5f;height:100%;
+                                border-radius:4px;transition:width 0.6s ease;">
+                                </div>
+                            </div>
+                            <div style="width:30px;font-size:0.85rem;
+                            font-weight:700;color:#1a3a2a;text-align:right;">
+                                ${s.count}
+                            </div>
+                        </div>
+                    `).join('')
+                    : '<p style="color:#999;font-size:0.9rem;">No scheme data yet.</p>';
+
+                // Chosen scheme section
+                const chosenHTML = schemeData.chosen_frequency.length > 0
+                    ? `
+                        <div style="margin-top:1.5rem;padding-top:1.5rem;
+                        border-top:1px solid #e8f5e9;">
+                            <div style="font-size:0.85rem;font-weight:700;
+                            color:#1a3a2a;margin-bottom:1rem;">
+                                Most Chosen Schemes
+                            </div>
+                            ${schemeData.chosen_frequency.map((s, i) => `
+                                <div style="display:flex;justify-content:
+                                space-between;align-items:center;padding:
+                                0.5rem 0;border-bottom:1px solid #f5f5f5;">
+                                    <span style="font-size:0.875rem;
+                                    color:#333;">
+                                        ${i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}
+                                        ${s.scheme}
+                                    </span>
+                                    <span style="background:rgba(45,158,95,0.1);
+                                    color:#2d9e5f;padding:2px 10px;
+                                    border-radius:999px;font-size:0.8rem;
+                                    font-weight:700;">
+                                        ${s.count} farmers
+                                    </span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `
+                    : '';
+
+                container.innerHTML = summaryHTML +
+                    '<div style="margin-top:1rem;">' +
+                    '<div style="font-size:0.85rem;font-weight:700;' +
+                    'color:#1a3a2a;margin-bottom:1rem;">Schemes Matched ' +
+                    'Across Farmers</div>' +
+                    schemeBarHTML + '</div>' + chosenHTML;
+            }
+        } catch(e) {
+            console.warn('Scheme stats failed:', e);
+            document.getElementById('schemeStatsContent').innerHTML =
+                '<p style="color:#999;text-align:center;padding:1rem;">' +
+                'Could not load scheme data. Is MongoDB logger running?</p>';
+        }
+
       } catch (err) {
         showToast('Failed to load stats: ' + err.message, 'error');
       }
@@ -1602,7 +1917,7 @@
     // ══════════════════════════════════════════════════
     // SEARCH FILTERING
     // ══════════════════════════════════════════════════
-    document.getElementById('mysqlSearch').addEventListener('input', function() {
+    document.getElementById('mysqlSearch').addEventListener('input', function () {
       const val = this.value.toLowerCase();
       document.querySelectorAll('#mysqlTableBody tr').forEach(row => {
         if (row.querySelector('.table-loading') || row.querySelector('.table-empty')) return;
@@ -1612,7 +1927,7 @@
       });
     });
 
-    document.getElementById('mongoSearch').addEventListener('input', function() {
+    document.getElementById('mongoSearch').addEventListener('input', function () {
       const val = this.value.toLowerCase();
       document.querySelectorAll('#mongoTableBody tr').forEach(row => {
         if (row.querySelector('.table-loading') || row.querySelector('.table-empty')) return;
@@ -1671,4 +1986,5 @@
     });
   </script>
 </body>
+
 </html>

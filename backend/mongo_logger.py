@@ -27,6 +27,10 @@ def add_farmer():
             "land_size":    float(data["land_size"]),
             "location":     data["location"],
             "description":  data.get("description", ""),
+            "phone":        data.get("phone", ""),
+            "irrigation":   data.get("irrigation", ""),
+            "soil_quality": data.get("soil_quality"),
+            "district":     data.get("district", ""),
             "submitted_at": datetime.now().isoformat(),
             "score":        None
         }
@@ -78,7 +82,11 @@ def edit_farmer(farmer_id):
                 "crop_type":   data["crop_type"],
                 "land_size":   float(data["land_size"]),
                 "location":    data["location"],
-                "description": data.get("description", "")
+                "description": data.get("description", ""),
+                "phone":       data.get("phone", ""),
+                "irrigation":  data.get("irrigation", ""),
+                "soil_quality": data.get("soil_quality"),
+                "district":    data.get("district", "")
             }
         }
         result = farmers_col.update_one(
@@ -109,14 +117,43 @@ def add_score():
     try:
         data = request.json
         farmer_id = data["farmer_id"]
+        scheme_name = data.get("scheme_name", "")
         score_doc = {
-            "harvest_score":    float(data["harvest_score"]),
-            "grade":            data.get("grade", ""),
-            "risk_level":       data.get("risk_level", ""),
-            "eligible":         data.get("eligible", False),
+            "harvest_score": float(data.get("harvest_score", 0)),
+            "grade": data.get("grade", ""),
+            "risk_level": data.get("risk_level", ""),
+            "eligible": data.get("eligible", False),
+            "confidence": data.get("confidence", ""),
+            "is_fallback": data.get("is_fallback", False),
             "recommended_loan": data.get("recommended_loan", ""),
-            "government_scheme":data.get("government_scheme", ""),
-            "scored_at":        datetime.now().isoformat()
+            "loan_bids": data.get("loan_bids", []),
+            "government_scheme": {
+                "name": scheme_name,
+                "benefit": data.get("scheme_benefit", ""),
+                "eligibility": data.get("scheme_eligibility", "")
+            },
+            "eligible_schemes": data.get("eligible_schemes", []),
+            "other_schemes": data.get("other_schemes", []),
+            "recommendation": data.get("recommendation", ""),
+            "factors": data.get("factors", []),
+            "explanation": data.get("explanation", []),
+            "weather_recommendations": data.get("weather_recommendations", []),
+            "has_image": data.get("has_image", False),
+            "rf_only_score": data.get("rf_only_score"),
+            "final_harvest_score": data.get("final_harvest_score"),
+            "image_analysis": {
+                "crop_condition": data.get("img_crop_condition", ""),
+                "condition_key": data.get("img_condition_key", ""),
+                "confidence": data.get("img_confidence", 0),
+                "health_score": data.get("img_health_score", 0),
+                "advice": data.get("img_advice", ""),
+                "class_probabilities": data.get("img_class_probabilities", {}),
+                "delta_direction": data.get("img_delta_direction", ""),
+                "score_delta": data.get("img_score_delta", 0)
+            } if data.get("has_image") else None,
+            # Backward-compatibility fields still used by existing admin stats/UI
+            "chosen_scheme": scheme_name,
+            "scored_at": datetime.now().isoformat()
         }
         # Embed score inside the farmer document
         result = farmers_col.update_one(
@@ -158,6 +195,85 @@ def get_stats():
             "eligible_for_loan":    eligible,
             "top_crops": [
                 {"crop": c["_id"], "count": c["count"]} for c in top_crops
+            ]
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+@app.route("/mongo/schemes/stats", methods=["GET"])
+def get_schemes_stats():
+    """Return scheme eligibility statistics from MongoDB."""
+    try:
+        # Count total farmers with scores
+        total_scored = farmers_col.count_documents(
+            {"score": {"$ne": None}}
+        )
+
+        # Count eligible farmers
+        eligible_count = farmers_col.count_documents(
+            {"score.eligible": True}
+        )
+
+        # Get scheme frequency — how many farmers matched each scheme
+        pipeline = [
+            {
+                "$match": {
+                    "score.eligible_schemes": {
+                        "$exists": True,
+                        "$nin": ["", []]
+                    }
+                }
+            },
+            {
+                "$project": {
+                    "schemes": {
+                        "$cond": [
+                            {"$isArray": "$score.eligible_schemes"},
+                            {
+                                "$map": {
+                                    "input": "$score.eligible_schemes",
+                                    "as": "s",
+                                    "in": {
+                                        "$cond": [
+                                            {"$eq": [{"$type": "$$s"}, "object"]},
+                                            "$$s.name",
+                                            "$$s"
+                                        ]
+                                    }
+                                }
+                            },
+                            {"$split": ["$score.eligible_schemes", ", "]}
+                        ]
+                    }
+                }
+            },
+            {"$unwind": "$schemes"},
+            {"$match": {"schemes": {"$nin": [None, ""]}}},
+            {"$group": {"_id": "$schemes", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}}
+        ]
+        scheme_freq = list(farmers_col.aggregate(pipeline))
+
+        # Get chosen scheme frequency
+        chosen_pipeline = [
+            {"$match": {"score.chosen_scheme": {"$ne": "", "$exists": True}}},
+            {"$group": {"_id": "$score.chosen_scheme", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}}
+        ]
+        chosen_freq = list(farmers_col.aggregate(chosen_pipeline))
+
+        return jsonify({
+            "success": True,
+            "total_scored": total_scored,
+            "eligible_count": eligible_count,
+            "scheme_frequency": [
+                {"scheme": s["_id"], "count": s["count"]}
+                for s in scheme_freq
+            ],
+            "chosen_frequency": [
+                {"scheme": s["_id"], "count": s["count"]}
+                for s in chosen_freq
             ]
         })
     except Exception as e:
